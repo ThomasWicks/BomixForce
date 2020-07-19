@@ -16,6 +16,7 @@ namespace Bomix_Force.Data.Context
         public virtual DbSet<Access> Access { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<UserLogin> UserLogin { get; set; }
+        public virtual DbSet<UserLogin> Order { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

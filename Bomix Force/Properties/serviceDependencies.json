@@ -2,7 +2,7 @@
   "dependencies": {
     "mssql2": {
       "type": "mssql",
-      "connectionId": "DESKTOP-AQCIGBU"
+      "connectionId": "DESKTOP-39B4HAJ"
     }
   }
 }
