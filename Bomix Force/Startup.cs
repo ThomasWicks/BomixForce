@@ -12,6 +12,7 @@ using Bomix_Force.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Bomix_Force.Data.Context;
 
 namespace Bomix_Force
 {
@@ -27,11 +28,11 @@ namespace Bomix_Force
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ModelContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DevConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                    Configuration.GetConnectionString("Mysqlconnection")));
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ModelContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

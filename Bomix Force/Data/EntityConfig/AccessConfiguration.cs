@@ -1,41 +1,37 @@
 ﻿using Bomix_Force.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bomix_Force.Data.EntityConfig
 {
-    public class AccessConfiguration : EntityTypeConfiguration<Access>
+    public class AccessConfiguration : IEntityTypeConfiguration<Access>
     {
-        public AccessConfiguration()
+        public void Configure(EntityTypeBuilder<Access> builder)
         {
-            ToTable("ACCESS");
-            HasKey(e => new { e.IdProfile, e.IdPermission });
+            builder.ToTable("ACCESS");
+            builder.HasKey(e => new { e.IdProfile, e.IdPermission });
 
 
-            Property(u => u.IdProfile)
+            builder.Property(u => u.IdProfile)
                 .HasColumnName("ID_PROFILE")
                 .IsRequired();
 
-            Property(u => u.IdPermission)
+            builder.Property(u => u.IdPermission)
                 .HasColumnName("ID_PERMISSION")
                 .IsRequired();
 
-            Property(u => u.IdUser)
+            builder.Property(u => u.IdUser)
                 .HasColumnName("ID_USER");
 
-            HasRequired(e => e.Profile)
+            builder.HasOne(e => e.Profile)
                 .WithMany(t => t.AccessList)
                 .HasForeignKey(e => e.IdProfile)
-                .WillCascadeOnDelete(false);
+                .IsRequired();
 
-            HasRequired(e => e.Permission)
+            builder.HasOne(e => e.Permission)
                 .WithMany(t => t.AccessList)
                 .HasForeignKey(e => e.IdPermission)
-                .WillCascadeOnDelete(false);
+                .IsRequired();
         }
-
     }
 }

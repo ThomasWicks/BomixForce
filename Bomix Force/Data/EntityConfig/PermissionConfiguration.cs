@@ -1,30 +1,31 @@
 ﻿using Bomix_Force.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
 
 namespace Bomix_Force.Data.EntityConfig
 {
-    public class PermissionConfiguration : EntityTypeConfiguration<Permission>
+    public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
     {
-        public PermissionConfiguration()
+        public void Configure(EntityTypeBuilder<Permission> builder)
         {
-            ToTable("PERMISSION");
-            HasKey(p => p.Id);
+            builder.ToTable("PERMISSION");
+            builder.HasKey(p => p.Id);
 
-            Property(p => p.ClaimType)
+            builder.Property(p => p.ClaimType)
                 .HasColumnName("CLAIMTYPE")
                 .HasMaxLength(100);
 
-            Property(p => p.ClaimValue)
+            builder.Property(p => p.ClaimValue)
                 .HasColumnName("CLAIMVALUE")
                 .HasMaxLength(100);
 
-            Property(p => p.IdUser)
+            builder.Property(p => p.IdUser)
                 .HasColumnName("ID_USER");
 
-            Property(p => p.Id)
+            builder.Property(p => p.Id)
                 .HasColumnName("ID")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .UseIdentityColumn();
         }
     }
 }

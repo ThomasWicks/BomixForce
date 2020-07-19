@@ -1,29 +1,31 @@
 ﻿using Bomix_Force.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
 
 namespace Bomix_Force.Data.EntityConfig
 {
-    public class ProfileConfiguration : EntityTypeConfiguration<Profile>
+    public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     {
-        public ProfileConfiguration()
-        {
-            ToTable("PROFILE");
-            HasKey(p => p.Id);
 
-            Property(p => p.Name)
+        public void Configure(EntityTypeBuilder<Profile> builder)
+        {
+            builder.ToTable("PROFILE");
+            builder.HasKey(p => p.Id);
+
+            builder.Property(p => p.Name)
                 .HasColumnName("NAME")
                 .IsRequired()
                 .HasMaxLength(50);
 
-            Property(p => p.Active)
+            builder.Property(p => p.Active)
                 .HasColumnName("ACTIVE")
                 .IsRequired()
                 .HasMaxLength(1);
 
-            Property(p => p.Id)
+            builder.Property(p => p.Id)
                 .HasColumnName("ID")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+                .UseIdentityColumn();
         }
     }
 }
