@@ -21,20 +21,6 @@ namespace Bomix_Force.Data.EntityConfig
                 .HasColumnName("ID_ESTABLISHMENT")
                 .IsRequired();
 
-            builder.Property(u => u.Cpf)
-                .HasColumnName("CPF")
-                .HasMaxLength(11)
-                .IsRequired();
-
-            builder.Property(u => u.Name)
-                .HasColumnName("NAME")
-                .HasMaxLength(50)
-                .IsRequired();
-
-            builder.Property(u => u.Email)
-                .HasColumnName("EMAIL")
-                .HasMaxLength(50)
-                .IsRequired();
 
             builder.Property(u => u.Active)
                 .HasColumnName("ACTIVE")
@@ -105,6 +91,10 @@ namespace Bomix_Force.Data.EntityConfig
             builder.Property(u => u.Id)
                 .HasColumnName("ID")
                 .UseIdentityColumn();
+
+            builder.HasOne(u => u.Person)
+                .WithOne(t => t.User)
+                .IsRequired();
         }
     }
 }

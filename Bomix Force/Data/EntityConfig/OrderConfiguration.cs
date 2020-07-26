@@ -24,17 +24,10 @@ namespace Bomix_Force.Data.EntityConfig
                .IsRequired();
 
             builder.HasOne(e => e.Company)
-                 .WithMany(t => t.Orders)
-                 .HasForeignKey(e => e.CompanyId)
-                 .IsRequired();
-
-            builder.HasMany(e => e.Person)
-                .WithOne(t => t.Order).
-                HasForeignKey(e => e.Id_Order);
+                 .WithMany(t => t.Orders).IsRequired();
 
             builder.HasMany(e => e.Item)
-                .WithOne(t=> t.Order)
-                .HasForeignKey(i=> i.Id_Order);
+                .WithOne(t => t.Order).IsRequired() ;
 
         }
     }

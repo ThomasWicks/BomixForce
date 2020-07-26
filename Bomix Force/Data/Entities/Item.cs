@@ -10,7 +10,6 @@ namespace Bomix_Force.Data.Entities
         public int Id { get; set; }
         public string Status_art { get; set; }
         public string Description { get; set; }
-        public int Id_Order { get; set; }
         public virtual Order Order { get; set; }
     }
 }

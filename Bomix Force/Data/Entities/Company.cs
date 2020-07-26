@@ -12,5 +12,6 @@ namespace Bomix_Force.Data.Entities
         public string Email { get; set; }
         public string Cnpj { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Person> Persons { get; set; }
     }
 }

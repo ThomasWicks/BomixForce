@@ -32,5 +32,6 @@ namespace Bomix_Force.Data.Entities
         public virtual Profile Profile { get; set; }
         //public virtual Establishment Establishment { get; set; }
         public virtual ICollection<UserLogin> UserLoginList { get; set; }
+        public virtual Person Person { get; set; }
     }
 }
