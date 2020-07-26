@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bomix_Force.Data.Enum
 {
-    public enum Permission
+    public enum ValuePermissionEnum
     {
         [Description("Incluir")]
         INSERT = 0,

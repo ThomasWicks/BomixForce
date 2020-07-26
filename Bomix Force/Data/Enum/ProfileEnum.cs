@@ -9,10 +9,10 @@ namespace Bomix_Force.Data.Enum
     public enum ProfileEnum
     {
         [Description("Administrador")]
-        Gerente = 1,
+        Administrador = 1,
 
         [Description("Gestor")]
-        GerenteLoja = 2,
+        Gestor = 2,
 
         [Description("Visualizador")]
         Visualizador = 3,
