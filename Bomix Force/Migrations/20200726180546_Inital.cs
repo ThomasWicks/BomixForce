@@ -3,26 +3,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bomix_Force.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Inital : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Company",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    Status_Order = table.Column<string>(nullable: true),
-                    Person_id_request = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false),
-                    Person_id_seller = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Cnpj = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_Company", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,6 +74,29 @@ namespace Bomix_Force.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<int>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Status_Order = table.Column<string>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: false),
+                    Id_item = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Order_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -141,6 +161,82 @@ namespace Bomix_Force.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Item",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status_art = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Id_Order = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Item", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Item_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "N_conformity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Lot = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Id_Order = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_N_conformity", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_N_conformity_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Person",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Cpf = table.Column<int>(nullable: false),
+                    Tel = table.Column<int>(nullable: false),
+                    Company_Id = table.Column<int>(nullable: false),
+                    Id_Order = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: true),
+                    OrderId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Person", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Person_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Person_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "USERLOGIN",
                 columns: table => new
                 {
@@ -165,6 +261,31 @@ namespace Bomix_Force.Migrations
                 column: "ID_PERMISSION");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Item_OrderId",
+                table: "Item",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_N_conformity_OrderId",
+                table: "N_conformity",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_CompanyId",
+                table: "Order",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_CompanyId",
+                table: "Person",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_OrderId",
+                table: "Person",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User1_ProfileId",
                 table: "User1",
                 column: "ProfileId");
@@ -176,7 +297,13 @@ namespace Bomix_Force.Migrations
                 name: "ACCESS");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Item");
+
+            migrationBuilder.DropTable(
+                name: "N_conformity");
+
+            migrationBuilder.DropTable(
+                name: "Person");
 
             migrationBuilder.DropTable(
                 name: "User");
@@ -188,7 +315,13 @@ namespace Bomix_Force.Migrations
                 name: "PERMISSION");
 
             migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
                 name: "User1");
+
+            migrationBuilder.DropTable(
+                name: "Company");
 
             migrationBuilder.DropTable(
                 name: "PROFILE");
