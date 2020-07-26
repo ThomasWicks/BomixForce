@@ -20,8 +20,8 @@ namespace Bomix_Force.Data.EntityConfig
              .IsRequired();
 
             builder.HasOne(u => u.Order)
-                .WithMany(u=>u.N_Conformities)
-                .HasForeignKey(i=>i.Id_Order);
+                .WithMany(u => u.N_Conformities)
+                .IsRequired();
                 
         }
     }
