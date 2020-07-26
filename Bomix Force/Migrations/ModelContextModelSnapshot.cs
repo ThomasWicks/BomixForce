@@ -40,6 +40,36 @@ namespace Bomix_Force.Migrations
                     b.ToTable("ACCESS");
                 });
 
+            modelBuilder.Entity("Bomix_Force.Data.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Person_id_request")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Person_id_seller")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status_Order")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Order");
+                });
+
             modelBuilder.Entity("Bomix_Force.Data.Entities.Permission", b =>
                 {
                     b.Property<int>("Id")
@@ -99,97 +129,68 @@ namespace Bomix_Force.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnName("ACCESSFAILEDCOUNT")
                         .HasColumnType("int");
 
                     b.Property<string>("Active")
-                        .IsRequired()
-                        .HasColumnName("ACTIVE")
-                        .HasColumnType("CHAR")
-                        .HasMaxLength(1);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Cpf")
-                        .IsRequired()
-                        .HasColumnName("CPF")
-                        .HasColumnType("nvarchar(11)")
-                        .HasMaxLength(11);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnName("EMAIL")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnName("EMAILCONFIRMED")
                         .HasColumnType("bit");
 
                     b.Property<int>("IdEstablishment")
-                        .HasColumnName("ID_ESTABLISHMENT")
                         .HasColumnType("int");
 
                     b.Property<int>("IdProfile")
-                        .HasColumnName("ID_PROFILE")
                         .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnName("LOCKOUTENABLED")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LockoutEndDateUTC")
-                        .HasColumnName("LOCKOUTENDDATEUTC")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("NAME")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnName("PASSWORDHASH")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnName("PHONENUMBER")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnName("PHONENUMBERCONFIRMED")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ProfileId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("RecieveNotification")
-                        .HasColumnName("RECIEVENOTIFICATION")
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnName("SECURITYSTAMP")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnName("TWOFACTORENABLED")
                         .HasColumnType("bit");
 
                     b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnName("USERNAME")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProfile");
+                    b.HasIndex("ProfileId");
 
-                    b.ToTable("USER");
+                    b.ToTable("User1");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.UserLogin", b =>
@@ -213,6 +214,58 @@ namespace Bomix_Force.Migrations
                     b.ToTable("USERLOGIN");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("Bomix_Force.Data.Entities.Access", b =>
                 {
                     b.HasOne("Bomix_Force.Data.Entities.Permission", "Permission")
@@ -232,9 +285,7 @@ namespace Bomix_Force.Migrations
                 {
                     b.HasOne("Bomix_Force.Data.Entities.Profile", "Profile")
                         .WithMany("UserList")
-                        .HasForeignKey("IdProfile")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProfileId");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.UserLogin", b =>

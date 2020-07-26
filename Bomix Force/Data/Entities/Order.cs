@@ -7,7 +7,7 @@ namespace Bomix_Force.Data.Entities
 {
     public class Order
     {
-        public int IdOrder { get; set; }
+        public int Id { get; set; }
         public int Number { get; set; }
         public DateTime Date { get; set; }
         public string Status_Order { get; set; }

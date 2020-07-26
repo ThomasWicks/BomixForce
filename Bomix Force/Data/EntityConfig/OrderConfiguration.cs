@@ -9,7 +9,7 @@ namespace Bomix_Force.Data.EntityConfig
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.ToTable("ORDER");
-            builder.HasKey(e => new { e.IdOrder });
+            builder.HasKey(e => new { e.Id });
 
             builder.Property(u => u.Number)
                .HasColumnName("NUMBER")

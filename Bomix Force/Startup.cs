@@ -13,6 +13,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Bomix_Force.Data.Context;
+using Bomix_Force.Repo;
+using Bomix_Force.Data.Entities;
+using Bomix_Force.Repo.Interface;
 
 namespace Bomix_Force
 {
@@ -31,10 +34,20 @@ namespace Bomix_Force
             services.AddDbContext<ModelContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Mysqlconnection")));
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ModelContext>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ModelContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            //Injeção de dependencia
+            services.AddScoped<ModelContext>();
+            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+            services.AddScoped<IGenericRepository<Access>, GenericRepository<Access>>();
+            services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
+            services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
+            services.AddScoped<IGenericRepository<Permission>, GenericRepository<Permission>>();
+            services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
+            services.AddScoped<IGenericRepository<Profile>, GenericRepository<Profile>>();
+            services.AddScoped<IGenericRepository<UserLogin>, GenericRepository<UserLogin>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -3,10 +3,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bomix_Force.Migrations
 {
-    public partial class Inita : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<int>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Status_Order = table.Column<string>(nullable: true),
+                    Person_id_request = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false),
+                    Person_id_seller = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "PERMISSION",
                 columns: table => new
@@ -37,6 +55,31 @@ namespace Bomix_Force.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ACCESS",
                 columns: table => new
                 {
@@ -62,38 +105,39 @@ namespace Bomix_Force.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "USER",
+                name: "User1",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ID_PROFILE = table.Column<int>(nullable: false),
-                    CPF = table.Column<string>(maxLength: 11, nullable: false),
-                    NAME = table.Column<string>(maxLength: 50, nullable: false),
-                    EMAIL = table.Column<string>(maxLength: 50, nullable: false),
-                    ACTIVE = table.Column<string>(type: "CHAR", maxLength: 1, nullable: false),
-                    USERNAME = table.Column<string>(maxLength: 50, nullable: false),
-                    ID_ESTABLISHMENT = table.Column<int>(nullable: false),
-                    EMAILCONFIRMED = table.Column<bool>(nullable: false),
-                    PASSWORDHASH = table.Column<string>(nullable: false),
-                    SECURITYSTAMP = table.Column<string>(nullable: true),
-                    PHONENUMBER = table.Column<string>(maxLength: 50, nullable: true),
-                    PHONENUMBERCONFIRMED = table.Column<bool>(nullable: false),
-                    TWOFACTORENABLED = table.Column<bool>(nullable: false),
-                    LOCKOUTENDDATEUTC = table.Column<DateTime>(nullable: true),
-                    LOCKOUTENABLED = table.Column<bool>(nullable: false),
-                    RECIEVENOTIFICATION = table.Column<bool>(nullable: false),
-                    ACCESSFAILEDCOUNT = table.Column<int>(type: "int", nullable: false)
+                    IdProfile = table.Column<int>(nullable: false),
+                    Cpf = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Active = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: true),
+                    IdEstablishment = table.Column<int>(nullable: false),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEndDateUTC = table.Column<DateTime>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    RecieveNotification = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    ProfileId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_USER", x => x.ID);
+                    table.PrimaryKey("PK_User1", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_USER_PROFILE_ID_PROFILE",
-                        column: x => x.ID_PROFILE,
+                        name: "FK_User1_PROFILE_ProfileId",
+                        column: x => x.ProfileId,
                         principalTable: "PROFILE",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,10 +152,10 @@ namespace Bomix_Force.Migrations
                 {
                     table.PrimaryKey("PK_USERLOGIN", x => new { x.ID_USER, x.LOGINPROVIDER, x.PROVIDERKEY });
                     table.ForeignKey(
-                        name: "FK_USERLOGIN_USER_ID_USER",
+                        name: "FK_USERLOGIN_User1_ID_USER",
                         column: x => x.ID_USER,
-                        principalTable: "USER",
-                        principalColumn: "ID",
+                        principalTable: "User1",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -121,9 +165,9 @@ namespace Bomix_Force.Migrations
                 column: "ID_PERMISSION");
 
             migrationBuilder.CreateIndex(
-                name: "IX_USER_ID_PROFILE",
-                table: "USER",
-                column: "ID_PROFILE");
+                name: "IX_User1_ProfileId",
+                table: "User1",
+                column: "ProfileId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -132,13 +176,19 @@ namespace Bomix_Force.Migrations
                 name: "ACCESS");
 
             migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
+                name: "User");
+
+            migrationBuilder.DropTable(
                 name: "USERLOGIN");
 
             migrationBuilder.DropTable(
                 name: "PERMISSION");
 
             migrationBuilder.DropTable(
-                name: "USER");
+                name: "User1");
 
             migrationBuilder.DropTable(
                 name: "PROFILE");
