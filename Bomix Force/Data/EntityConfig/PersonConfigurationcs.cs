@@ -9,7 +9,7 @@ namespace Bomix_Force.Data.EntityConfig
         public void Configure(EntityTypeBuilder<Person> builder)
         {
             builder.ToTable("PERSON");
-            builder.HasKey(e => new { e.IdPerson });
+            builder.HasKey(e => new { e.Id });
 
             builder.Property(u => u.Name)
                .HasColumnName("NAME")
@@ -19,9 +19,6 @@ namespace Bomix_Force.Data.EntityConfig
               .HasColumnName("EMAIL")
               .IsRequired();
 
-            builder.Property(u => u.Sector)
-              .HasColumnName("SECTOR")
-              .IsRequired();
 
             builder.Property(u => u.Cpf)
               .HasColumnName("CPF")
@@ -35,6 +32,9 @@ namespace Bomix_Force.Data.EntityConfig
               .HasColumnName("COMPANYID")
               .IsRequired();
 
+            builder.HasOne(u => u.Order)
+                .WithMany(t=>t.Person);
+                
 
         }
     }

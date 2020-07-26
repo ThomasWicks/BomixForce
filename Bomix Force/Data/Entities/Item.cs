@@ -5,16 +5,12 @@ using System.Threading.Tasks;
 
 namespace Bomix_Force.Data.Entities
 {
-    public class Person
+    public class Item
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public int Cpf { get; set; }
-        public int Tel { get; set; }
-        public int Company_Id { get; set; }
+        public string Status_art { get; set; }
+        public string Description { get; set; }
         public int Id_Order { get; set; }
-        public virtual Company Company { get; set; }
         public virtual Order Order { get; set; }
     }
 }

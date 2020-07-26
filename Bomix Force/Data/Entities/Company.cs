@@ -7,9 +7,10 @@ namespace Bomix_Force.Data.Entities
 {
     public class Company
     {
-        public int IdCompany { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Cnpj { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

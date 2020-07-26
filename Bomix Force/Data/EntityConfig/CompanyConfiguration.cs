@@ -9,7 +9,7 @@ namespace Bomix_Force.Data.EntityConfig
         public void Configure(EntityTypeBuilder<Company> builder)
         {
             builder.ToTable("COMPANY");
-            builder.HasKey(e => new { e.IdCompany });
+            builder.HasKey(e => new { e.Id });
 
             builder.Property(u => u.Name)
                .HasColumnName("NAME")

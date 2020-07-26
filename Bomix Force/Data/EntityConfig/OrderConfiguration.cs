@@ -23,17 +23,19 @@ namespace Bomix_Force.Data.EntityConfig
                .HasColumnName("STATUS")
                .IsRequired();
 
-            builder.Property(u => u.Person_id_request)
-               .HasColumnName("PERSON_ID_REQUEST")
-               .IsRequired();
+            builder.HasOne(e => e.Company)
+                 .WithMany(t => t.Orders)
+                 .HasForeignKey(e => e.CompanyId)
+                 .IsRequired();
 
-            builder.Property(u => u.CompanyId)
-               .HasColumnName("COMPANYID")
-               .IsRequired();
+            builder.HasMany(e => e.Person)
+                .WithOne(t => t.Order).
+                HasForeignKey(e => e.Id_Order);
 
-            builder.Property(u => u.Person_id_seller)
-               .HasColumnName("PERSON_ID_SELLER")
-               .IsRequired();
+            builder.HasMany(e => e.Item)
+                .WithOne(t=> t.Order)
+                .HasForeignKey(i=> i.Id_Order);
+
         }
     }
 }
