@@ -29,25 +29,36 @@
     <!-- fazer o if para verificar cada perfil e ver se tem a permissão de ver ou não e se é a tela de login -->
     <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 150px;">
         <div>
-            <img class="rounded mx-auto d-block" src="https://conteudo.imguol.com.br/blogs/174/files/2018/05/iStock-648229868.jpg" alt="W3Schools.com" style="width:50px;height:50px;">
-            <h5 class="text-center">Usuarios</h5>
+            <a href="@Url.Action("Index", "User")">
+                <i class="text-align:center fas fa-user-alt fa-4x"></i>
+            </a>
+            <h5 class="text-center">Usuários</h5>
         </div>
         <div>
-            <i class="fa fa-archive rounded mx-auto d-block" style="width:50px;height:50px;"></i>
+            <a href="@Url.Action("Index", "User")">
+                <i class="text-align:center fa fa-archive fa-4x"> </i>
+            </a>
+            <!-- <i class="fa fa-archive rounded mx-auto d-block" style="width:100px;height:50px;"></i> -->
             <h5>Pedidos</h5>
         </div>
         <div>
-            <img class="rounded mx-auto d-block" src="https://conteudo.imguol.com.br/blogs/174/files/2018/05/iStock-648229868.jpg" alt="W3Schools.com" style="width:50px;height:50px;">
-            <h5>Vendas</h5>
-        </div>
-        <div>
-            <img class="rounded mx-auto d-block" src="https://conteudo.imguol.com.br/blogs/174/files/2018/05/iStock-648229868.jpg" alt="W3Schools.com" style="width:50px;height:50px;">
-            <h5>Outros</h5>
+            <a href="@Url.Action("Index", "User")">
+                <i class="text-align:center fas fa-piggy-bank fa-4x"></i>
+            </a>
+            <h5 class="text-center">Vendas</h5>
         </div>
     </aside>
-    <div class="container">
+    <div class="teste">
         <main role="main" class="pb-3">
             @RenderBody()
+            <div class="botao pagination">
+                <a href="#">&laquo;</a>
+                <a href="#">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">&raquo;</a>
+            </div>
         </main>
     </div>
 
@@ -59,6 +70,29 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/96765fe8b0.js" crossorigin="anonymous"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+<style lang="scss" scoped>
+.teste {
+  width: 90%;
+  padding-left: 100px;
+  padding-top: 25px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.pagination {
+  display: inline-block;
+}
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.botao {
+  float: right;
+}
+</style>
