@@ -1,4 +1,5 @@
 ﻿using Bomix_Force.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -10,28 +11,16 @@ namespace Bomix_Force.Data.EntityConfig
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("USER");
-            builder.HasKey(u => u.Id);
-
             builder.Property(u => u.IdProfile)
                 .HasColumnName("ID_PROFILE")
+                .HasColumnType("int")
                 .IsRequired();
-
-            builder.Property(u => u.IdEstablishment)
-                .HasColumnName("ID_ESTABLISHMENT")
-                .IsRequired();
-
 
             builder.Property(u => u.Active)
                 .HasColumnName("ACTIVE")
                 .HasColumnType("CHAR")
                 .IsRequired()
                 .HasMaxLength(1);
-
-            builder.Property(u => u.Username)
-                .HasColumnName("USERNAME")
-                .HasMaxLength(50)
-                .IsRequired();
 
             builder.Property(u => u.EmailConfirmed)
                 .HasColumnName("EMAILCONFIRMED")
@@ -68,11 +57,6 @@ namespace Bomix_Force.Data.EntityConfig
                 // .HasColumnType("NUMBER")
                 .IsRequired();
 
-            builder.Property(u => u.RecieveNotification)
-                .HasColumnName("RECIEVENOTIFICATION")
-                // .HasColumnType("NUMBER")
-                .IsRequired();
-
             builder.Property(u => u.AccessFailedCount)
                 .HasColumnName("ACCESSFAILEDCOUNT")
                 .IsRequired()
@@ -88,12 +72,9 @@ namespace Bomix_Force.Data.EntityConfig
             //    .HasForeignKey(u => u.IdEstablishment)
             //    .WillCascadeOnDelete(false);
 
-            builder.Property(u => u.Id)
-                .HasColumnName("ID")
-                .UseIdentityColumn();
-
             builder.HasOne(u => u.Person)
                 .WithOne(t => t.User)
+                .HasForeignKey<Person>(i => i.UserId)
                 .IsRequired();
         }
     }

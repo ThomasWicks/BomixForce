@@ -27,11 +27,6 @@ namespace Bomix_Force.Data.EntityConfig
             builder.Property(ul => ul.ProviderKey)
                 .HasColumnName("PROVIDERKEY")
                 .HasMaxLength(128);
-
-            builder.HasOne(ul => ul.User)
-                .WithMany(u => u.UserLoginList)
-                .HasForeignKey(ul => ul.IdUser)
-                .IsRequired();
         }
     }
 }

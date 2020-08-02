@@ -3,23 +3,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bomix_Force.Migrations
 {
-    public partial class Inital : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Company",
+                name: "COMPANY",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Cnpj = table.Column<string>(nullable: true)
+                    NAME = table.Column<string>(nullable: false),
+                    EMAIL = table.Column<string>(nullable: false),
+                    CNPJ = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Company", x => x.Id);
+                    table.PrimaryKey("PK_COMPANY", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DOCUMENT",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DOCUMENT", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,49 +64,23 @@ namespace Bomix_Force.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Order",
+                name: "ORDER",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    Status_Order = table.Column<string>(nullable: true),
-                    CompanyId = table.Column<int>(nullable: false),
-                    Id_item = table.Column<int>(nullable: false)
+                    NUMBER = table.Column<int>(nullable: false),
+                    DATE = table.Column<DateTime>(nullable: false),
+                    STATUS = table.Column<string>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_ORDER", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Order_Company_CompanyId",
+                        name: "FK_ORDER_COMPANY_CompanyId",
                         column: x => x.CompanyId,
-                        principalTable: "Company",
+                        principalTable: "COMPANY",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -125,115 +111,117 @@ namespace Bomix_Force.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User1",
+                name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdProfile = table.Column<int>(nullable: false),
-                    Cpf = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
-                    Active = table.Column<string>(nullable: true),
-                    Username = table.Column<string>(nullable: true),
-                    IdEstablishment = table.Column<int>(nullable: false),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEndDateUTC = table.Column<DateTime>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    RecieveNotification = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    ProfileId = table.Column<int>(nullable: true)
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    EMAILCONFIRMED = table.Column<bool>(nullable: false),
+                    PASSWORDHASH = table.Column<string>(nullable: false),
+                    SECURITYSTAMP = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PHONENUMBER = table.Column<string>(maxLength: 50, nullable: true),
+                    PHONENUMBERCONFIRMED = table.Column<bool>(nullable: false),
+                    TWOFACTORENABLED = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LOCKOUTENABLED = table.Column<bool>(nullable: false),
+                    ACCESSFAILEDCOUNT = table.Column<int>(type: "int", nullable: false),
+                    ID_PROFILE = table.Column<int>(type: "int", nullable: false),
+                    ACTIVE = table.Column<string>(type: "CHAR", maxLength: 1, nullable: false),
+                    LOCKOUTENDDATEUTC = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User1", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User1_PROFILE_ProfileId",
-                        column: x => x.ProfileId,
+                        name: "FK_User_PROFILE_ID_PROFILE",
+                        column: x => x.ID_PROFILE,
                         principalTable: "PROFILE",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Item",
+                name: "ITEM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status_art = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Id_Order = table.Column<int>(nullable: false),
-                    OrderId = table.Column<int>(nullable: true)
+                    STATUS_ART = table.Column<string>(nullable: false),
+                    DESCRIPTION = table.Column<string>(nullable: false),
+                    OrderId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Item", x => x.Id);
+                    table.PrimaryKey("PK_ITEM", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Item_Order_OrderId",
+                        name: "FK_ITEM_ORDER_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Order",
+                        principalTable: "ORDER",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "N_conformity",
+                name: "N_CONFORMITY",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Lot = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    LOT = table.Column<string>(nullable: false),
+                    DESCRIPTION = table.Column<string>(nullable: false),
                     Id_Order = table.Column<int>(nullable: false),
-                    OrderId = table.Column<int>(nullable: true)
+                    OrderId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_N_conformity", x => x.Id);
+                    table.PrimaryKey("PK_N_CONFORMITY", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_N_conformity_Order_OrderId",
+                        name: "FK_N_CONFORMITY_ORDER_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Order",
+                        principalTable: "ORDER",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Person",
+                name: "PERSON",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Cpf = table.Column<int>(nullable: false),
-                    Tel = table.Column<int>(nullable: false),
-                    Company_Id = table.Column<int>(nullable: false),
-                    Id_Order = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: true),
+                    NAME = table.Column<string>(nullable: false),
+                    EMAIL = table.Column<string>(nullable: false),
+                    CPF = table.Column<int>(nullable: false),
+                    TEL = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Person", x => x.Id);
+                    table.PrimaryKey("PK_PERSON", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Person_Company_CompanyId",
+                        name: "FK_PERSON_COMPANY_CompanyId",
                         column: x => x.CompanyId,
-                        principalTable: "Company",
+                        principalTable: "COMPANY",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PERSON_ORDER_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "ORDER",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Person_Order_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Order",
+                        name: "FK_PERSON_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -242,17 +230,18 @@ namespace Bomix_Force.Migrations
                 {
                     ID_USER = table.Column<int>(nullable: false),
                     LOGINPROVIDER = table.Column<string>(maxLength: 128, nullable: false),
-                    PROVIDERKEY = table.Column<string>(maxLength: 128, nullable: false)
+                    PROVIDERKEY = table.Column<string>(maxLength: 128, nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_USERLOGIN", x => new { x.ID_USER, x.LOGINPROVIDER, x.PROVIDERKEY });
                     table.ForeignKey(
-                        name: "FK_USERLOGIN_User1_ID_USER",
-                        column: x => x.ID_USER,
-                        principalTable: "User1",
+                        name: "FK_USERLOGIN_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -261,34 +250,45 @@ namespace Bomix_Force.Migrations
                 column: "ID_PERMISSION");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_OrderId",
-                table: "Item",
+                name: "IX_ITEM_OrderId",
+                table: "ITEM",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_N_conformity_OrderId",
-                table: "N_conformity",
+                name: "IX_N_CONFORMITY_OrderId",
+                table: "N_CONFORMITY",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_CompanyId",
-                table: "Order",
+                name: "IX_ORDER_CompanyId",
+                table: "ORDER",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_CompanyId",
-                table: "Person",
+                name: "IX_PERSON_CompanyId",
+                table: "PERSON",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_OrderId",
-                table: "Person",
+                name: "IX_PERSON_OrderId",
+                table: "PERSON",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User1_ProfileId",
-                table: "User1",
-                column: "ProfileId");
+                name: "IX_PERSON_UserId",
+                table: "PERSON",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_ID_PROFILE",
+                table: "User",
+                column: "ID_PROFILE");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_USERLOGIN_UserId",
+                table: "USERLOGIN",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -297,16 +297,16 @@ namespace Bomix_Force.Migrations
                 name: "ACCESS");
 
             migrationBuilder.DropTable(
-                name: "Item");
+                name: "DOCUMENT");
 
             migrationBuilder.DropTable(
-                name: "N_conformity");
+                name: "ITEM");
 
             migrationBuilder.DropTable(
-                name: "Person");
+                name: "N_CONFORMITY");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "PERSON");
 
             migrationBuilder.DropTable(
                 name: "USERLOGIN");
@@ -315,13 +315,13 @@ namespace Bomix_Force.Migrations
                 name: "PERMISSION");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "ORDER");
 
             migrationBuilder.DropTable(
-                name: "User1");
+                name: "User");
 
             migrationBuilder.DropTable(
-                name: "Company");
+                name: "COMPANY");
 
             migrationBuilder.DropTable(
                 name: "PROFILE");

@@ -32,7 +32,6 @@ namespace Bomix_Force.Data.EntityConfig
                 .WithMany(t => t.Persons)
                 .IsRequired();
 
-
         }
     }
 }

@@ -34,10 +34,14 @@ namespace Bomix_Force
             services.AddDbContext<ModelContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Mysqlconnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ModelContext>();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ModelContext>();
+            services.AddIdentity<User, UserRole>(cfg => {
+                cfg.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<ModelContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
             //Injeção de dependencia
             services.AddScoped<ModelContext>();
             services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
