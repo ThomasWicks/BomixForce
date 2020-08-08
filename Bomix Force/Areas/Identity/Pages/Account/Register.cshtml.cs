@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Bomix_Force.Data.Context;
+using Bomix_Force.Data.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -63,6 +65,14 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
 
             [Required]
             public string CompanyName { get; set; }
+            [Required]
+            public string Name { get; set; }
+            [Required]
+            public int CPF { get; set; }
+            [Required]
+            public int Tel { get; set; }
+            [Required]
+            public string Endereço { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -77,6 +87,11 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                var context = new ModelContext();
+                var company = context.Company.Where(c => c.Name == Input.CompanyName).FirstOrDefault();
+                //TODO TEST IF COMPANY QUERY WORKS
+                Person person = new Person { Name = Input.Name, Email = Input.Email, Cpf = Input.CPF, Tel = Input.Tel, Company = company };
+                _logger.LogInformation("Person = " + person.Tel);
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

@@ -9,6 +9,10 @@ namespace Bomix_Force.Data.Context
 {
     public class ModelContext : IdentityDbContext
     {
+        public ModelContext()
+        {
+        }
+
         public ModelContext(DbContextOptions<ModelContext> options)
            : base(options)
         {
