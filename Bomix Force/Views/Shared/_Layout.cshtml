@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,52 +28,51 @@
         </nav>
     </header>
     <!-- fazer o if para verificar cada perfil e ver se tem a permissão de ver ou não e se é a tela de login -->
-    <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 150px;">
-        <div>
-            <a href="@Url.Action("Index", "User")">
-                <i class="text-align:center fas fa-user-alt fa-4x"></i>
-            </a>
-            <h5 class="text-center">Usuários</h5>
-        </div>
-        <div>
-            <a href="@Url.Action("Index", "User")">
-                <i class="text-align:center fa fa-archive fa-4x"> </i>
-            </a>
-            <!-- <i class="fa fa-archive rounded mx-auto d-block" style="width:100px;height:50px;"></i> -->
-            <h5>Pedidos</h5>
-        </div>
-        <div>
-            <a href="@Url.Action("Index", "User")">
-                <i class="text-align:center fas fa-piggy-bank fa-4x"></i>
-            </a>
-            <h5 class="text-center">Vendas</h5>
-        </div>
-    </aside>
-    <div class="teste">
-        <main role="main" class="pb-3">
-            @RenderBody()
-            <div class="botao pagination">
-                <a href="#">&laquo;</a>
-                <a href="#">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">&raquo;</a>
+        <!-- <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 150px;">
+            <div>
+                <a href="@Url.Action("Index", "User")">
+                    <i class="text-align:center fas fa-user-alt fa-4x"></i>
+                </a>
+                <h5 class="text-center">Usuários</h5>
             </div>
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - Bomix_Force - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div>
+                <a href="@Url.Action("Index", "User")">
+                    <i class="text-align:center fa fa-archive fa-4x"> </i>
+                </a>
+                <h5>Pedidos</h5>
+            </div>
+            <div>
+                <a href="@Url.Action("Index", "User")">
+                    <i class="text-align:center fas fa-piggy-bank fa-4x"></i>
+                </a>
+                <h5 class="text-center">Vendas</h5>
+            </div>
+        </aside> -->
+        <div class="teste">
+            <main role="main" class="pb-3">
+                @RenderBody()
+                <div class="botao pagination">
+                    <!-- <a href="#">&laquo;</a>
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">&raquo;</a> -->
+                </div>
+            </main>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://kit.fontawesome.com/96765fe8b0.js" crossorigin="anonymous"></script>
-    @RenderSection("Scripts", required: false)
-</body>
+
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - Bomix_Force - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="https://kit.fontawesome.com/96765fe8b0.js" crossorigin="anonymous"></script>
+        @RenderSection("Scripts", required: false)
+    </body>
 </html>
 
 <style lang="scss" scoped>
