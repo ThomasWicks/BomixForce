@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Bomix_Force.Data.Migrations
+namespace Bomix_Force.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,11 +47,38 @@ namespace Bomix_Force.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "COMPANY",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NAME = table.Column<string>(nullable: false),
+                    EMAIL = table.Column<string>(nullable: false),
+                    CNPJ = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_COMPANY", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DOCUMENT",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DOCUMENT", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -73,7 +99,7 @@ namespace Bomix_Force.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -153,6 +179,102 @@ namespace Bomix_Force.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ORDER",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NUMBER = table.Column<int>(nullable: false),
+                    DATE = table.Column<DateTime>(nullable: false),
+                    STATUS = table.Column<string>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ORDER", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ORDER_COMPANY_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "COMPANY",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ITEM",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    STATUS_ART = table.Column<string>(nullable: false),
+                    DESCRIPTION = table.Column<string>(nullable: false),
+                    OrderId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ITEM", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ITEM_ORDER_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "ORDER",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "N_CONFORMITY",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LOT = table.Column<string>(nullable: false),
+                    DESCRIPTION = table.Column<string>(nullable: false),
+                    Id_Order = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_N_CONFORMITY", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_N_CONFORMITY_ORDER_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "ORDER",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PERSON",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NAME = table.Column<string>(nullable: false),
+                    EMAIL = table.Column<string>(nullable: false),
+                    CPF = table.Column<int>(nullable: false),
+                    TEL = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PERSON", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PERSON_COMPANY_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "COMPANY",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PERSON_ORDER_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "ORDER",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +313,31 @@ namespace Bomix_Force.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ITEM_OrderId",
+                table: "ITEM",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_N_CONFORMITY_OrderId",
+                table: "N_CONFORMITY",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ORDER_CompanyId",
+                table: "ORDER",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PERSON_CompanyId",
+                table: "PERSON",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PERSON_OrderId",
+                table: "PERSON",
+                column: "OrderId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +358,28 @@ namespace Bomix_Force.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "DOCUMENT");
+
+            migrationBuilder.DropTable(
+                name: "ITEM");
+
+            migrationBuilder.DropTable(
+                name: "N_CONFORMITY");
+
+            migrationBuilder.DropTable(
+                name: "PERSON");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "ORDER");
+
+            migrationBuilder.DropTable(
+                name: "COMPANY");
         }
     }
 }

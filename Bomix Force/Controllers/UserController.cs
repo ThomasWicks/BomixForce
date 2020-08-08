@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bomix_Force.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,34 +9,31 @@ namespace Bomix_Force.Controllers
 {
     public class UserController : Controller
     {
-        // GET: User
+        // GET: UserController
         public ActionResult Index()
         {
-            List<UserViewModel> UserList = new List<UserViewModel>();
-            return View(UserList);
-        }   
+            return View();
+        }
 
-        // GET: User/Details/5
+        // GET: UserController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: User/Create
+        // GET: UserController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: User/Create
+        // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
             try
             {
-                // TODO: Add insert logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -46,21 +42,19 @@ namespace Bomix_Force.Controllers
             }
         }
 
-        // GET: User/Edit/5
+        // GET: UserController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: User/Edit/5
+        // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -69,21 +63,19 @@ namespace Bomix_Force.Controllers
             }
         }
 
-        // GET: User/Delete/5
+        // GET: UserController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: User/Delete/5
+        // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch

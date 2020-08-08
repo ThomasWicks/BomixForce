@@ -1,17 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
-using Bomix_Force.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Bomix_Force.Data.Context;
+using Bomix_Force.Repo;
+using Bomix_Force.Data.Entities;
+using Bomix_Force.Repo.Interface;
+using AutoMapper;
+using Bomix_Force.Util;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bomix_Force
 {
@@ -27,13 +28,42 @@ namespace Bomix_Force
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ModelContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("Mysqlconnection")));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Delete", policy => policy.Requirements.Add(new AuthorizationHelper("Delete")));
+                options.AddPolicy("Create", policy => policy.Requirements.Add(new AuthorizationHelper("Create")));
+                options.AddPolicy("Edit", policy => policy.Requirements.Add(new AuthorizationHelper("Edit")));
+                options.AddPolicy("Index", policy => policy.Requirements.Add(new AuthorizationHelper("Index")));
+            }
+            );
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ModelContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSingleton<IAuthorizationHandler, AuthHendler>();
+            // Auto Mapper Configurations
+            AutoMapperConfig autoMapper = new AutoMapperConfig();
+            services.AddSingleton(autoMapper);
+
+            //Injeção de dependencia
+            services.AddScoped<ModelContext>();
+            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+            //services.AddScoped<IGenericRepository<Access>, GenericRepository<Access>>();
+            services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
+            services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
+            //services.AddScoped<IGenericRepository<Permission>, GenericRepository<Permission>>();
+            services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
+            //services.AddScoped<IGenericRepository<Bomix_Force.Data.Entities.Profile>, GenericRepository<Bomix_Force.Data.Entities.Profile>>();
+            //services.AddScoped<IGenericRepository<UserLogin>, GenericRepository<UserLogin>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
