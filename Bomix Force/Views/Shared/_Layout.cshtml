@@ -20,22 +20,19 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com" style="width:50px;height:50px;">
-                    </ul>
                 </div>
             </div>
         </nav>
     </header>
     <!-- fazer o if para verificar cada perfil e ver se tem a permissão de ver ou não e se é a tela de login -->
-        <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 150px;">
+        <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 110px;">
             <div>
                 <a href="@Url.Action("Index", "User")">
-                    <i class="text-align:center fas fa-user-alt fa-4x"></i>
+                    <i class="align-middle fas fa-user-alt fa-3x"></i>
                 </a>
                 <h5 class="text-center">Usuários</h5>
             </div>
-            <div>
+            <!-- <div>
                 <a href="@Url.Action("Index", "User")">
                     <i class="text-align:center fa fa-archive fa-4x"> </i>
                 </a>
@@ -46,7 +43,7 @@
                     <i class="text-align:center fas fa-piggy-bank fa-4x"></i>
                 </a>
                 <h5 class="text-center">Vendas</h5>
-            </div>
+            </div> -->
         </aside>
         <div class="teste">
             <main role="main" class="pb-3">
@@ -77,9 +74,9 @@
 
 <style lang="scss" scoped>
 .teste {
-  width: 90%;
+  width: 95%;
   padding-left: 100px;
-  padding-top: 25px;
+  padding-top: 10px;
   margin-right: auto;
   margin-left: auto;
 }
