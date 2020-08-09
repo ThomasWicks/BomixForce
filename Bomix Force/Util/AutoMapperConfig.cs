@@ -1,4 +1,5 @@
-﻿using AutoMapper.Configuration;
+﻿using AutoMapper;
+using AutoMapper.Configuration;
 using Bomix_Force.Data.Entities;
 using Bomix_Force.ViewModels;
 using System;
@@ -8,18 +9,13 @@ using System.Threading.Tasks;
 
 namespace Bomix_Force.Util
 {
-    public class AutoMapperConfig
+    public class AutoMapperConfig : Profile
     {
-        public static MapperConfigurationExpression RegisterMappings()
+        public AutoMapperConfig()
         {
-            MapperConfigurationExpression cfg = new MapperConfigurationExpression();
             #region User 
-            cfg.CreateMap<User, UserViewModel>().ReverseMap();
-            cfg.CreateMap<UserViewModel, User>().ReverseMap();
+            CreateMap<UserViewModel, Person>().ReverseMap();
             #endregion
-
-
-            return cfg;
         }
     }
 }

@@ -51,8 +51,7 @@ namespace Bomix_Force
             services.AddRazorPages();
             services.AddSingleton<IAuthorizationHandler, AuthHendler>();
             // Auto Mapper Configurations
-            AutoMapperConfig autoMapper = new AutoMapperConfig();
-            services.AddSingleton(autoMapper);
+            services.AddAutoMapper(typeof (Startup));
 
             //Injeção de dependencia
             services.AddScoped<ModelContext>();

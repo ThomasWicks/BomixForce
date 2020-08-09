@@ -29,19 +29,23 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IGenericRepository<Company> _genericCompanyService;
+        private readonly IGenericRepository<Person> _genericPersonService;
+
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IGenericRepository<Company> genericCompanyService)
+            IGenericRepository<Company> genericCompanyService,
+            IGenericRepository<Person> genericPersonService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _genericCompanyService = genericCompanyService;
+            _genericPersonService = genericPersonService;
         }
 
         [BindProperty]
@@ -79,13 +83,15 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
             public int Tel { get; set; }
             [Required]
             public string Endereço { get; set; }
+
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             List<Company> company = new List<Company>();
-            company = _genericCompanyService.Get(g=> g.Name == "Bomix").ToList();
+            company = _genericCompanyService.GetAll().ToList();
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
@@ -96,12 +102,14 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var context = new ModelContext();
-                var company = context.Company.Where(c => c.Name == Input.CompanyName).FirstOrDefault();
                 //TODO TEST IF COMPANY QUERY WORKS
-                Person person = new Person { Name = Input.Name, Email = Input.Email, Cpf = Input.CPF, Tel = Input.Tel, Company = company };
-                _logger.LogInformation("Person = " + person.Tel);
+                Company company = _genericCompanyService.Get(c => c.Name == Input.CompanyName).First();
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                Person person = new Person { Name = Input.Name, Email = Input.Email, Cpf = Input.CPF, Tel = Input.Tel, Company = company, UserId = user.Id};
+                _genericPersonService.Insert(person);
+                _genericPersonService.Save();
+                _logger.LogInformation("Person = " + person.Tel);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
