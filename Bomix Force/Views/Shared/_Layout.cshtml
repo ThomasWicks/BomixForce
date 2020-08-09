@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,9 +10,10 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <!-- fazer o if para verificar se é tela de login -->
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Bomix_Force</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Bomix Force</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -19,31 +21,78 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com" style="width:50px;height:50px;">
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - Bomix_Force - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- fazer o if para verificar cada perfil e ver se tem a permissão de ver ou não e se é a tela de login -->
+        <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 150px;">
+            <div>
+                <a href="@Url.Action("Index", "User")">
+                    <i class="text-align:center fas fa-user-alt fa-4x"></i>
+                </a>
+                <h5 class="text-center">Usuários</h5>
+            </div>
+            <div>
+                <a href="@Url.Action("Index", "User")">
+                    <i class="text-align:center fa fa-archive fa-4x"> </i>
+                </a>
+                <h5>Pedidos</h5>
+            </div>
+            <div>
+                <a href="@Url.Action("Index", "User")">
+                    <i class="text-align:center fas fa-piggy-bank fa-4x"></i>
+                </a>
+                <h5 class="text-center">Vendas</h5>
+            </div>
+        </aside>
+        <div class="teste">
+            <main role="main" class="pb-3">
+                @RenderBody()
+                <div class="botao pagination">
+                    <!-- <a href="#">&laquo;</a>
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">&raquo;</a> -->
+                </div>
+            </main>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
-</body>
+
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - Bomix_Force - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="https://kit.fontawesome.com/96765fe8b0.js" crossorigin="anonymous"></script>
+        @RenderSection("Scripts", required: false)
+    </body>
 </html>
+
+<style lang="scss" scoped>
+.teste {
+  width: 90%;
+  padding-left: 100px;
+  padding-top: 25px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.pagination {
+  display: inline-block;
+}
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.botao {
+  float: right;
+}
+</style>

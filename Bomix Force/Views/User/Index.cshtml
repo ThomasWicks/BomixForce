@@ -1,0 +1,86 @@
+﻿﻿
+@model IEnumerable<Bomix_Force.ViewModels.UserViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Usuario</h2>
+
+<p class="clearfix">
+    <a class="float-right btn btn-outline-primary btn-lg" asp-action="Create">Cadastrar</a>
+</p>
+<table class="table">
+     <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cpf)
+            </th>
+                        <th class="text-center">
+                Ações
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+            <th>
+                teste
+            </th>
+            <th>
+               teste
+            </th>
+            <th>
+                teste
+            </th>
+            <th>
+               teste
+            </th>
+                <td class="text-center">
+                    <a href="@Url.Action("Edit")">
+                     <i class="fas fa-user-edit"> </i>
+                    </a> | 
+                    <a href="@Url.Action("Delete")">
+                     <i class="fas fa-user-times"></i>
+                    </a>
+                    <!-- @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) -->
+                </td>
+        </tr>
+    
+                   <tr>
+            <th>
+                teste
+            </th>
+            <th>
+               teste
+            </th>
+            <th>
+                teste
+            </th>
+            <th>
+               teste
+            </th>
+                <td class="text-center">
+                    <a href="@Url.Action("Edit")">
+                     <i class="fas fa-user-edit"> </i>
+                    </a> | 
+                    <a href="@Url.Action("Delete")">
+                     <i class="fas fa-user-times"></i>
+                    </a>
+                    <!-- @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) -->
+                </td>
+        </tr>
+
+    </tbody>
+</table>
