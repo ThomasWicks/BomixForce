@@ -17,7 +17,6 @@ namespace Bomix_Force.Controllers
 
         public HomeController(ILogger<HomeController> logger)
         {
-            console.log(logger)
             _logger = logger;
         }
 
@@ -28,6 +27,11 @@ namespace Bomix_Force.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Login()
         {
             return View();
         }

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Bomix_Force.ViewModel
+namespace Bomix_Force.Views.Home
 {
-    public class UserViewModel
+    public class Login
     {
-
     }
 }

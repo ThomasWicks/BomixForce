@@ -10,21 +10,21 @@
     <div class="col-md-6 col-md-offset-2">
         <section>
             <figure>
-                <img src="./Views/Assets/img_girls.jpg" alt="img_girl" class="img-fluid">
+                <img src="Views/Assets/LoginBomix.png" alt="Bomix" class="img-fluid">
             </figure>
         </section>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 mt-5" >
         <section>
-            <form id="account" method="post">
+            <form  id="account" method="post">
                 <h4>Login</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
+                <div class="form-group py-3">
                     <input asp-for="Input.Email" placeholder="Email" class="form-control" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group py-3">
                     <input asp-for="Input.Password" placeholder="Senha" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
@@ -36,8 +36,8 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log in</button>
+                <div class="form-group float-right">
+                    <button type="submit" class="btn btn-outline-primary btn-lg">Logar</button>
                 </div>
                 <div class="form-group">
                     <p>
