@@ -15,12 +15,15 @@ namespace Bomix_Force.Controllers
 {
     public class UserController : Controller
     {
+        private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IMapper _mapper;
-        public UserController(IGenericRepository<Person> genericPersonService, IMapper mapper)
+        public UserController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper)
         {
-            _genericPersonService = genericPersonService;
             _mapper = mapper;
+            _genericPersonService = genericPersonService;
+            _genericCompanyService = genericCompanyService;
+
         }
 
         // GET: UserController
@@ -28,7 +31,7 @@ namespace Bomix_Force.Controllers
         {
             string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             Person person = _genericPersonService.Get(u => u.UserId == user).First();
-            IEnumerable<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get(p => p.Company == person.Company));
+            IEnumerable<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get(p => p.CompanyId == person.CompanyId));
             return View(userView);
         }
 

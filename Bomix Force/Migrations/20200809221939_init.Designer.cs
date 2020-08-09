@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bomix_Force.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    [Migration("20200808143024_Initial")]
-    partial class Initial
+    [Migration("20200809221939_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -155,6 +155,7 @@ namespace Bomix_Force.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CompanyId")
+                        .HasColumnName("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<int>("Cpf")
@@ -419,7 +420,7 @@ namespace Bomix_Force.Migrations
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Person", b =>
                 {
-                    b.HasOne("Bomix_Force.Data.Entities.Company", "Company")
+                    b.HasOne("Bomix_Force.Data.Entities.Company", null)
                         .WithMany("Persons")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)

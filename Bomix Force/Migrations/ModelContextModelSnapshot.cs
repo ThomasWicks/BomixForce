@@ -153,6 +153,7 @@ namespace Bomix_Force.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CompanyId")
+                        .HasColumnName("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<int>("Cpf")
@@ -417,7 +418,7 @@ namespace Bomix_Force.Migrations
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Person", b =>
                 {
-                    b.HasOne("Bomix_Force.Data.Entities.Company", "Company")
+                    b.HasOne("Bomix_Force.Data.Entities.Company", null)
                         .WithMany("Persons")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)

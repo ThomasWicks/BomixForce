@@ -28,10 +28,10 @@ namespace Bomix_Force.Data.EntityConfig
               .HasColumnName("TEL")
               .IsRequired();
 
-            builder.HasOne(u => u.Company)
-                .WithMany(t => t.Persons)
-                .IsRequired();
-
+            
+            builder.Property(u => u.CompanyId)
+              .HasColumnName("CompanyId")
+              .IsRequired();
         }
     }
 }
