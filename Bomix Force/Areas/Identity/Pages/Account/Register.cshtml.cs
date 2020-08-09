@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Bomix_Force.AppServices.Interface;
 using Bomix_Force.Data.Context;
 using Bomix_Force.Data.Entities;
+using Bomix_Force.Repo.Interface;
+using Bomix_Force.Service.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -25,17 +28,20 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IGenericRepository<Company> _genericCompanyService;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IGenericRepository<Company> genericCompanyService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _genericCompanyService = genericCompanyService;
         }
 
         [BindProperty]
@@ -78,6 +84,8 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+            List<Company> company = new List<Company>();
+            company = _genericCompanyService.Get(g=> g.Name == "Bomix").ToList();
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
