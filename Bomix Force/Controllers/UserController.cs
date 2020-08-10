@@ -20,8 +20,8 @@ namespace Bomix_Force.Controllers
         private readonly IMapper _mapper;
         public UserController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper)
         {
-            _mapper = mapper;
             _genericPersonService = genericPersonService;
+            _mapper = mapper;
             _genericCompanyService = genericCompanyService;
 
         }
@@ -65,7 +65,9 @@ namespace Bomix_Force.Controllers
         // GET: UserController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Person person = _genericPersonService.Get(u => u.Id == id).First();
+            UserViewModel userView = _mapper.Map<UserViewModel>(person);
+            return View(userView);
         }
 
         // POST: UserController/Edit/5
@@ -75,6 +77,12 @@ namespace Bomix_Force.Controllers
         {
             try
             {
+                Person person = _genericPersonService.Get(u => u.Id == id).First();
+                person.Name = collection["Name"];
+                person.Cpf =Int32.Parse( collection["Cpf"]);
+                person.Tel =Int32.Parse(collection["Tel"]);
+                _genericPersonService.Update(person);
+                _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch

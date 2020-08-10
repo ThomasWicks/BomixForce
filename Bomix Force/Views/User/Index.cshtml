@@ -48,11 +48,11 @@
                     </td>
                     <td class="text-center">
 
-                        @Html.DisplayFor(modelItem => item.Company)
+                        @Html.DisplayFor(modelItem => item.Company.Name)
                     </td>
 
                     <td class="text-center">
-                        <a href="@Url.Action("Edit")">
+                        <a href="@Url.Action("Edit", new {id=item.Id} )">
                             <i class="fas fa-user-edit"> </i>
                         </a> |
                         <a href="@Url.Action("Delete")">
