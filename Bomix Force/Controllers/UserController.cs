@@ -94,7 +94,9 @@ namespace Bomix_Force.Controllers
         // GET: UserController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Person person = _genericPersonService.Get(u => u.Id == id).First();
+            UserViewModel userView = _mapper.Map<UserViewModel>(person);
+            return View(userView);
         }
 
         // POST: UserController/Delete/5
@@ -104,6 +106,8 @@ namespace Bomix_Force.Controllers
         {
             try
             {
+                _genericPersonService.Delete(id);
+                _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch

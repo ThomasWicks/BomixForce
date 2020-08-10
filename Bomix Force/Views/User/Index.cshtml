@@ -55,7 +55,7 @@
                         <a href="@Url.Action("Edit", new {id=item.Id} )">
                             <i class="fas fa-user-edit"> </i>
                         </a> |
-                        <a href="@Url.Action("Delete")">
+                        <a href="@Url.Action("Delete", new {id=item.Id})">
                             <i class="fas fa-user-times"></i>
                         </a>
                         <!-- @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
