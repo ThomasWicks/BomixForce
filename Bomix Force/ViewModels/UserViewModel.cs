@@ -11,7 +11,6 @@ namespace Bomix_Force.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public int Cpf { get; set; }
         public int Tel { get; set; }
         public  Company Company { get; set; }
     }

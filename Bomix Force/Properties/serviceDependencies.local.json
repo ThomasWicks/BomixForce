@@ -4,6 +4,14 @@
       "type": "mssql.onprem",
       "connectionId": "DESKTOP-AQCIGBU",
       "secretStore": "LocalSecretsFile"
+    },
+    "secrets1": {
+      "type": "secrets.user"
+    },
+    "mssql1": {
+      "type": "mssql.onprem",
+      "connectionId": "Mysqlconnection",
+      "secretStore": "LocalSecretsFile"
     }
   }
 }
