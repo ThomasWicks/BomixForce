@@ -35,6 +35,13 @@ namespace Bomix_Force
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Mysqlconnection")));
 
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ModelContext>();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddSingleton<IAuthorizationHandler, AuthHendler>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Delete", policy => policy.Requirements.Add(new AuthorizationHelper("Delete")));
@@ -43,13 +50,6 @@ namespace Bomix_Force
                 options.AddPolicy("Index", policy => policy.Requirements.Add(new AuthorizationHelper("Index")));
             }
             );
-
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ModelContext>();
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-            services.AddSingleton<IAuthorizationHandler, AuthHendler>();
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof (Startup));
 

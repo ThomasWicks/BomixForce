@@ -6,21 +6,21 @@
 <h2>Usuário</h2>
 
 <p class="clearfix">
-    <a class="float-right btn btn-outline-primary btn-lg" asp-action="Create">Cadastrar</a>
+    <a class="float-right btn btn-outline-primary btn-lg" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>
 </p>
 <table class="table">
     <thead class="thead-dark">
         <tr>
-            <th>
+            <th  class="text-center">
                 Username
             </th>
-            <th>
+            <th  class="text-center">
                 Email
             </th>
-            <th>
+            <th  class="text-center">
                 CPF
             </th>
-            <th>
+            <th  class="text-center">
                 Company
             </th>
             <th class="text-center">
@@ -65,17 +65,6 @@
                 </tr>
             }
         }
-    <td class="text-center">
-        <a href="@Url.Action("Edit")">
-            <i class="fas fa-user-edit"> </i>
-        </a> |
-        <a href="@Url.Action("Delete")">
-            <i class="fas fa-user-times"></i>
-        </a>
-        <!-- @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) -->
-    </td>
     </tr>
 
     </tbody>

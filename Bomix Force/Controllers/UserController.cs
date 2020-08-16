@@ -7,6 +7,7 @@ using AutoMapper;
 using Bomix_Force.Data.Entities;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace Bomix_Force.Controllers
             _genericCompanyService = genericCompanyService;
 
         }
-
+        [Authorize]
         // GET: UserController
         public ActionResult Index()
         {
