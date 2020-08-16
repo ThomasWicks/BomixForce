@@ -53,7 +53,7 @@ namespace Bomix_Force
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof (Startup));
 
-            //Injeção de dependencia
+            //Injeï¿½ï¿½o de dependencia
             services.AddScoped<ModelContext>();
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
             services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();

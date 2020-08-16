@@ -2,21 +2,43 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+ViewData["Title"] = "Log in";
 }
 
 <!-- <h1>@ViewData["Title"]</h1> -->
-<div class="row">
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <figure>
-                <img src="Views/Assets/LoginBomix.png" alt="Bomix" class="img-fluid">
-            </figure>
-        </section>
+<body class="">
+  <div class="d-flex w-100 h-100 mx-auto">
+    <div class="col bg-login"></div>
+    <div class="col px-5 align-self-center">
+      <div class="col-xl-9 col-lg-9">
+        <form id="account" method="post">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email</label>
+                                <input asp-for="Input.Email" placeholder="teste@teste.com.br" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Senha</label>
+                                <input asp-for="Input.Password" placeholder="Senha" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+          </div>
+          <button type="submit" class="btn btn-outline-primary float-right">Entrar</button>
+        </form>
+      </div>
     </div>
-    <div class="col-md-4 mt-5" >
+  </div>
+  <!-- <footer class="mastfoot mt-auto">
+    <div class="inner">
+Email de contato: teste@teste.com
+    </div>
+  </footer> -->
+</body>
+<!-- <div class="row d-flex">
+    <div class="col-6">
+    </div>
+    <div class="col-4 px-5 mt-5 justify-self-center">
         <section>
-            <form  id="account" method="post">
+            <form id="account" method="post">
                 <h4>Login</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
@@ -50,8 +72,37 @@
             </form>
         </section>
     </div>
-</div>
+</div> -->
+<style lang="scss" scoped>
+html,
+body {
+  height: 100%;
+  background-color: #fff;
+}
+
+body {
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+}
+label {
+    color: black
+}
+footer {
+  text-align: center;
+  padding:10px 0;
+  background-color: #4D4B4B;
+}
+.bg-login {
+  background: url(../../../Assets/Bomix.jfif);
+  background-size: cover;
+}
+</style>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }
+
