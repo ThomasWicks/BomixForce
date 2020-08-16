@@ -106,7 +106,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 Company company = _genericCompanyService.Get(c => c.Name == Input.CompanyName).First();
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                Person person = new Person { Name = Input.Name, Email = Input.Email, Tel = Input.Tel, CompanyId = company.Id, UserId = user.Id};
+                Person person = new Person { Name = Input.Name, Email = Input.Email, Tel = Input.Tel, Company = company, UserId = user.Id};
                 _genericPersonService.Insert(person);
                 _genericPersonService.Save();
                 _logger.LogInformation("Person = " + person.Tel);

@@ -55,14 +55,10 @@ namespace Bomix_Force
 
             //Injeção de dependencia
             services.AddScoped<ModelContext>();
-            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-            //services.AddScoped<IGenericRepository<Access>, GenericRepository<Access>>();
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
             services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
-            //services.AddScoped<IGenericRepository<Permission>, GenericRepository<Permission>>();
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
-            //services.AddScoped<IGenericRepository<Bomix_Force.Data.Entities.Profile>, GenericRepository<Bomix_Force.Data.Entities.Profile>>();
-            //services.AddScoped<IGenericRepository<UserLogin>, GenericRepository<UserLogin>>();
+            services.AddScoped<IGenericRepository<Item>, GenericRepository<Item>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

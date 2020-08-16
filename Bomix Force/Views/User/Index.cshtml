@@ -1,67 +1,64 @@
 ﻿@model IEnumerable<Bomix_Force.ViewModels.UserViewModel>
-@{
+    @{
     ViewData["Title"] = "Index";
-}
+    }
 
-<h2>Usuário</h2>
+    <h2>Usuário</h2>
 
-<p class="clearfix">
-    <a class="float-right btn btn-outline-primary btn-lg" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>
-</p>
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-            <th  class="text-center">
-                Username
-            </th>
-            <th  class="text-center">
-                Email
-            </th>
-            <th  class="text-center">
-                CPF
-            </th>
-            <th  class="text-center">
-                Company
-            </th>
-            <th class="text-center">
-                Ações
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model?.Count() > 0)
-        {
+    <p class="clearfix">
+        <a class="float-right btn btn-outline-primary btn-lg" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>
+    </p>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-center">
+                    Username
+                </th>
+                <th class="text-center">
+                    Email
+                </th>
+                <th class="text-center">
+                    Company
+                </th>
+                <th class="text-center">
+                    Ações
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model?.Count() > 0)
+            {
             foreach (var item in Model)
             {
-                <tr>
-                    <td class="text-center">
+            <tr>
+                <td class="text-center">
 
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td class="text-center">
 
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td class="text-center">
 
-                        @Html.DisplayFor(modelItem => item.Company.Name)
-                    </td>
+                    @Html.DisplayFor(modelItem => item.Company.Name)
+                </td>
 
-                    <td class="text-center">
-                        <a href="@Url.Action("Edit", new {id=item.Id} )">
-                            <i class="fas fa-user-edit"> </i>
-                        </a> |
-                        <a href="@Url.Action("Delete", new {id=item.Id})">
-                            <i class="fas fa-user-times"></i>
-                        </a>
-                        <!-- @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) -->
-                    </td>
-                </tr>
+                <td class="text-center">
+                    <a href="@Url.Action(" Edit", new {id=item.Id} )">
+                        <i class="fas fa-user-edit"> </i>
+                    </a> |
+                    <a href="@Url.Action(" Delete", new {id=item.Id})">
+                        <i class="fas fa-user-times"></i>
+                    </a>
+                    <!-- @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) -->
+                </td>
+            </tr>
             }
-        }
-    </tr>
+            }
+            </tr>
 
-    </tbody>
-</table>
+        </tbody>
+    </table>

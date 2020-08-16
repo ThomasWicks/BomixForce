@@ -22,11 +22,6 @@ namespace Bomix_Force.Data.EntityConfig
             builder.Property(u => u.Tel)
               .HasColumnName("TEL")
               .IsRequired();
-
-            
-            builder.Property(u => u.CompanyId)
-              .HasColumnName("CompanyId")
-              .IsRequired();
         }
     }
 }
