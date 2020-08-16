@@ -13,6 +13,8 @@ using AutoMapper;
 using Bomix_Force.Util;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Bomix_Force.AppServices.Interface;
+using Bomix_Force.AppServices;
 
 namespace Bomix_Force
 {
@@ -41,6 +43,8 @@ namespace Bomix_Force
                 .AddEntityFrameworkStores<ModelContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IAuthorizationHandler, AuthHendler>();
             services.AddAuthorization(options =>
             {
@@ -61,6 +65,7 @@ namespace Bomix_Force
             services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
             //services.AddScoped<IGenericRepository<Permission>, GenericRepository<Permission>>();
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
+
             //services.AddScoped<IGenericRepository<Bomix_Force.Data.Entities.Profile>, GenericRepository<Bomix_Force.Data.Entities.Profile>>();
             //services.AddScoped<IGenericRepository<UserLogin>, GenericRepository<UserLogin>>();
         }

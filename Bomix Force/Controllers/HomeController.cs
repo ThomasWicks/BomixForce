@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Bomix_Force.Models;
 using Microsoft.AspNetCore.Authorization;
+using Bomix_Force.AppServices;
 
 namespace Bomix_Force.Controllers
 {
