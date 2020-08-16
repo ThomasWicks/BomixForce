@@ -12,6 +12,6 @@ namespace Bomix_Force.ViewModels
         public int Number { get; set; }
         public DateTime Date { get; set; }
         public string Status_Order { get; set; }
-        public virtual List<Item> Item { get; set; }
+        public List<Item> Item { get; set; }
     }
 }
