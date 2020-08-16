@@ -19,11 +19,6 @@ namespace Bomix_Force.Data.EntityConfig
               .HasColumnName("EMAIL")
               .IsRequired();
 
-
-            builder.Property(u => u.Cpf)
-              .HasColumnName("CPF")
-              .IsRequired();
-
             builder.Property(u => u.Tel)
               .HasColumnName("TEL")
               .IsRequired();

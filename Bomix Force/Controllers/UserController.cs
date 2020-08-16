@@ -80,7 +80,6 @@ namespace Bomix_Force.Controllers
             {
                 Person person = _genericPersonService.Get(u => u.Id == id).First();
                 person.Name = collection["Name"];
-                person.Cpf =Int32.Parse( collection["Cpf"]);
                 person.Tel =Int32.Parse(collection["Tel"]);
                 _genericPersonService.Update(person);
                 _genericPersonService.Save();

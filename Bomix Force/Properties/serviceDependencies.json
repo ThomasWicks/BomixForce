@@ -3,6 +3,13 @@
     "mssql2": {
       "type": "mssql",
       "connectionId": "DESKTOP-39B4HAJ"
+    },
+    "secrets1": {
+      "type": "secrets"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "Mysqlconnection"
     }
   }
 }
