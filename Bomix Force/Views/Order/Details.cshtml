@@ -1,0 +1,61 @@
+﻿@model Bomix_Force.ViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<div>
+    <h4>OrderViewModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Number)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Number)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status_Order)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status_Order)
+        </dd>
+    </dl>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-center">
+                    Status da Arte
+                </th>
+                <th class="text-center">
+                    Descrição
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Item)
+            {
+                <tr>
+                    <th class="text-center">
+                        @item.Status_art
+                    </th>
+                    <th class="text-center">
+                        @item.Description
+                    </th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    @*@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |*@
+    <a asp-action="Index">Back to List</a>
+</div>

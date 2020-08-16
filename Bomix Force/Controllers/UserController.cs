@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bomix_Force.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IGenericRepository<Company> _genericCompanyService;
