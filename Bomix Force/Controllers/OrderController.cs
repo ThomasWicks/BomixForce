@@ -9,54 +9,55 @@ using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bomix_Force.Controllers
 {
     [Authorize]
-    public class UserController : Controller
+    public class OrderController : Controller
     {
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
+        private readonly IGenericRepository<Order> _genericOrderService;
+        private readonly IGenericRepository<Item> _genericItemService;
         private readonly IMapper _mapper;
-        public UserController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper)
+        public OrderController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper
+            , IGenericRepository<Order> genericOrderService, IGenericRepository<Item> genericItemService)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
             _genericCompanyService = genericCompanyService;
+            _genericOrderService = genericOrderService;
+            _genericItemService = genericItemService;
 
         }
-        [Authorize]
-        // GET: UserController
+        // GET: OrderController
         public ActionResult Index()
         {
             string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             Person person = _genericPersonService.Get(u => u.UserId == user).First();
-            Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
-
-            IEnumerable<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get(g=> g.CompanyId == person.CompanyId));
-            foreach (var item in userView)
-            {
-                item.Company = company;
-            }
-
-            return View(userView);
+            List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
+            IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+            return View(orderView);
         }
 
-        // GET: UserController/Details/5
+        // GET: OrderController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Order order = _genericOrderService.Get(g => g.Id == id).First();
+            List<Item> itens = _genericItemService.Get(i => i.OrderId == order.Id).ToList();
+            OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
+            orderView.Item = itens;
+            return View(orderView);
         }
 
-        // GET: UserController/Create
+        // GET: OrderController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: UserController/Create
+        // POST: OrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -71,26 +72,19 @@ namespace Bomix_Force.Controllers
             }
         }
 
-        // GET: UserController/Edit/5
+        // GET: OrderController/Edit/5
         public ActionResult Edit(int id)
         {
-            Person person = _genericPersonService.Get(u => u.Id == id).First();
-            UserViewModel userView = _mapper.Map<UserViewModel>(person);
-            return View(userView);
+            return View();
         }
 
-        // POST: UserController/Edit/5
+        // POST: OrderController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                Person person = _genericPersonService.Get(u => u.Id == id).First();
-                person.Name = collection["Name"];
-                person.Tel =Int32.Parse(collection["Tel"]);
-                _genericPersonService.Update(person);
-                _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -99,23 +93,19 @@ namespace Bomix_Force.Controllers
             }
         }
 
-        // GET: UserController/Delete/5
+        // GET: OrderController/Delete/5
         public ActionResult Delete(int id)
         {
-            Person person = _genericPersonService.Get(u => u.Id == id).First();
-            UserViewModel userView = _mapper.Map<UserViewModel>(person);
-            return View(userView);
+            return View();
         }
 
-        // POST: UserController/Delete/5
+        // POST: OrderController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                _genericPersonService.Delete(id);
-                _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -12,6 +12,9 @@ namespace Bomix_Force.Data.Entities
         public string Email { get; set; }
         public int Tel { get; set; }
         public string UserId { get; set; }
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
+        public int? OrderId { get; set; }
+        public virtual Company Company { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

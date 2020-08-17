@@ -70,7 +70,8 @@ namespace Bomix_Force.Migrations
                         .HasColumnName("DESCRIPTION")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Status_art")
@@ -97,15 +98,13 @@ namespace Bomix_Force.Migrations
                         .HasColumnName("DESCRIPTION")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id_Order")
-                        .HasColumnType("int");
-
                     b.Property<string>("Lot")
                         .IsRequired()
                         .HasColumnName("LOT")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -122,7 +121,8 @@ namespace Bomix_Force.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CompanyId")
+                    b.Property<int?>("CompanyId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -152,8 +152,7 @@ namespace Bomix_Force.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnName("CompanyId")
+                    b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -414,13 +413,11 @@ namespace Bomix_Force.Migrations
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Person", b =>
                 {
-                    b.HasOne("Bomix_Force.Data.Entities.Company", null)
+                    b.HasOne("Bomix_Force.Data.Entities.Company", "Company")
                         .WithMany("Persons")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompanyId");
 
-                    b.HasOne("Bomix_Force.Data.Entities.Order", null)
+                    b.HasOne("Bomix_Force.Data.Entities.Order", "Order")
                         .WithMany("Person")
                         .HasForeignKey("OrderId");
                 });
