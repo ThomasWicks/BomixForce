@@ -3,24 +3,24 @@
     ViewData["Title"] = "Index";
     }
 
-    <h2>Usuário</h2>
 
-    <p class="clearfix">
-        <a class="float-right btn btn-outline-primary btn-lg" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>
-    </p>
-    <table class="table">
-        <thead class="thead-dark">
+    <div class="clearfix mx-5">
+    <h2 class="mx-5 mt-3">Usuário</h2>
+        <a class="float-right btn btn-primary btn-lg mb-3" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>
+    <div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="thead-dark thead-sm">
             <tr>
-                <th class="text-center">
+                <th scope="col" class="text-center">
                     Username
                 </th>
-                <th class="text-center">
+                <th scope="col" class="text-center">
                     Email
                 </th>
-                <th class="text-center">
+                <th scope="col" class="text-center">
                     Company
                 </th>
-                <th class="text-center">
+                <th scope="col" class="text-center">
                     Ações
                 </th>
             </tr>
@@ -58,7 +58,8 @@
             </tr>
             }
             }
-            </tr>
 
         </tbody>
     </table>
+    </div>
+    </div>
