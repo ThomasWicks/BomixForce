@@ -55,7 +55,7 @@ namespace Bomix_Force
 
             //Injeção de dependencia
             services.AddScoped<ModelContext>();
-            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+            //services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
             //services.AddScoped<IGenericRepository<Access>, GenericRepository<Access>>();
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
             services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();

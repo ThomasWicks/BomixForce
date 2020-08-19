@@ -14,7 +14,7 @@
     <header>   
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Bomix Force</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Login">Bomix Force</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,7 +25,7 @@
             </div>
         </nav>
     </header>
-        <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 110px;">
+        <!-- <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 110px;">
             <div>
                 <a href="@Url.Action("Index", "User")">
                     <i class="align-middle fas fa-user-alt fa-3x"></i>
@@ -44,7 +44,7 @@
                 </a>
                 <h5 class="text-center">Vendas</h5>
             </div>
-        </aside>
+        </aside> -->
         <div>
             <main role="main" class="pb-3">
                 @RenderBody()
