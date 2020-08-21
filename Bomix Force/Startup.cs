@@ -87,7 +87,6 @@ namespace Bomix_Force
                 await _roleManager.CreateAsync(role);
 
                 //Here we create a Admin super user who will maintain the website                   
-
                 var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com" };
 
 
@@ -100,15 +99,29 @@ namespace Bomix_Force
                 {
                     var result1 = await _userManager.AddToRoleAsync(user, "Admin");
                 }
+
             }
 
             // creating Creating Manager role     
-            x = await _roleManager.RoleExistsAsync("Manager");
+            x = await _roleManager.RoleExistsAsync("Company");
             if (!x)
             {
                 var role = new IdentityRole();
-                role.Name = "Manager";
+                role.Name = "Company";
                 await _roleManager.CreateAsync(role);
+
+                var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com" };
+
+
+                string userPWD = "Admin123@";
+
+                var chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //Add default User to Role Admin    
+                if (chkUser.Succeeded)
+                {
+                    var result1 = await _userManager.AddToRoleAsync(user, "Company");
+                }
             }
 
             // creating Creating Employee role     

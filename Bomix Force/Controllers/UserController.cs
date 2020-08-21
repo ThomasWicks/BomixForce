@@ -31,17 +31,33 @@ namespace Bomix_Force.Controllers
         // GET: UserController
         public ActionResult Index()
         {
-            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            Person person = _genericPersonService.Get(u => u.UserId == user).First();
-            Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
-
-            IEnumerable<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get(g=> g.CompanyId == person.CompanyId));
-            foreach (var item in userView)
+            var teste = User.IsInRole("Company");
+            if (User.IsInRole("Admin"))
             {
-                item.Company = company;
-            }
+                IEnumerable<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get());
+                foreach (var item in userView)
+                {
+                    Person person = _genericPersonService.Get(u => u.Name == item.Name).First();
+                    item.Company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First(); ;
+                }
 
-            return View(userView);
+                return View(userView);
+            }
+            else if (User.IsInRole("Company"))
+            {
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
+
+                IEnumerable<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get(g => g.CompanyId == person.CompanyId));
+                foreach (var item in userView)
+                {
+                    item.Company = company;
+                }
+
+                return View(userView);
+            }
+            return View();
         }
 
         // GET: UserController/Details/5

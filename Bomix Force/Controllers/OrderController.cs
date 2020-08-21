@@ -9,6 +9,7 @@ using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bomix_Force.Controllers
@@ -20,12 +21,14 @@ namespace Bomix_Force.Controllers
         private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IGenericRepository<Order> _genericOrderService;
         private readonly IGenericRepository<Item> _genericItemService;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         public OrderController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper
-            , IGenericRepository<Order> genericOrderService, IGenericRepository<Item> genericItemService)
+            , IGenericRepository<Order> genericOrderService, IGenericRepository<Item> genericItemService, RoleManager<IdentityRole> roleManager)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
+            _roleManager = roleManager;
             _genericCompanyService = genericCompanyService;
             _genericOrderService = genericOrderService;
             _genericItemService = genericItemService;
@@ -34,11 +37,31 @@ namespace Bomix_Force.Controllers
         // GET: OrderController
         public ActionResult Index()
         {
-            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            Person person = _genericPersonService.Get(u => u.UserId == user).First();
-            List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
-            IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-            return View(orderView);
+            if (User.IsInRole("Admin"))
+            {
+                List<Order> orders = _genericOrderService.Get().ToList();
+                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                return View(orderView);
+            }
+            else if (User.IsInRole("User"))
+            {
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var test = _roleManager.FindByIdAsync(user);
+                Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
+                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                return View(orderView);
+            }
+            else
+            {
+                //TODO COMPANY
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var test = _roleManager.FindByIdAsync(user);
+                Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
+                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                return View(orderView);
+            };
         }
 
         // GET: OrderController/Details/5
@@ -47,7 +70,7 @@ namespace Bomix_Force.Controllers
             Order order = _genericOrderService.Get(g => g.Id == id).First();
             List<Item> itens = _genericItemService.Get(i => i.OrderId == order.Id).ToList();
             OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
-            orderView.Item = itens;
+            //orderView.Item = itens;
             return View(orderView);
         }
 
