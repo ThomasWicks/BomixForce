@@ -116,9 +116,9 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                     _genericPersonService.Save();
                     _logger.LogInformation("Person = " + person.Tel);
                     _logger.LogInformation("Novo usuário criado.");
-                    
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+
+
+                    return Page();
                 }
                 foreach (var error in result.Errors)
                 {

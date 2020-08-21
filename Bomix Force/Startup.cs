@@ -94,9 +94,11 @@ namespace Bomix_Force
             }
 
             // creating Creating Manager role     
+            x = await _roleManager.RoleExistsAsync("Company");
             if (!x)
             {
                 var role = new IdentityRole();
+                role.Name = "Company";
                 await _roleManager.CreateAsync(role);
 
                 var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
@@ -152,7 +154,7 @@ namespace Bomix_Force
                     pattern: "{controller=Home}/{action=Login}");
                 endpoints.MapRazorPages();
             });
-        createRolesandUsers(services).Wait();
+            createRolesandUsers(services).Wait();
         }
 
     }

@@ -10,13 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bomix_Force.Migrations
 {
     [DbContext(typeof(ModelContext))]
-<<<<<<< HEAD:Bomix Force/Migrations/20200820231344_init.Designer.cs
-    [Migration("20200820231344_init")]
+    [Migration("20200821000644_init")]
     partial class init
-=======
-    [Migration("20200820235404_Initial")]
-    partial class Initial
->>>>>>> feature/creating_roles:Bomix Force/Migrations/20200820235404_Initial.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
