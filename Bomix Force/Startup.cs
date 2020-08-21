@@ -59,19 +59,10 @@ namespace Bomix_Force
 
             //Injeção de dependencia
             services.AddScoped<ModelContext>();
-            //services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-            //services.AddScoped<IGenericRepository<Access>, GenericRepository<Access>>();
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
             services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
-            //services.AddScoped<IGenericRepository<Permission>, GenericRepository<Permission>>();
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
-            //services.AddScoped<IGenericRepository<Bomix_Force.Data.Entities.Profile>, GenericRepository<Bomix_Force.Data.Entities.Profile>>();
 
-            createRolesandUsers(createProvider(services)).Wait();
-        }
-        public IServiceProvider createProvider(IServiceCollection services)
-        {
-            return services.BuildServiceProvider();
         }
 
         private async Task createRolesandUsers(IServiceProvider serviceProvider)
@@ -88,7 +79,7 @@ namespace Bomix_Force
 
                 //Here we create a Admin super user who will maintain the website                   
 
-                var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com" };
+                var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com", EmailConfirmed = true };
 
 
                 string userPWD = "Admin123@";
@@ -103,12 +94,25 @@ namespace Bomix_Force
             }
 
             // creating Creating Manager role     
-            x = await _roleManager.RoleExistsAsync("Manager");
+            x = await _roleManager.RoleExistsAsync("Company");
             if (!x)
             {
                 var role = new IdentityRole();
-                role.Name = "Manager";
+                role.Name = "Company";
                 await _roleManager.CreateAsync(role);
+
+                var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
+
+
+                string userPWD = "Admin123@";
+
+                var chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //Add default User to Role Admin
+                if (chkUser.Succeeded)
+                {
+                    var result1 = await _userManager.AddToRoleAsync(user, "Company");
+                }
             }
 
             // creating Creating Employee role     
@@ -122,7 +126,7 @@ namespace Bomix_Force
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -150,6 +154,8 @@ namespace Bomix_Force
                     pattern: "{controller=Home}/{action=Login}");
                 endpoints.MapRazorPages();
             });
+        createRolesandUsers(services).Wait();
         }
+
     }
 }
