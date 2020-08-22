@@ -136,7 +136,7 @@ namespace Bomix_Force.Controllers
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
     }

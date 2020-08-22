@@ -47,10 +47,18 @@ namespace Bomix_Force.Controllers
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var test = _roleManager.FindByIdAsync(user);
-                Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
-                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-                return View(orderView);
+                try
+                {
+                    Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                    List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
+                    IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                    return View(orderView);
+                }
+                catch(Exception ex)
+                {
+                    //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
+                   return View();
+                }
             }
             else
             {
@@ -70,7 +78,7 @@ namespace Bomix_Force.Controllers
             Order order = _genericOrderService.Get(g => g.Id == id).First();
             List<Item> itens = _genericItemService.Get(i => i.OrderId == order.Id).ToList();
             OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
-            //orderView.Item = itens;
+            orderView.Item = itens;
             return View(orderView);
         }
 

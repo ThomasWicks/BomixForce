@@ -62,7 +62,8 @@ namespace Bomix_Force
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
             services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
-
+            services.AddScoped<IGenericRepository<Item>, GenericRepository<Item>>();
+            services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
         }
 
         private async Task createRolesandUsers(IServiceProvider serviceProvider)
