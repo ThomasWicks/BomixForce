@@ -123,6 +123,19 @@ namespace Bomix_Force
                 var role = new IdentityRole();
                 role.Name = "User";
                 await _roleManager.CreateAsync(role);
+
+                var user = new IdentityUser { UserName = "user.user@hotmail.com", Email = "user.user@hotmail.com", EmailConfirmed = true };
+
+
+                string userPWD = "Admin123@";
+
+                var chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //Add default User to Role Admin
+                if (chkUser.Succeeded)
+                {
+                    var result1 = await _userManager.AddToRoleAsync(user, "User");
+                }
             }
         }
 

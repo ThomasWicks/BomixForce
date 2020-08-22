@@ -50,7 +50,9 @@ namespace Bomix_Force.Controllers
                 try
                 {
                     Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                    List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
+                    
+                    //pega todos as orders cujo status não está finalizado e tem algum person com o id igual ao person que está logado
+                    List<Order> orders = _genericOrderService.Get(o=>o.Status_Order !="FINALIZADO").Where(o => o.Person.Any(p => p.Id == person.Id)).ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                     return View(orderView);
                 }
@@ -62,7 +64,6 @@ namespace Bomix_Force.Controllers
             }
             else
             {
-                //TODO COMPANY
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var test = _roleManager.FindByIdAsync(user);
                 Person person = _genericPersonService.Get(u => u.UserId == user).First();
