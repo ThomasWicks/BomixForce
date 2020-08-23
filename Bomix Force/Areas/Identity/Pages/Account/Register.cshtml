@@ -53,25 +53,13 @@
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="col-6">
-                <label asp-for="Input.CompanyName"></label>
-                                                @*<div class="col-md-4">
-                                                <select class="form-control">
-                                                    <option value="">-- Select Country --</option>
-                                                    @foreach (var company in Model.Input.CompanyName)
-                                                    {
-                                                        <option value="@company.Id">@company.Name</option>
-                                                    }
-                                                </select>
-                                            </div>*@
-                <input asp-for="Input.CompanyName" class="form-control" />
-                <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="Input.Tel"></label>
+                    <input asp-for="Input.Tel" class="form-control" />
+                    <span asp-validation-for="Input.Tel" class="text-danger"></span>
+                </div>
             </div>
 
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Tel"></label>
-                <input asp-for="Input.Tel" class="form-control" />
-                <span asp-validation-for="Input.Tel" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Endereço"></label>
