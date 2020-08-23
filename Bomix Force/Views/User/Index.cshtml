@@ -6,7 +6,7 @@
 
 <div class="clearfix mx-5">
     <h2 class="mt-3">Usuário</h2>
-    <a class="float-right btn btn-primary btn-lg mb-3" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>
+    <a class="float-right btn btn-primary btn-lg mb-3" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>   
     <div class="table-responsive">
         <table class="table table-hover">
             <thead class="thead-dark thead-sm">
@@ -50,26 +50,26 @@
                                 </a> |
                               
 
-                                <a type="button" class="fas fa-user-times" data-toggle="modal" data-target="#@item.Name"></a>
-                                <div class="modal fade" id=@item.Name role="dialog">
+                                <a href="" type="button" data-toggle="modal" data-target="#teste"> <i class="fas fa-user-times"> </i></a>
+                                <div class="modal fade" id="teste" id=@item.Name role="dialog">
                                     <div class="modal-dialog">
       
                                         <!-- Modal content-->
                                         <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">Modal Header</h4>
+                                            <div class="modal-header bg-dark">
+                                                <h4 class="modal-title float-left text-white">Deletar</h4>
+                                                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body">
 
                                                 <p>Você tem certeza que deseja deletar @Html.DisplayFor(modelItem => item.Name)?</p>
                                             </div>
                                             <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger float-left" data-dismiss="modal">Close</button>
                                                 <form asp-action="Delete">
                                                     @Html.HiddenFor(modelItem => item.Name)
-                                                    <input type="submit" value="Delete" class="btn btn-danger" /> |
+                                                    <button type="submit" class="btn btn-primary float-right">Excluir</button>
                                                 </form>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                             </div>
                                         </div>
 
@@ -82,6 +82,12 @@
                             </td>
                         </tr>
                     }
+                }else{
+                     <tr>
+                        <td>
+                        <h5>Nenhum Usuário encontrado.</h5>
+                        </td>
+                     </tr>
                 }
 
             </tbody>
