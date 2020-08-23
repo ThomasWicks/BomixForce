@@ -19,7 +19,7 @@ namespace Bomix_Force.ViewModels
  
     public class UserViewModel
     {
-            public Guid Id { get; set; }
+            public int Id { get; set; }
             [Required]
             [Display(Name = "Usuário")]
             public string UserName { get; set; }

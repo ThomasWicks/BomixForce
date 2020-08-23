@@ -46,14 +46,14 @@ namespace Bomix_Force.Controllers
                 UserViewIndex userList = new UserViewIndex();
                 userList.UserList = new List<UserViewModel>();
                 List<Person> people = _genericPersonService.GetAll().ToList();
-                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>> (people).ToList();
+                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
                 foreach (var item in userList.UserList)
                 {
                     Person person = _genericPersonService.Get(u => u.Name == item.Name).First();
                     //item.Input.Company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First(); ;
                 }
 
-                return View(userList.UserList);
+                return View(userList);
             }
             else if (User.IsInRole("Company"))
             {
