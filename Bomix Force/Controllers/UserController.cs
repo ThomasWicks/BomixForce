@@ -50,7 +50,7 @@ namespace Bomix_Force.Controllers
                 foreach (var item in userList.UserList)
                 {
                     Person person = _genericPersonService.Get(u => u.Name == item.Name).First();
-                    //item.Input.Company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First(); ;
+                    item.Company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First(); ;
                 }
 
                 return View(userList);
@@ -60,14 +60,15 @@ namespace Bomix_Force.Controllers
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person person = _genericPersonService.Get(u => u.UserId == user).First();
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
-
-                IEnumerable<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get(g => g.CompanyId == person.CompanyId));
-                foreach (var item in userView)
+                UserViewIndex userList = new UserViewIndex();
+                userList.UserList = new List<UserViewModel>();
+                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get(g => g.CompanyId == person.CompanyId));
+                foreach (var item in userList.UserList)
                 {
-                    item.CompanyName = company.Name;
+                    item.Company = company;
                 }
 
-                return View(userView);
+                return View(userList);
             }
             return View();
         }
@@ -81,8 +82,8 @@ namespace Bomix_Force.Controllers
         // GET: UserController/Create
         public ActionResult Create()
         {
-            List<Company> company = new List<Company>();
-            company = _genericCompanyService.GetAll().ToList();
+            //List<Company> company = new List<Company>();
+            //company = _genericCompanyService.GetAll().ToList();
             //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View();
         }
@@ -90,42 +91,51 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserViewModel userviewModel)
+        public async Task<ActionResult> Create(UserViewIndex userviewIndex)
         {
             try
             {
                 //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                 //if (ModelState.IsValid)
                 //{
-
-                //TODO TEST IF COMPANY QUERY WORKS
-                Company company = _genericCompanyService.Get(c => c.Name == userviewModel.CompanyName).First();
-                var user = new IdentityUser { UserName = userviewModel.UserName, Email = userviewModel.Email };
-                var result = await _userManager.CreateAsync(user, userviewModel.Password);
-
-                if (result.Succeeded)
+                if (User.IsInRole("Company"))
                 {
-                    Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
-                    _genericPersonService.Insert(person);
-                    _genericPersonService.Save();
-                    _logger.LogInformation("Person = " + person.Tel);
-                    _logger.LogInformation("Novo usuário criado.");
+                    //TODO TEST IF COMPANY QUERY WORKS
+                    string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    Person person_owner = _genericPersonService.Get(u => u.UserId == userId).First();
+                    Company company = _genericCompanyService.Get(g => g.Id == person_owner.CompanyId).First();
+                    UserViewModel userviewModel = userviewIndex.User;
+                    var user = new IdentityUser { UserName = userviewModel.UserName, Email = userviewModel.Email };
+                    var result = await _userManager.CreateAsync(user, userviewModel.Password);
+
+                    if (result.Succeeded)
+                    {
+                        Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
+                        _genericPersonService.Insert(person);
+                        _genericPersonService.Save();
+                        _logger.LogInformation("Person = " + person.Tel);
+                        _logger.LogInformation("Novo usuário criado.");
 
 
+                        return RedirectToAction(nameof(Index));
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    //}
+
+                    // If we got this far, something failed, redisplay form
                     return RedirectToAction(nameof(Index));
                 }
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    return View();
                 }
-                //}
-
-                // If we got this far, something failed, redisplay form
-                return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
