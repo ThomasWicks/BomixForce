@@ -18,15 +18,15 @@ namespace Bomix_Force.Controllers
     public class OrderController : Controller
     {
         private readonly IGenericRepository<Company> _genericCompanyService;
-        private readonly IGenericRepository<Person> _genericPersonService;
+        //private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IGenericRepository<Order> _genericOrderService;
         private readonly IGenericRepository<Item> _genericItemService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        public OrderController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper
+        public OrderController(IGenericRepository<Company> genericCompanyService, IMapper mapper
             , IGenericRepository<Order> genericOrderService, IGenericRepository<Item> genericItemService, RoleManager<IdentityRole> roleManager)
         {
-            _genericPersonService = genericPersonService;
+            //_genericPersonService = genericPersonService;
             _mapper = mapper;
             _roleManager = roleManager;
             _genericCompanyService = genericCompanyService;
@@ -47,8 +47,8 @@ namespace Bomix_Force.Controllers
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var test = _roleManager.FindByIdAsync(user);
-                Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
+                //Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                List<Order> orders = _genericOrderService.Get(o => /*o.CompanyId == person.CompanyId && */o.Status_Order != "FINALIZADO").ToList();
                 IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 return View(orderView);
             }
@@ -57,8 +57,8 @@ namespace Bomix_Force.Controllers
                 //TODO COMPANY
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var test = _roleManager.FindByIdAsync(user);
-                Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
+                //Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                List<Order> orders = _genericOrderService.Get(o => /*o.CompanyId == person.CompanyId &&*/ o.Status_Order != "FINALIZADO").ToList();
                 IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 return View(orderView);
             };

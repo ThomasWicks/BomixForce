@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bomix_Force.Data.Context
 {
-    public class ModelContext : IdentityDbContext
+    public class ModelContext : IdentityDbContext<ApplicationUser>
     {
         public ModelContext()
         {
@@ -18,7 +18,6 @@ namespace Bomix_Force.Data.Context
         {
         }
         public virtual DbSet<Order> Order { get; set; }
-        public virtual DbSet<Person> Person { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<N_conformity> N_conformity { get; set; }
         public virtual DbSet<Item> Item { get; set; }
@@ -32,8 +31,7 @@ namespace Bomix_Force.Data.Context
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentConfiguration());
-            modelBuilder.ApplyConfiguration(new PersonConfiguration());
-            
+
         }
     }
 }

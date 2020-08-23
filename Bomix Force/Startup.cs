@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Bomix_Force
 {
@@ -30,16 +31,27 @@ namespace Bomix_Force
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<ModelContext>(options =>
+            services.AddDbContextPool<ModelContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Mysqlconnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+
+            services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ModelContext>();
+
+            services.AddScoped<ModelContext>();
+
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IAuthorizationHandler, AuthHendler>();
+            // Auto Mapper Configurations
+            services.AddAutoMapper(typeof(Startup));
+
+            //Injeção de dependencia
+            services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
+            services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
 
             services.AddAuthorization(options =>
             {
@@ -50,25 +62,12 @@ namespace Bomix_Force
                 options.AddPolicy("RequirUserRole",
                     policy => policy.RequireRole("User"));
             });
-
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-            services.AddSingleton<IAuthorizationHandler, AuthHendler>();
-            // Auto Mapper Configurations
-            services.AddAutoMapper(typeof(Startup));
-
-            //Injeção de dependencia
-            services.AddScoped<ModelContext>();
-            services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
-            services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
-            services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
-
         }
 
         private async Task createRolesandUsers(IServiceProvider serviceProvider)
         {
             var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             bool x = await _roleManager.RoleExistsAsync("Admin");
             if (!x)
             {
@@ -79,7 +78,7 @@ namespace Bomix_Force
 
                 //Here we create a Admin super user who will maintain the website                   
 
-                var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com", EmailConfirmed = true };
+                var user = new ApplicationUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com", EmailConfirmed = true , CompanyId = 1};
 
 
                 string userPWD = "Admin123@";
@@ -101,7 +100,7 @@ namespace Bomix_Force
                 role.Name = "Company";
                 await _roleManager.CreateAsync(role);
 
-                var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
+                var user = new ApplicationUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true, CompanyId = 2};
 
 
                 string userPWD = "Admin123@";

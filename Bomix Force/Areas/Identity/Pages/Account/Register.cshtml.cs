@@ -24,26 +24,24 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IGenericRepository<Company> _genericCompanyService;
-        private readonly IGenericRepository<Person> _genericPersonService;
+        //private readonly IGenericRepository<Person> _genericPersonService;
 
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IGenericRepository<Company> genericCompanyService,
-            IGenericRepository<Person> genericPersonService)
+            IGenericRepository<Company> genericCompanyService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _genericCompanyService = genericCompanyService;
-            _genericPersonService = genericPersonService;
         }
 
         [BindProperty]
@@ -106,15 +104,15 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 var context = new ModelContext();
                 //TODO TEST IF COMPANY QUERY WORKS
                 Company company = _genericCompanyService.Get(c => c.Name == Input.CompanyName).First();
-                var user = new IdentityUser { UserName = Input.UserName, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.UserName, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
                 if (result.Succeeded)
                 {
-                    Person person = new Person { Name = Input.Name, Email = Input.Email, Tel = Input.Tel, CompanyId = company.Id, UserId = user.Id };
-                    _genericPersonService.Insert(person);
-                    _genericPersonService.Save();
-                    _logger.LogInformation("Person = " + person.Tel);
+                    //Person person = new Person { Name = Input.Name, Email = Input.Email, Tel = Input.Tel, CompanyId = company.Id, UserId = user.Id };
+                    //_genericPersonService.Insert(person);
+                    //_genericPersonService.Save();
+                    //_logger.LogInformation("Person = " + person.Tel);
                     _logger.LogInformation("Novo usuário criado.");
 
 

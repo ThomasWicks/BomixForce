@@ -14,7 +14,7 @@ namespace Bomix_Force.Util
         public AutoMapperConfig()
         {
             #region User 
-            CreateMap<UserViewModel, Person>().ReverseMap();
+            //CreateMap<UserViewModel, Person>().ReverseMap();
             #endregion
 
             #region Order
