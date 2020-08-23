@@ -28,7 +28,6 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IGenericRepository<Company> _genericCompanyService;
-        //private readonly IGenericRepository<Person> _genericPersonService;
 
 
         public RegisterModel(
@@ -101,7 +100,6 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var context = new ModelContext();
                 //TODO TEST IF COMPANY QUERY WORKS
                 Company company = _genericCompanyService.Get(c => c.Name == Input.CompanyName).First();
                 var user = new ApplicationUser { UserName = Input.UserName, Email = Input.Email };
@@ -109,10 +107,6 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 
                 if (result.Succeeded)
                 {
-                    //Person person = new Person { Name = Input.Name, Email = Input.Email, Tel = Input.Tel, CompanyId = company.Id, UserId = user.Id };
-                    //_genericPersonService.Insert(person);
-                    //_genericPersonService.Save();
-                    //_logger.LogInformation("Person = " + person.Tel);
                     _logger.LogInformation("Novo usuário criado.");
 
 

@@ -18,7 +18,6 @@ namespace Bomix_Force.Controllers
     public class OrderController : Controller
     {
         private readonly IGenericRepository<Company> _genericCompanyService;
-        //private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IGenericRepository<Order> _genericOrderService;
         private readonly IGenericRepository<Item> _genericItemService;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -26,7 +25,6 @@ namespace Bomix_Force.Controllers
         public OrderController(IGenericRepository<Company> genericCompanyService, IMapper mapper
             , IGenericRepository<Order> genericOrderService, IGenericRepository<Item> genericItemService, RoleManager<IdentityRole> roleManager)
         {
-            //_genericPersonService = genericPersonService;
             _mapper = mapper;
             _roleManager = roleManager;
             _genericCompanyService = genericCompanyService;

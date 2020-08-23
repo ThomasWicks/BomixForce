@@ -16,11 +16,17 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace Bomix_Force
 {
     public class Startup
     {
+        private ISecureDataFormat<AuthenticationTicket> ticketFormat;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,6 +43,8 @@ namespace Bomix_Force
 
 
             services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddDefaultTokenProviders()
+                .AddSignInManager<SignInManager<ApplicationUser>>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ModelContext>();
 
@@ -52,16 +60,32 @@ namespace Bomix_Force
             //Injeção de dependencia
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
             services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
+            services.AddScoped<IGenericRepository<ApplicationUser>, GenericRepository<ApplicationUser>>();
+            services.AddScoped<UserManager<ApplicationUser>>();
+            services.AddScoped<SignInManager<ApplicationUser>>();
 
-            services.AddAuthorization(options =>
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, 
+            //    options => { 
+            //        options.LoginPath = new PathString("/Identity/Account/Login");
+            //        options.AccessDeniedPath = new PathString("/Identity/Account/denied");
+            //        options.Cookie.Name = IdentityConstants.TwoFactorUserIdScheme;
+            //        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            //    });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                   .AddCookie(options =>
+                   {
+                       options.LoginPath = "/Identity/Account/Login";
+                       options.LogoutPath = "/Identity/Account/Login";
+                   });
+
+            services.AddAuthentication(options =>
             {
-                options.AddPolicy("RequireAdministratorRole",
-                     policy => policy.RequireRole("Admin"));
-                options.AddPolicy("RequireCompanyRole",
-                     policy => policy.RequireRole("Company"));
-                options.AddPolicy("RequirUserRole",
-                    policy => policy.RequireRole("User"));
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
+
+
         }
 
         private async Task createRolesandUsers(IServiceProvider serviceProvider)
