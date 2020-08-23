@@ -95,30 +95,30 @@ namespace Bomix_Force.Controllers
             try
             {
                 //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                if (ModelState.IsValid)
+                //if (ModelState.IsValid)
+                //{
+
+                //TODO TEST IF COMPANY QUERY WORKS
+                Company company = _genericCompanyService.Get(c => c.Name == userviewModel.CompanyName).First();
+                var user = new IdentityUser { UserName = userviewModel.UserName, Email = userviewModel.Email };
+                var result = await _userManager.CreateAsync(user, userviewModel.Password);
+
+                if (result.Succeeded)
                 {
-
-                    //TODO TEST IF COMPANY QUERY WORKS
-                    Company company = _genericCompanyService.Get(c => c.Name == userviewModel.CompanyName).First();
-                    var user = new IdentityUser { UserName = userviewModel.UserName, Email = userviewModel.Email };
-                    var result = await _userManager.CreateAsync(user, userviewModel.Password);
-
-                    if (result.Succeeded)
-                    {
-                        Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
-                        _genericPersonService.Insert(person);
-                        _genericPersonService.Save();
-                        _logger.LogInformation("Person = " + person.Tel);
-                        _logger.LogInformation("Novo usuário criado.");
+                    Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
+                    _genericPersonService.Insert(person);
+                    _genericPersonService.Save();
+                    _logger.LogInformation("Person = " + person.Tel);
+                    _logger.LogInformation("Novo usuário criado.");
 
 
-                        return RedirectToAction(nameof(Index));
-                    }
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    return RedirectToAction(nameof(Index));
                 }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                //}
 
                 // If we got this far, something failed, redisplay form
                 return RedirectToAction(nameof(Index));
@@ -146,7 +146,7 @@ namespace Bomix_Force.Controllers
             {
                 Person person = _genericPersonService.Get(u => u.Id == id).First();
                 person.Name = collection["Name"];
-                person.Tel =Int32.Parse(collection["Tel"]);
+                person.Tel = Int32.Parse(collection["Tel"]);
                 _genericPersonService.Update(person);
                 _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
