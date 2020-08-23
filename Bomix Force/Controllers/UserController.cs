@@ -70,6 +70,12 @@ namespace Bomix_Force.Controllers
 
                 return View(userList);
             }
+            else if (User.IsInRole("User"))
+            {
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                return RedirectToAction("Action", new { id = person.Id });
+            }
             return View();
         }
 
@@ -82,9 +88,6 @@ namespace Bomix_Force.Controllers
         // GET: UserController/Create
         public ActionResult Create()
         {
-            //List<Company> company = new List<Company>();
-            //company = _genericCompanyService.GetAll().ToList();
-            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View();
         }
 
