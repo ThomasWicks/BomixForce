@@ -37,40 +37,41 @@ namespace Bomix_Force.Controllers
         // GET: OrderController
         public ActionResult Index()
         {
-            if (User.IsInRole("Admin"))
+            try
             {
-                List<Order> orders = _genericOrderService.Get().ToList();
-                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-                return View(orderView);
-            }
-            else if (User.IsInRole("User"))
-            {
-                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var test = _roleManager.FindByIdAsync(user);
-                try
+                if (User.IsInRole("Admin"))
                 {
-                    Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                    
-                    //pega todos as orders cujo status não está finalizado e tem algum person com o id igual ao person que está logado
-                    List<Order> orders = _genericOrderService.Get(o=>o.Status_Order !="FINALIZADO").Where(o => o.Person.Any(p => p.Id == person.Id)).ToList();
+                    List<Order> orders = _genericOrderService.Get().ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                     return View(orderView);
                 }
-                catch(Exception ex)
+                else if (User.IsInRole("User"))
                 {
-                    //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
-                   return View();
+                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    var test = _roleManager.FindByIdAsync(user);
+                    Person person = _genericPersonService.Get(u => u.UserId == user).First();
+
+                    //pega todos as orders cujo status não está finalizado e tem algum person com o id igual ao person que está logado
+                    List<Order> orders = _genericOrderService.Get(o => o.Status_Order != "FINALIZADO").Where(o => o.Person.Any(p => p.Id == person.Id)).ToList();
+                    IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                    return View(orderView);
+
                 }
+                else
+                {
+                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    var test = _roleManager.FindByIdAsync(user);
+                    Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                    List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
+                    IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                    return View(orderView);
+                };
             }
-            else
+            catch (Exception ex)
             {
-                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var test = _roleManager.FindByIdAsync(user);
-                Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status_Order != "FINALIZADO").ToList();
-                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-                return View(orderView);
-            };
+                //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
+                return View();
+            }
         }
 
         // GET: OrderController/Details/5
