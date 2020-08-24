@@ -158,7 +158,40 @@
             </div>
         </div>
 
-        <div class="table-responsive">
+        <div>
+                <div class="row">
+                    @foreach (var item in @Model.UserList)
+                        {
+                                <div class="col-sm-4 mt-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h6>
+                                            <p class="card-text"><strong>Email:  @Html.DisplayFor(modelItem => item.Email)</strong></p>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                              <p class="card-text"><strong>Empresa: @Html.DisplayFor(modelItem => item.Company.Name)</strong> </p>
+                                            }
+                                            <p class="card-text"><strong>Setor: Atendimento Médico</strong> </p>
+                                            <p class="card-text"><strong>Cargo: Gerente dos medicos</strong></p>
+                                        </div>
+                                        <div class="card-footer bg-dark">
+                                            @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                    <!-- @Html.DisplayFor(modelItem => item.Name)
+
+                                    @Html.DisplayFor(modelItem => item.Email)
+
+                                    @Html.DisplayFor(modelItem => item.Company.Name)
+                                    @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
+                        }
+                </div>
+        </div>
+
+        <!-- <div class="table-responsive">
             <table class="table table-hover">
                 <thead class="thead-dark thead-sm">
                     <tr>
@@ -213,5 +246,12 @@
 
                 </tbody>
             </table>
-        </div>
+        </div> -->
     </div>
+
+<style>
+.testee{
+    max-width:inherit
+}
+
+</style>
