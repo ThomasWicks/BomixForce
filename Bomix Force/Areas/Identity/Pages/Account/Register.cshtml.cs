@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Bomix_Force.AppServices;
 using Bomix_Force.AppServices.Interface;
 using Bomix_Force.Data.Context;
 using Bomix_Force.Data.Entities;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using IEmailSender = Bomix_Force.AppServices.Interface.IEmailSender;
 
 namespace Bomix_Force.Areas.Identity.Pages.Account
 {
@@ -27,6 +29,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly IEmailSender _emailSender;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
 
@@ -35,13 +38,17 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
+            //IEmailSender emailSender,
             IEmailSender emailSender,
             IGenericRepository<Company> genericCompanyService,
-            IGenericRepository<Person> genericPersonService)
+            IGenericRepository<Person> genericPersonService
+              )
+           
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _emailSender = emailSender;
             _genericCompanyService = genericCompanyService;
             _genericPersonService = genericPersonService;
         }

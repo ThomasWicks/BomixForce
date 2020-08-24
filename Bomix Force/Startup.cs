@@ -1,3 +1,4 @@
+     
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System;
+using Bomix_Force.AppServices.Interface;
+using Bomix_Force.AppServices;
 
 namespace Bomix_Force
 {
@@ -53,6 +56,10 @@ namespace Bomix_Force
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IAuthorizationHandler, AuthHendler>();
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
