@@ -172,13 +172,13 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(UserViewIndex userviewIndex)
+        public async Task<ActionResult> Edit(UserViewEdit userviewIndex)
         {
             try
             {
-                Person person = _genericPersonService.Get(u => u.Id == userviewIndex.User.Id).First();
+                Person person = _genericPersonService.Get(u => u.Id == userviewIndex.Id).First();
                 var user = await _userManager.FindByIdAsync(person.UserId);
-                var changePasswordResult = await _userManager.ChangePasswordAsync(user, userviewIndex.UserViewEdit.OldPassword, userviewIndex.UserViewEdit.Password);
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user, userviewIndex.OldPassword, userviewIndex.Password);
                 if (!changePasswordResult.Succeeded)
                 {
                     foreach (var error in changePasswordResult.Errors)
@@ -186,12 +186,12 @@ namespace Bomix_Force.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-                person = _mapper.Map<Person>(userviewIndex.UserViewEdit);
-                _genericPersonService.Update(person);
-                _genericPersonService.Save();
+                //person = _mapper.Map<Person>(userviewIndex);
+                //_genericPersonService.Update(person);
+                //_genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception x)
             {
                 return View();
             }
