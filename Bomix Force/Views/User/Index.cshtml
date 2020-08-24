@@ -4,214 +4,226 @@
 }
 
 
-    <div class="clearfix mx-5">
-        <h2 class="mt-3">Usuário</h2>
-        @if (User.IsInRole("Company"))
-        {
-            <a class="float-right btn btn-primary btn-lg mb-3" data-toggle="modal" data-target="#myModal">Cadastrar</a>
-        }
-        <!-- Modal Cadastro-->
-        <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog modal-lg">
+<div class="clearfix mx-5">
+    <h2 class="mt-3">Usuário</h2>
+    @if (User.IsInRole("Company"))
+    {
+        <a class="float-right btn btn-primary btn-lg mb-3" data-toggle="modal" data-target="#myModal">Cadastrar</a>
+    }
+    <!-- Modal Cadastro-->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
 
-                <!-- Modal Cadastro-->
-                <div class="modal-content">
-                    <div class="modal-header bg-dark">
-                        <h4 class="modal-title float-left text-white">Cadastro</h4>
-                        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" asp-controller="User" asp-action="Create">
-                            <div asp-validation-summary="All" class="text-danger"></div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label asp-for="@Model.User.UserName"></label>
-                                    <input asp-for="@Model.User.UserName" class="form-control" />
-                                    <span asp-validation-for="@Model.User.UserName" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label asp-for="@Model.User.Email"></label>
-                                    <input asp-for="@Model.User.Email" class="form-control" />
-                                    <span asp-validation-for="@Model.User.Email" class="text-danger"></span>
-                                </div>
+            <!-- Modal Cadastro-->
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h4 class="modal-title float-left text-white">Cadastro</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" asp-controller="User" asp-action="Create">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label asp-for="@Model.User.UserName"></label>
+                                <input asp-for="@Model.User.UserName" class="form-control" />
+                                <span asp-validation-for="@Model.User.UserName" class="text-danger"></span>
                             </div>
-                            <div class="row py-2">
-                                <div class="col-6">
-                                    <label asp-for="@Model.User.Password"></label>
-                                    <input asp-for="@Model.User.Password" class="form-control" />
-                                    <span asp-validation-for="@Model.User.Password" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label asp-for="@Model.User.ConfirmPassword"></label>
-                                    <input asp-for="@Model.User.ConfirmPassword" class="form-control" />
-                                    <span asp-validation-for="@Model.User.ConfirmPassword" class="text-danger"></span>
-                                </div>
+                            <div class="col-6">
+                                <label asp-for="@Model.User.Email"></label>
+                                <input asp-for="@Model.User.Email" class="form-control" />
+                                <span asp-validation-for="@Model.User.Email" class="text-danger"></span>
                             </div>
-                            <div class="row py-2">
-                                <div class="col-6">
-                                    <label asp-for="@Model.User.Name"></label>
-                                    <input asp-for="@Model.User.Name" class="form-control" />
-                                    <span asp-validation-for="@Model.User.Name" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label asp-for="@Model.User.Tel"></label>
-                                        <input asp-for="@Model.User.Tel" class="form-control" />
-                                        <span asp-validation-for="@Model.User.Tel" class="text-danger"></span>
-                                    </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-6">
+                                <label asp-for="@Model.User.Password"></label>
+                                <input asp-for="@Model.User.Password" class="form-control" />
+                                <span asp-validation-for="@Model.User.Password" class="text-danger"></span>
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="@Model.User.ConfirmPassword"></label>
+                                <input asp-for="@Model.User.ConfirmPassword" class="form-control" />
+                                <span asp-validation-for="@Model.User.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-6">
+                                <label asp-for="@Model.User.Name"></label>
+                                <input asp-for="@Model.User.Name" class="form-control" />
+                                <span asp-validation-for="@Model.User.Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="@Model.User.Tel"></label>
+                                    <input asp-for="@Model.User.Tel" class="form-control" />
+                                    <span asp-validation-for="@Model.User.Tel" class="text-danger"></span>
                                 </div>
 
                             </div>
-                            <div class="form-group">
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="@Model.User.Cargo"></label>
+                                    <input asp-for="@Model.User.Cargo" class="form-control" />
+                                    <span asp-validation-for="@Model.User.Cargo" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="@Model.User.Setor"></label>
+                                    <input asp-for="@Model.User.Setor" class="form-control" />
+                                    <span asp-validation-for="@Model.User.Setor" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary float-right">Cadastrar</button>
+                    </form>
+                </div>
+                <!-- <div class="modal-footer">
+
+                </div> -->
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Edit-->
+    <div class="modal fade" id="EditModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h4 class="modal-title float-left text-white">Edit</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" asp-controller="User" asp-action="Edit">
+                        @Html.HiddenFor(model => model.UserViewEdit.Id)
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label asp-for="@Model.UserViewEdit.Email"></label>
+                                <input asp-for="@Model.UserViewEdit.Email" class="form-control" />
+                                <span asp-validation-for="@Model.UserViewEdit.Email" class="text-danger">
+                                    @Html.DisplayNameFor(model => model.UserViewEdit.Email)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-6">
+                                <label asp-for="@Model.UserViewEdit.Password"></label>
+                                <input asp-for="@Model.UserViewEdit.Password" class="form-control" />
+                                <span asp-validation-for="@Model.UserViewEdit.Password" class="text-danger">
+                                </span>
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="@Model.UserViewEdit.ConfirmPassword"></label>
+                                <input asp-for="@Model.UserViewEdit.ConfirmPassword" class="form-control" />
+                                <span asp-validation-for="@Model.UserViewEdit.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-6">
+                                <label asp-for="@Model.UserViewEdit.Name"></label>
+                                <input asp-for="@Model.UserViewEdit.Name" class="form-control" />
+                                <span asp-validation-for="@Model.UserViewEdit.Name" class="text-danger">
+                                    @Html.DisplayNameFor(model => model.UserViewEdit.Name)
+                                </span>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="@Model.UserViewEdit.Tel"></label>
+                                    <input asp-for="@Model.UserViewEdit.Tel" class="form-control" />
+                                    <span asp-validation-for="@Model.UserViewEdit.Tel" class="text-danger">
+                                        @Html.DisplayNameFor(model => model.UserViewEdit.Tel)
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-6">
                                 <label asp-for="@Model.User.Endereço"></label>
                                 <input asp-for="@Model.User.Endereço" class="form-control" />
                                 <span asp-validation-for="@Model.User.Endereço" class="text-danger"></span>
                             </div>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary float-right">Cadastrar</button>
-                        </form>
-                    </div>
-                    <!-- <div class="modal-footer">
+                            <div class="col-6">
+                                <label asp-for="@Model.UserViewEdit.OldPassword"></label>
+                                <input asp-for="@Model.UserViewEdit.OldPassword" class="form-control" />
+                                <span asp-validation-for="@Model.UserViewEdit.OldPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary float-right">Salvar</button>
+                    </form>
+                </div>
+                <!-- <div class="modal-footer">
 
                 </div> -->
-                </div>
-
             </div>
+
         </div>
+    </div>
 
-        <!-- Modal Edit-->
-        <div class="modal fade" id="EditModal" role="dialog">
-            <div class="modal-dialog modal-lg">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header bg-dark">
-                        <h4 class="modal-title float-left text-white">Edit</h4>
-                        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" asp-controller="User" asp-action="Edit">
-                            @Html.HiddenFor(model => model.UserViewEdit.Id)
-                            <div asp-validation-summary="All" class="text-danger"></div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <label asp-for="@Model.UserViewEdit.Email"></label>
-                                    <input asp-for="@Model.UserViewEdit.Email" class="form-control" />
-                                    <span asp-validation-for="@Model.UserViewEdit.Email" class="text-danger">
-                                        @Html.DisplayNameFor(model => model.UserViewEdit.Email)
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="row py-2">
-                                <div class="col-6">
-                                    <label asp-for="@Model.UserViewEdit.Password"></label>
-                                    <input asp-for="@Model.UserViewEdit.Password" class="form-control" />
-                                    <span asp-validation-for="@Model.UserViewEdit.Password" class="text-danger">
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <label asp-for="@Model.UserViewEdit.ConfirmPassword"></label>
-                                    <input asp-for="@Model.UserViewEdit.ConfirmPassword" class="form-control" />
-                                    <span asp-validation-for="@Model.UserViewEdit.ConfirmPassword" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row py-2">
-                                <div class="col-6">
-                                    <label asp-for="@Model.UserViewEdit.Name"></label>
-                                    <input asp-for="@Model.UserViewEdit.Name" class="form-control" />
-                                    <span asp-validation-for="@Model.UserViewEdit.Name" class="text-danger">
-                                        @Html.DisplayNameFor(model => model.UserViewEdit.Name)
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label asp-for="@Model.UserViewEdit.Tel"></label>
-                                        <input asp-for="@Model.UserViewEdit.Tel" class="form-control" />
-                                        <span asp-validation-for="@Model.UserViewEdit.Tel" class="text-danger">
-                                            @Html.DisplayNameFor(model => model.UserViewEdit.Tel)
-                                        </span>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="row py-2">
-                                <div class="col-6">
-                                    <label asp-for="@Model.User.Endereço"></label>
-                                    <input asp-for="@Model.User.Endereço" class="form-control" />
-                                    <span asp-validation-for="@Model.User.Endereço" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label asp-for="@Model.UserViewEdit.OldPassword"></label>
-                                    <input asp-for="@Model.UserViewEdit.OldPassword" class="form-control" />
-                                    <span asp-validation-for="@Model.UserViewEdit.OldPassword" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary float-right">Salvar</button>
-                        </form>
-                    </div>
-                    <!-- <div class="modal-footer">
-
-                </div> -->
-                </div>
-
-            </div>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead class="thead-dark thead-sm">
-                    <tr>
-                        <th scope="col" class="text-center">
-                            Username
-                        </th>
-                        <th scope="col" class="text-center">
-                            Email
-                        </th>
-                        <th scope="col" class="text-center">
-                            Company
-                        </th>
-                        <th scope="col" class="text-center">
-                            Ações
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (@Model.UserList?.Count() > 0)
-                    {
-                        foreach (var item in @Model.UserList)
-                        {
-                            <tr>
-                                <td class="text-center">
-
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td class="text-center">
-
-                                    @Html.DisplayFor(modelItem => item.Email)
-                                </td>
-                                <td class="text-center">
-
-                                    @Html.DisplayFor(modelItem => item.Company.Name)
-                                </td>
-
-                                <td class="text-center">
-                                    @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" })
-                                
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-dark thead-sm">
+                <tr>
+                    <th scope="col" class="text-center">
+                        Username
+                    </th>
+                    <th scope="col" class="text-center">
+                        Email
+                    </th>
+                    <th scope="col" class="text-center">
+                        Company
+                    </th>
+                    <th scope="col" class="text-center">
+                        Ações
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model.UserList?.Count() > 0)
+                {
+                    foreach (var item in @Model.UserList)
                     {
                         <tr>
-                            <td>
-                                <h6>Nenhum Usuário encontrado.</h6>
+                            <td class="text-center">
+
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td class="text-center">
+
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td class="text-center">
+
+                                @Html.DisplayFor(modelItem => item.Company.Name)
+                            </td>
+
+                            <td class="text-center">
+                                @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" })
+
                             </td>
                         </tr>
                     }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <h6>Nenhum Usuário encontrado.</h6>
+                        </td>
+                    </tr>
+                }
 
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
+</div>

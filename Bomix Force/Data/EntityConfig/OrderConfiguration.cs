@@ -11,15 +11,18 @@ namespace Bomix_Force.Data.EntityConfig
             builder.ToTable("ORDER");
             builder.HasKey(e => new { e.Id });
 
-            builder.Property(u => u.Number)
+            builder.Property(u => u.NumeroPedido)
                .HasColumnName("NUMBER")
                .IsRequired();
 
-            builder.Property(u => u.Date)
-               .HasColumnName("DATE")
+            builder.Property(u => u.Entrega)
+               .HasColumnName("ENTREGADATE")
+               .IsRequired();
+            builder.Property(u => u.Emissao)
+               .HasColumnName("EMISSAOGADATE")
                .IsRequired();
 
-            builder.Property(u => u.Status_Order)
+            builder.Property(u => u.Status)
                .HasColumnName("STATUS")
                .IsRequired();
 

@@ -130,7 +130,7 @@ namespace Bomix_Force.Controllers
 
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
+                        Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email,Cargo=userviewModel.Cargo, Setor=userviewModel.Setor, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Person = " + person.Tel);

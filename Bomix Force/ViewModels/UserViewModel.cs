@@ -47,6 +47,9 @@ namespace Bomix_Force.ViewModels
         public int Tel { get; set; }
         [Required]
         public string Endereço { get; set; }
+        [Required]
+        public string Cargo { get; set; }
+        public string Setor { get; set; }
         public Company Company { get; set; }
     }
     public class UserViewIndex

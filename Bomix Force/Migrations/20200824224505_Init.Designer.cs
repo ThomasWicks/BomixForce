@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bomix_Force.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    [Migration("20200822180330_init")]
-    partial class init
+    [Migration("20200824224505_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,6 +76,12 @@ namespace Bomix_Force.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status_art")
                         .IsRequired()
                         .HasColumnName("STATUS_ART")
@@ -127,15 +133,19 @@ namespace Bomix_Force.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnName("DATE")
+                    b.Property<DateTime>("Emissao")
+                        .HasColumnName("EMISSAOGADATE")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Number")
+                    b.Property<DateTime>("Entrega")
+                        .HasColumnName("ENTREGADATE")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NumeroPedido")
                         .HasColumnName("NUMBER")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status_Order")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnName("STATUS")
                         .HasColumnType("nvarchar(max)");
@@ -154,6 +164,11 @@ namespace Bomix_Force.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Cargo")
+                        .IsRequired()
+                        .HasColumnName("CARGO")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
@@ -169,6 +184,11 @@ namespace Bomix_Force.Migrations
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Setor")
+                        .IsRequired()
+                        .HasColumnName("SETOR")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Tel")
                         .HasColumnName("TEL")

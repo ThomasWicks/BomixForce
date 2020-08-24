@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bomix_Force.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -186,7 +186,8 @@ namespace Bomix_Force.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NUMBER = table.Column<int>(nullable: false),
-                    DATE = table.Column<DateTime>(nullable: false),
+                    EMISSAOGADATE = table.Column<DateTime>(nullable: false),
+                    ENTREGADATE = table.Column<DateTime>(nullable: false),
                     STATUS = table.Column<string>(nullable: false),
                     CompanyId = table.Column<int>(nullable: false)
                 },
@@ -208,6 +209,8 @@ namespace Bomix_Force.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     STATUS_ART = table.Column<string>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    ProductId = table.Column<string>(nullable: true),
                     DESCRIPTION = table.Column<string>(nullable: false),
                     OrderId = table.Column<int>(nullable: false)
                 },
@@ -252,6 +255,8 @@ namespace Bomix_Force.Migrations
                     NAME = table.Column<string>(nullable: false),
                     EMAIL = table.Column<string>(nullable: false),
                     TEL = table.Column<int>(nullable: false),
+                    SETOR = table.Column<string>(nullable: false),
+                    CARGO = table.Column<string>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     CompanyId = table.Column<int>(nullable: true),
                     OrderId = table.Column<int>(nullable: true)

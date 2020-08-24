@@ -22,6 +22,13 @@ namespace Bomix_Force.Data.EntityConfig
             builder.Property(u => u.Tel)
               .HasColumnName("TEL")
               .IsRequired();
+            builder.Property(u => u.Setor)
+             .HasColumnName("SETOR")
+             .IsRequired();
+
+            builder.Property(u => u.Cargo)
+             .HasColumnName("CARGO")
+             .IsRequired();
         }
     }
 }
