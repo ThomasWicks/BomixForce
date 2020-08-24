@@ -58,6 +58,9 @@ namespace Bomix_Force.Controllers
             else if (User.IsInRole("Company"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                List<Person> people = _genericPersonService.Get(u => u.UserId == user).ToList();
+                if(people.Count > 0)
+                {
                 Person person = _genericPersonService.Get(u => u.UserId == user).First();
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
                 UserViewIndex userList = new UserViewIndex();
@@ -69,6 +72,14 @@ namespace Bomix_Force.Controllers
                 }
 
                 return View(userList);
+
+                }
+                else
+                {
+                    UserViewIndex userList = new UserViewIndex();
+                    return View(userList);
+
+                }
             }
             else if (User.IsInRole("User"))
             {
