@@ -52,6 +52,35 @@ namespace Bomix_Force.ViewModels
     {
         public IEnumerable<UserViewModel> UserList { get; set; }
         public UserViewModel User { get; set; }
+        public UserViewEdit UserViewEdit { get; set; }
     }
+    public class UserViewEdit
+    {
+        public int Id { get; set; }
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
+        [Required]
+        [StringLength(100, ErrorMessage = "A {0} precisa ser pelo menos {2} e no máximo {1} caracteres.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Senha")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar senha")]
+        [Compare("Password", ErrorMessage = "As senhas não correspondem.")]
+        public string ConfirmPassword { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        [Display(Name = "Telefone")]
+        [DataType(DataType.PhoneNumber)]
+        public int Tel { get; set; }
+        [Required]
+        public string Endereço { get; set; }
+        public string OldPassword { get; set; }
+        public Company Company { get; set; }
+    }
 }

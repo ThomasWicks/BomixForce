@@ -65,7 +65,8 @@ namespace Bomix_Force.Controllers
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
                 UserViewIndex userList = new UserViewIndex();
                 userList.UserList = new List<UserViewModel>();
-                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(_genericPersonService.Get(g => g.CompanyId == person.CompanyId));
+                IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
+                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
                 foreach (var item in userList.UserList)
                 {
                     item.Company = company;
@@ -157,20 +158,29 @@ namespace Bomix_Force.Controllers
         public ActionResult Edit(int id)
         {
             Person person = _genericPersonService.Get(u => u.Id == id).First();
-            UserViewModel userView = _mapper.Map<UserViewModel>(person);
+            UserViewIndex userView = new UserViewIndex();
+            userView.UserViewEdit =  _mapper.Map<UserViewEdit>(person);
             return View(userView);
         }
 
         // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(UserViewIndex userviewIndex)
         {
             try
             {
-                Person person = _genericPersonService.Get(u => u.Id == id).First();
-                person.Name = collection["Name"];
-                person.Tel = Int32.Parse(collection["Tel"]);
+                Person person = _genericPersonService.Get(u => u.Id == userviewIndex.User.Id).First();
+                var user = await _userManager.FindByIdAsync(person.UserId);
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user, userviewIndex.UserViewEdit.OldPassword, userviewIndex.UserViewEdit.Password);
+                if (!changePasswordResult.Succeeded)
+                {
+                    foreach (var error in changePasswordResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                person = _mapper.Map<Person>(userviewIndex.UserViewEdit);
                 _genericPersonService.Update(person);
                 _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
