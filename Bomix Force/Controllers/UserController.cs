@@ -160,7 +160,7 @@ namespace Bomix_Force.Controllers
             Person person = _genericPersonService.Get(u => u.Id == id).First();
             UserViewIndex userView = new UserViewIndex();
             userView.UserViewEdit =  _mapper.Map<UserViewEdit>(person);
-            return View(userView);
+            return View(userView.UserViewEdit);
         }
 
         // POST: UserController/Edit/5
