@@ -58,8 +58,8 @@ namespace Bomix_Force.Controllers
             else if (User.IsInRole("Company"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                List<Person> people = _genericPersonService.Get(u => u.UserId == user).ToList();
-                if(people.Count > 0)
+                List<Person> listPerson = _genericPersonService.Get(u => u.UserId == user).ToList();
+                if(listPerson.Count > 0)
                 {
                 Person person = _genericPersonService.Get(u => u.UserId == user).First();
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
