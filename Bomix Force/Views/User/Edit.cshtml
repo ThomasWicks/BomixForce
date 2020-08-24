@@ -1,17 +1,31 @@
-﻿@model Bomix_Force.ViewModels.UserViewModel
+﻿@model Bomix_Force.ViewModels.UserViewEdit
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-<h4>UserViewModel</h4>
-<hr />
-<div class="row">
+<h1 class="text-center">Editar</h1>
+
+<hr /> 
+<div class="row float-none justify-content-center">
     <div class="col-md-4">
         <form asp-action="Edit">
-            @Html.HiddenFor(model => model.Id)
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -23,14 +37,21 @@
                 <span asp-validation-for="Tel" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="Endereço" class="control-label"></label>
+                <input asp-for="Endereço" class="form-control" />
+                <span asp-validation-for="Endereço" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OldPassword" class="control-label"></label>
+                <input asp-for="OldPassword" class="form-control" />
+                <span asp-validation-for="OldPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <a asp-action="Index">Cancelar</a>
+                <input type="submit" value="Save" class="btn btn-primary float-right" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

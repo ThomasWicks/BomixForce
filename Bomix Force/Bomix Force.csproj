@@ -33,6 +33,11 @@
 
   <ItemGroup>
     <Folder Include="Models\ViewModels\" />
+    <Folder Include="Views\Assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Assets\LoginBomix.png" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

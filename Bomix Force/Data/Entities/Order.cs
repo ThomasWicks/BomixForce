@@ -11,9 +11,10 @@ namespace Bomix_Force.Data.Entities
         public int Number { get; set; }
         public DateTime Date { get; set; }
         public string Status_Order { get; set; }
-        public virtual ICollection<Item> Item { get; set; }
+        public virtual List<Item> Item { get; set; }
+        public int? CompanyId { get; set; }
         public virtual Company Company { get; set; }
-        public virtual ICollection<Person> Person { get; set; }
-        public virtual ICollection<N_conformity> N_Conformities { get; set; }
+        public virtual List<Person> Person { get; set; }
+        public virtual List<N_conformity> N_Conformities { get; set; }
     }
 }

@@ -230,7 +230,6 @@ namespace Bomix_Force.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LOT = table.Column<string>(nullable: false),
                     DESCRIPTION = table.Column<string>(nullable: false),
-                    Id_Order = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -252,10 +251,9 @@ namespace Bomix_Force.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NAME = table.Column<string>(nullable: false),
                     EMAIL = table.Column<string>(nullable: false),
-                    CPF = table.Column<int>(nullable: false),
                     TEL = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
-                    CompanyId = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: true),
                     OrderId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -266,7 +264,7 @@ namespace Bomix_Force.Migrations
                         column: x => x.CompanyId,
                         principalTable: "COMPANY",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PERSON_ORDER_OrderId",
                         column: x => x.OrderId,

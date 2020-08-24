@@ -13,8 +13,8 @@ using AutoMapper;
 using Bomix_Force.Util;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Bomix_Force.AppServices.Interface;
-using Bomix_Force.AppServices;
+using System.Threading.Tasks;
+using System;
 
 namespace Bomix_Force
 {
@@ -37,41 +37,102 @@ namespace Bomix_Force
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Mysqlconnection")));
 
-
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ModelContext>();
             services.AddControllersWithViews();
+             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IEmailSender, EmailSender>();
             services.AddRazorPages();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IAuthorizationHandler, AuthHendler>();
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Delete", policy => policy.Requirements.Add(new AuthorizationHelper("Delete")));
-                options.AddPolicy("Create", policy => policy.Requirements.Add(new AuthorizationHelper("Create")));
-                options.AddPolicy("Edit", policy => policy.Requirements.Add(new AuthorizationHelper("Edit")));
-                options.AddPolicy("Index", policy => policy.Requirements.Add(new AuthorizationHelper("Index")));
-            }
-            );
             // Auto Mapper Configurations
-            services.AddAutoMapper(typeof (Startup));
+            services.AddAutoMapper(typeof(Startup));
 
             //Injeção de dependencia
             services.AddScoped<ModelContext>();
-            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-            //services.AddScoped<IGenericRepository<Access>, GenericRepository<Access>>();
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
             services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
-            //services.AddScoped<IGenericRepository<Permission>, GenericRepository<Permission>>();
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
+            services.AddScoped<IGenericRepository<Item>, GenericRepository<Item>>();
+            services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
+        }
 
-            //services.AddScoped<IGenericRepository<Bomix_Force.Data.Entities.Profile>, GenericRepository<Bomix_Force.Data.Entities.Profile>>();
-            //services.AddScoped<IGenericRepository<UserLogin>, GenericRepository<UserLogin>>();
+        private async Task createRolesandUsers(IServiceProvider serviceProvider)
+        {
+            var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            bool x = await _roleManager.RoleExistsAsync("Admin");
+            if (!x)
+            {
+                // first we create Admin rool    
+                var role = new IdentityRole();
+                role.Name = "Admin";
+                await _roleManager.CreateAsync(role);
+
+                //Here we create a Admin super user who will maintain the website                   
+
+                var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com", EmailConfirmed = true };
+
+
+                string userPWD = "Admin123@";
+
+                IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //Add default User to Role Admin    
+                if (chkUser.Succeeded)
+                {
+                    var result1 = await _userManager.AddToRoleAsync(user, "Admin");
+                }
+            }
+
+            // creating Creating Manager role     
+            x = await _roleManager.RoleExistsAsync("Company");
+            if (!x)
+            {
+                var role = new IdentityRole();
+                role.Name = "Company";
+                await _roleManager.CreateAsync(role);
+
+                var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
+
+
+                string userPWD = "Admin123@";
+
+                var chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //Add default User to Role Admin
+                if (chkUser.Succeeded)
+                {
+                    var result1 = await _userManager.AddToRoleAsync(user, "Company");
+                }
+            }
+
+            // creating Creating Employee role     
+            x = await _roleManager.RoleExistsAsync("User");
+            if (!x)
+            {
+                var role = new IdentityRole();
+                role.Name = "User";
+                await _roleManager.CreateAsync(role);
+
+                var user = new IdentityUser { UserName = "user.user@hotmail.com", Email = "user.user@hotmail.com", EmailConfirmed = true };
+
+
+                string userPWD = "Admin123@";
+
+                var chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //Add default User to Role Admin
+                if (chkUser.Succeeded)
+                {
+                    var result1 = await _userManager.AddToRoleAsync(user, "User");
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -99,6 +160,8 @@ namespace Bomix_Force
                     pattern: "{controller=Home}/{action=Login}");
                 endpoints.MapRazorPages();
             });
+            createRolesandUsers(services).Wait();
         }
+
     }
 }

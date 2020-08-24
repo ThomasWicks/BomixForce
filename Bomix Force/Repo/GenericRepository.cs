@@ -11,7 +11,7 @@ namespace Bomix_Force.Repo
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private ModelContext _context;
+        private readonly ModelContext _context;
         protected DbSet<T> _dbSet;
 
         public GenericRepository(ModelContext context)
