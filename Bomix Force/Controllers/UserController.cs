@@ -10,7 +10,10 @@ using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using IEmailSender = Bomix_Force.AppServices.Interface.IEmailSender;
 using Microsoft.AspNetCore.Identity;
+using Bomix_Force.AppServices;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -22,11 +25,12 @@ namespace Bomix_Force.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly IEmailSender _emailSender;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IMapper _mapper;
         public UserController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
@@ -34,7 +38,8 @@ namespace Bomix_Force.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
-
+            _emailSender = emailSender;
+           
         }
         [Authorize]
         // GET: UserController
@@ -130,6 +135,7 @@ namespace Bomix_Force.Controllers
                         _genericPersonService.Save();
                         _logger.LogInformation("Person = " + person.Tel);
                         _logger.LogInformation("Novo usuário criado.");
+                        await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário "+person.Name+" foi criado com sucesso");
 
 
                         return RedirectToAction(nameof(Index));

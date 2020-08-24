@@ -1,3 +1,4 @@
+     
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System;
+using Bomix_Force.AppServices.Interface;
+using Bomix_Force.AppServices;
 
 namespace Bomix_Force
 {
@@ -37,13 +40,25 @@ namespace Bomix_Force
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Mysqlconnection")));
 
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ModelContext>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+                     policy => policy.RequireRole("Admin"));
+                options.AddPolicy("RequireCompanyRole",
+                     policy => policy.RequireRole("Company"));
+                options.AddPolicy("RequirUserRole",
+                    policy => policy.RequireRole("User"));
+            });
+
             services.AddControllersWithViews();
-             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
-            services.AddSingleton<IEmailSender, EmailSender>();
             services.AddRazorPages();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IAuthorizationHandler, AuthHendler>();
             // Auto Mapper Configurations
