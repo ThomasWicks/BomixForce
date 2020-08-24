@@ -80,6 +80,7 @@ namespace Bomix_Force.ViewModels
         public int Tel { get; set; }
         [Required]
         public string Endereço { get; set; }
+        [DataType(DataType.Password)]
         public string OldPassword { get; set; }
         public Company Company { get; set; }
     }
