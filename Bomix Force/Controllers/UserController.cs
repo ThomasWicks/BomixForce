@@ -177,6 +177,7 @@ namespace Bomix_Force.Controllers
             try
             {
                 Person person = _genericPersonService.Get(u => u.Id == userviewIndex.Id).First();
+                _genericPersonService.Save();
                 var user = await _userManager.FindByIdAsync(person.UserId);
                 var changePasswordResult = await _userManager.ChangePasswordAsync(user, userviewIndex.OldPassword, userviewIndex.Password);
                 if (!changePasswordResult.Succeeded)
@@ -186,9 +187,10 @@ namespace Bomix_Force.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-                //person = _mapper.Map<Person>(userviewIndex);
-                //_genericPersonService.Update(person);
-                //_genericPersonService.Save();
+                userviewIndex.CompanyId = person.CompanyId;
+                person = _mapper.Map<Person>(userviewIndex);
+                _genericPersonService.Update(person);
+                _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception x)
