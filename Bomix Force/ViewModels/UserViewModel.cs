@@ -65,6 +65,7 @@ namespace Bomix_Force.ViewModels
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        public string UserID { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "A {0} precisa ser pelo menos {2} e no máximo {1} caracteres.", MinimumLength = 6)]
@@ -83,9 +84,10 @@ namespace Bomix_Force.ViewModels
         [DataType(DataType.PhoneNumber)]
         public int Tel { get; set; }
         [Required]
-        public string Endereço { get; set; }
         [DataType(DataType.Password)]
         public string OldPassword { get; set; }
+        public string Cargo { get; set; }
+        public string Setor { get; set; }
         public int? CompanyId { get; set; }
     }
 }
