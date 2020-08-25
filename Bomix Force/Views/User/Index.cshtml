@@ -160,33 +160,44 @@
 
     <div>
         <div class="row">
-            @foreach (var item in @Model.UserList)
+            @if (@Model?.UserList?.Count() > 0)
             {
-                <div class="col-sm-4 mt-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h6>
-                            <p class="card-text"><strong>Email:  @Html.DisplayFor(modelItem => item.Email)</strong></p>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <p class="card-text"><strong>Empresa: @Html.DisplayFor(modelItem => item.Company.Name)</strong> </p>
-                            }
-                            <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
-                            <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
-                        </div>
-                        <div class="card-footer bg-dark">
-                            @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })
-                        </div>
+                foreach (var item in @Model.UserList)
+                {
+                    <div class="col-sm-4 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h6>
+                                <p class="card-text"><strong>Email:  @Html.DisplayFor(modelItem => item.Email)</strong></p>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <p class="card-text"><strong>Empresa: @Html.DisplayFor(modelItem => item.Company.Name)</strong> </p>
+                                }
+                                <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
+                                <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
+                            </div>
+                            <div class="card-footer bg-dark">
+                                @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })
+                            </div>
 
+                        </div>
                     </div>
-                </div>
 
-                <!-- @Html.DisplayFor(modelItem => item.Name)
+                    <!-- @Html.DisplayFor(modelItem => item.Name)
 
-                @Html.DisplayFor(modelItem => item.Email)
+            @Html.DisplayFor(modelItem => item.Email)
 
-                @Html.DisplayFor(modelItem => item.Company.Name)
-                @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
+            @Html.DisplayFor(modelItem => item.Company.Name)
+            @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        <h6>Não foi possível achar as informações do usuário.</h6>
+                    </td>
+                </tr>
             }
         </div>
     </div>
