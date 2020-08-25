@@ -48,8 +48,10 @@ namespace Bomix_Force.Controllers
             var teste = User.IsInRole("Company");
             if (User.IsInRole("Admin"))
             {
-                UserViewIndex userList = new UserViewIndex();
-                userList.UserList = new List<UserViewModel>();
+                UserViewIndex userList = new UserViewIndex
+                {
+                    UserList = new List<UserViewModel>()
+                };
                 List<Person> people = _genericPersonService.GetAll().ToList();
                 userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
                 foreach (var item in userList.UserList)
@@ -68,9 +70,11 @@ namespace Bomix_Force.Controllers
                 {
                 Person person = _genericPersonService.Get(u => u.UserId == user).First();
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
-                UserViewIndex userList = new UserViewIndex();
-                userList.UserList = new List<UserViewModel>();
-                IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
+                    UserViewIndex userList = new UserViewIndex
+                    {
+                        UserList = new List<UserViewModel>()
+                    };
+                    IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
                 userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
                 foreach (var item in userList.UserList)
                 {
@@ -164,8 +168,10 @@ namespace Bomix_Force.Controllers
         public ActionResult Edit(int id)
         {
             Person person = _genericPersonService.Get(u => u.Id == id).First();
-            UserViewIndex userView = new UserViewIndex();
-            userView.UserViewEdit =  _mapper.Map<UserViewEdit>(person);
+            UserViewIndex userView = new UserViewIndex
+            {
+                UserViewEdit = _mapper.Map<UserViewEdit>(person)
+            };
             return View(userView.UserViewEdit);
         }
 

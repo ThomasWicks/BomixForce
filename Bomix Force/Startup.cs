@@ -1,5 +1,3 @@
-     
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -73,7 +71,7 @@ namespace Bomix_Force
             services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
         }
 
-        private async Task createRolesandUsers(IServiceProvider serviceProvider)
+        private async Task CreateRolesandUsers(IServiceProvider serviceProvider)
         {
             var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
@@ -81,8 +79,10 @@ namespace Bomix_Force
             if (!x)
             {
                 // first we create Admin rool    
-                var role = new IdentityRole();
-                role.Name = "Admin";
+                var role = new IdentityRole
+                {
+                    Name = "Admin"
+                };
                 await _roleManager.CreateAsync(role);
 
                 //Here we create a Admin super user who will maintain the website                   
@@ -97,7 +97,7 @@ namespace Bomix_Force
                 //Add default User to Role Admin    
                 if (chkUser.Succeeded)
                 {
-                    var result1 = await _userManager.AddToRoleAsync(user, "Admin");
+                    _ = await _userManager.AddToRoleAsync(user, "Admin");
                 }
             }
 
@@ -105,8 +105,10 @@ namespace Bomix_Force
             x = await _roleManager.RoleExistsAsync("Company");
             if (!x)
             {
-                var role = new IdentityRole();
-                role.Name = "Company";
+                var role = new IdentityRole
+                {
+                    Name = "Company"
+                };
                 await _roleManager.CreateAsync(role);
 
                 var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
@@ -119,7 +121,7 @@ namespace Bomix_Force
                 //Add default User to Role Admin
                 if (chkUser.Succeeded)
                 {
-                    var result1 = await _userManager.AddToRoleAsync(user, "Company");
+                    _ = await _userManager.AddToRoleAsync(user, "Company");
                 }
             }
 
@@ -127,8 +129,10 @@ namespace Bomix_Force
             x = await _roleManager.RoleExistsAsync("User");
             if (!x)
             {
-                var role = new IdentityRole();
-                role.Name = "User";
+                var role = new IdentityRole
+                {
+                    Name = "User"
+                };
                 await _roleManager.CreateAsync(role);
 
                 var user = new IdentityUser { UserName = "user.user@hotmail.com", Email = "user.user@hotmail.com", EmailConfirmed = true };
@@ -141,7 +145,7 @@ namespace Bomix_Force
                 //Add default User to Role Admin
                 if (chkUser.Succeeded)
                 {
-                    var result1 = await _userManager.AddToRoleAsync(user, "User");
+                    _ = await _userManager.AddToRoleAsync(user, "User");
                 }
             }
         }
@@ -175,7 +179,7 @@ namespace Bomix_Force
                     pattern: "{controller=Home}/{action=Login}");
                 endpoints.MapRazorPages();
             });
-            createRolesandUsers(services).Wait();
+            CreateRolesandUsers(services).Wait();
         }
 
     }
