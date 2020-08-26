@@ -59,8 +59,7 @@ namespace Bomix_Force.Controllers
                 }
                 else
                 {
-                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    var test = _roleManager.FindByIdAsync(user);
+                    string user =  User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person = _genericPersonService.Get(u => u.UserId == user).First();
                     List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status != "FINALIZADO").ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);

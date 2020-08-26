@@ -39,7 +39,7 @@ namespace Bomix_Force.Controllers
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
-           
+
         }
         [Authorize]
         // GET: UserController
@@ -65,31 +65,19 @@ namespace Bomix_Force.Controllers
             else if (User.IsInRole("Company"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                List<Person> listPerson = _genericPersonService.Get(u => u.UserId == user).ToList();
-                if(listPerson.Count > 0)
-                {
                 Person person = _genericPersonService.Get(u => u.UserId == user).First();
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
-                    UserViewIndex userList = new UserViewIndex
-                    {
-                        UserList = new List<UserViewModel>()
-                    };
-                    IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
+                UserViewIndex userList = new UserViewIndex
+                {
+                    UserList = new List<UserViewModel>()
+                };
+                IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
                 userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
                 foreach (var item in userList.UserList)
                 {
                     item.Company = company;
                 }
-
                 return View(userList);
-
-                }
-                else
-                {
-                    UserViewIndex userList = new UserViewIndex();
-                    return View(userList);
-
-                }
             }
             else if (User.IsInRole("User"))
             {
@@ -134,12 +122,12 @@ namespace Bomix_Force.Controllers
 
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email,Cargo=userviewModel.Cargo, Setor=userviewModel.Setor, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
+                        Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email, Cargo = userviewModel.Cargo, Setor = userviewModel.Setor, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Person = " + person.Tel);
                         _logger.LogInformation("Novo usuário criado.");
-                        await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário "+person.Name+" foi criado com sucesso");
+                        await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
 
 
                         return RedirectToAction(nameof(Index));
@@ -158,7 +146,7 @@ namespace Bomix_Force.Controllers
                     return View();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -182,7 +170,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-        
+
                 _genericPersonService.Save();
                 var user = await _userManager.FindByIdAsync(userviewEdit.UserID);
                 var changePasswordResult = await _userManager.ChangePasswordAsync(user, userviewEdit.OldPassword, userviewEdit.Password);
@@ -198,7 +186,7 @@ namespace Bomix_Force.Controllers
                 _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception x)
+            catch (Exception x)
             {
                 return View();
             }
