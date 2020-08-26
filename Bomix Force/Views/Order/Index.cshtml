@@ -6,6 +6,51 @@
 
 <div class="clearfix mx-5">
     <h2 class="mt-3">Pedidos</h2>
+        <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal Cadastro-->
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h4 class="modal-title float-left text-white">Itens</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12 mt-3">
+                        <div class="card border border-primary">
+                            <div class="card-body">
+                                <h6 class="card-title"><strong>Produto: BALDE PP BX R 18 IML (R.I) BC</strong></h6>
+                                <p class="card-text"><strong>Quantidade: 130</strong></p>
+                                <p class="card-text"><strong>Stauts:<span class="badge badge-wide badge-success"> Aprovado</span></strong> </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="card border border-primary">
+                            <div class="card-body">
+                                <h6 class="card-title"><strong>Produto: TAMPA PP TX R 18 BR F/FLAT VERDE</strong></h6>
+                                <p class="card-text"><strong>Quantidade: 200</strong></p>
+                                <p class="card-text"><strong>Stauts:<span class="badge badge-wide badge-warning"> Pendente</span></strong> </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="card border border-primary">
+                            <div class="card-body">
+                                <h6 class="card-title"><strong>Produto: TAMPA PP TX R 18 BR F/FLAT VERDE</strong></h6>
+                                <p class="card-text"><strong>Quantidade: 20</strong></p>
+                                <p class="card-text"><strong>Stauts:<span class="badge badge-wide badge-danger"> Negado</span></strong> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right"> Duplicar</button>
+                </div> 
+            </div>
+
+        </div>
+    </div>
     <!-- <div class="table-responsive mt-4">
         <table class="table table-hover">
             <thead class="thead-dark thead-sm">
@@ -31,13 +76,13 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Number)
+                                @Html.DisplayFor(modelItem => item.NumeroPedido)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Date)
+                                @Html.DisplayFor(modelItem => item.Entrega)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Status_Order)
+                                @Html.DisplayFor(modelItem => item.Status)
                             </td>
                             <td>
                             <a href="" type="button" data-toggle="modal" data-target="#teste"> <i class="fas fa-copy"></i></a>
@@ -66,12 +111,36 @@
                     <div class="col-sm-4 mt-3">
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Number)</strong></h6>
-                                <p class="card-text"><strong>Data: @Html.DisplayFor(modelItem => item.Date)</strong></p>
-                                <p class="card-text"><strong>Stauts: @Html.DisplayFor(modelItem => item.Status_Order)</strong> </p>
+                                <h6 class="card-title"><strong>Numero Pedido:  @Html.DisplayFor(modelItem => item.NumeroPedido)</strong></h6>
+                                <p class="card-text"><strong>Emissão: @Html.DisplayFor(modelItem => item.Emissao)</strong></p>
+                                <p class="card-text"><strong>Entrega: @Html.DisplayFor(modelItem => item.Entrega)</strong></p>
+                                @if (item.Status == "Aprovado")
+                                {
+                                    <p class="card-text">
+                                        <strong>
+                                            Stauts: <span class="badge badge-wide badge-success"> @Html.DisplayFor(modelItem => item.Status)</span>
+                                        </strong>
+                                    </p>
+                                }
+                                else if (item.Status == "Pendente")
+                                {
+                                    <p class="card-text">
+                                        <strong>
+                                            Stauts: <span class="badge badge-wide badge-warning"> @Html.DisplayFor(modelItem => item.Status)</span>
+                                        </strong>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="card-text">
+                                        <strong>
+                                            Stauts: <span class="badge badge-wide badge-danger"> @Html.DisplayFor(modelItem => item.Status)</span>
+                                        </strong>
+                                    </p>
+                                }
                             </div>
                             <div class="card-footer bg-dark">
-                                @Html.ActionLink("", "Details", "Order", new { item.Id }, new { @class="fas fa-copy fa-2x float-right" })
+                                <a href="" data-toggle="modal" data-target="#myModal"><i class="fas fa-info-circle fa-2x float-right"></i></a>
                             </div>
 
                         </div>
@@ -89,3 +158,15 @@
         </div>
     </div>
 </div>
+
+<style lang="scss" scoped>
+    .badge {
+        font-weight: 500;
+        text-transform: uppercase;
+        margin-right: 10px;
+        margin-left: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 25px;
+    }
+</style>
