@@ -165,6 +165,7 @@ namespace Bomix_Force.Controllers
         }
 
         // GET: UserController/Edit/5
+    [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
             Person person = _genericPersonService.Get(u => u.Id == id).First();
@@ -172,12 +173,13 @@ namespace Bomix_Force.Controllers
             {
                 UserViewEdit = _mapper.Map<UserViewEdit>(person)
             };
-            return View(userView.UserViewEdit);
+            return PartialView("_userModelPartial", userView.UserViewEdit);
         }
 
         // POST: UserController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[Route("User/Edit/{userviewEdit}")]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserViewEdit userviewEdit)
         {
             try
@@ -200,7 +202,7 @@ namespace Bomix_Force.Controllers
             }
             catch(Exception x)
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 

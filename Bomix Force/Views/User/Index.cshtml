@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<div id="PlaceHolderHere"></div>
 
 <div class="clearfix mx-5">
     <h2 class="mt-3">Usuário</h2>
@@ -177,7 +177,8 @@
                                 <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
                             </div>
                             <div class="card-footer bg-dark">
-                                @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })
+                                <button type="button" class="btn btn-primary" data-toggle="ajax-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")">Editar</button>
+                                @*@Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })*@
                             </div>
 
                         </div>
