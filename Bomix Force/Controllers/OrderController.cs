@@ -52,7 +52,7 @@ namespace Bomix_Force.Controllers
                     Person person = _genericPersonService.Get(u => u.UserId == user).First();
 
                     //pega todos as orders cujo status não está finalizado e tem algum person com o id igual ao person que está logado
-                    List<Order> orders = _genericOrderService.Get(o => person.OrderId == o.Id && o.Status != "FINALIZADO").ToList();
+                    List<Order> orders = _genericOrderService.Get(o => o.PersonId == person.Id && o.Status != "FINALIZADO").ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                     return View(orderView);
 
