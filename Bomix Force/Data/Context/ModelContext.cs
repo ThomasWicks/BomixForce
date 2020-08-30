@@ -3,6 +3,7 @@ using Bomix_Force.Data.EntityConfig;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Bomix_Force.ViewModels;
 
 
 namespace Bomix_Force.Data.Context
@@ -35,5 +36,7 @@ namespace Bomix_Force.Data.Context
             modelBuilder.ApplyConfiguration(new PersonConfiguration());
 
         }
+
+        public DbSet<Bomix_Force.ViewModels.UserViewEdit> UserViewEdit { get; set; }
     }
 }
