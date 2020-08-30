@@ -39,8 +39,6 @@
                             </div>
                         </div>
                         <div class="row py-2">
-                        </div>
-                        <div class="row py-2">
                             <div class="col-6">
                                 <label asp-for="@Model.User.Name"></label>
                                 <input asp-for="@Model.User.Name" class="form-control" />
@@ -69,9 +67,6 @@
                         <button type="submit" class="btn btn-primary float-right">Cadastrar</button>
                     </form>
                 </div>
-                <!-- <div class="modal-footer">
-
-                </div> -->
             </div>
 
         </div>
@@ -97,7 +92,7 @@
                                 <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
                             </div>
                             <div class="card-footer bg-dark">
-                                <button type="button" class="btn btn-primary" data-toggle="ajax-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")">Editar</button>
+                                <button class="btn float-right" data-toggle="ajax-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x blue"></i></button>
                                 @*@Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })*@
                             </div>
 
@@ -128,5 +123,8 @@
 <style>
     .testee {
         max-width: inherit
+    }
+    .blue {
+        color: #007bff ;
     }
 </style>
