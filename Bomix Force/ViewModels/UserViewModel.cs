@@ -65,18 +65,9 @@ namespace Bomix_Force.ViewModels
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [Required]
         public string UserID { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "A {0} precisa ser pelo menos {2} e no máximo {1} caracteres.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Senha")]
-        public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirmar senha")]
-        [Compare("Password", ErrorMessage = "As senhas não correspondem.")]
-        public string ConfirmPassword { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -84,10 +75,10 @@ namespace Bomix_Force.ViewModels
         [DataType(DataType.PhoneNumber)]
         public int Tel { get; set; }
         [Required]
-        [DataType(DataType.Password)]
-        public string OldPassword { get; set; }
         public string Cargo { get; set; }
+        [Required]
         public string Setor { get; set; }
+        [Required]
         public int? CompanyId { get; set; }
     }
 }

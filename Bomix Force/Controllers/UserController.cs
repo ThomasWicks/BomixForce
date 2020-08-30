@@ -184,17 +184,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-        
-                _genericPersonService.Save();
-                var user = await _userManager.FindByIdAsync(userviewEdit.UserID);
-                var changePasswordResult = await _userManager.ChangePasswordAsync(user, userviewEdit.OldPassword, userviewEdit.Password);
-                if (!changePasswordResult.Succeeded)
-                {
-                    foreach (var error in changePasswordResult.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+                
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
                 _genericPersonService.Save();

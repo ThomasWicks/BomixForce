@@ -79,84 +79,7 @@
         </div>
     </div>
 
-    <!-- Modal Edit-->
-    <div class="modal fade" id="EditModal" role="dialog">
-        <div class="modal-dialog modal-lg">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header bg-dark">
-                    <h4 class="modal-title float-left text-white">Edit</h4>
-                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" asp-controller="User" asp-action="Edit">
-                        @Html.HiddenFor(model => model.UserViewEdit.Id)
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        <div class="row">
-                            <div class="col-12">
-                                <label asp-for="@Model.UserViewEdit.Email"></label>
-                                <input asp-for="@Model.UserViewEdit.Email" class="form-control" />
-                                <span asp-validation-for="@Model.UserViewEdit.Email" class="text-danger">
-                                    @Html.DisplayNameFor(model => model.UserViewEdit.Email)
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row py-2">
-                            <div class="col-6">
-                                <label asp-for="@Model.UserViewEdit.Password"></label>
-                                <input asp-for="@Model.UserViewEdit.Password" class="form-control" />
-                                <span asp-validation-for="@Model.UserViewEdit.Password" class="text-danger">
-                                </span>
-                            </div>
-                            <div class="col-6">
-                                <label asp-for="@Model.UserViewEdit.ConfirmPassword"></label>
-                                <input asp-for="@Model.UserViewEdit.ConfirmPassword" class="form-control" />
-                                <span asp-validation-for="@Model.UserViewEdit.ConfirmPassword" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row py-2">
-                            <div class="col-6">
-                                <label asp-for="@Model.UserViewEdit.Name"></label>
-                                <input asp-for="@Model.UserViewEdit.Name" class="form-control" />
-                                <span asp-validation-for="@Model.UserViewEdit.Name" class="text-danger">
-                                    @Html.DisplayNameFor(model => model.UserViewEdit.Name)
-                                </span>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label asp-for="@Model.UserViewEdit.Tel"></label>
-                                    <input asp-for="@Model.UserViewEdit.Tel" class="form-control" />
-                                    <span asp-validation-for="@Model.UserViewEdit.Tel" class="text-danger">
-                                        @Html.DisplayNameFor(model => model.UserViewEdit.Tel)
-                                    </span>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row py-2">
-                            <div class="col-6">
-                                <label asp-for="@Model.User.Endereço"></label>
-                                <input asp-for="@Model.User.Endereço" class="form-control" />
-                                <span asp-validation-for="@Model.User.Endereço" class="text-danger"></span>
-                            </div>
-                            <div class="col-6">
-                                <label asp-for="@Model.UserViewEdit.OldPassword"></label>
-                                <input asp-for="@Model.UserViewEdit.OldPassword" class="form-control" />
-                                <span asp-validation-for="@Model.UserViewEdit.OldPassword" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary float-right">Salvar</button>
-                    </form>
-                </div>
-                <!-- <div class="modal-footer">
-
-                </div> -->
-            </div>
-
-        </div>
-    </div>
 
     <div>
         <div class="row">
@@ -203,62 +126,7 @@
         </div>
     </div>
 
-     @*<div class="table-responsive">
-        <table class="table table-hover">
-            <thead class="thead-dark thead-sm">
-                <tr>
-                    <th scope="col" class="text-center">
-                        Username
-                    </th>
-                    <th scope="col" class="text-center">
-                        Email
-                    </th>
-                    <th scope="col" class="text-center">
-                        Company
-                    </th>
-                    <th scope="col" class="text-center">
-                        Ações
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (@Model.UserList?.Count() > 0)
-                {
-                    foreach (var item in @Model.UserList)
-                    {
-                        <tr>
-                            <td class="text-center">
 
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td class="text-center">
-
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td class="text-center">
-
-                                @Html.DisplayFor(modelItem => item.Company.Name)
-                            </td>
-
-                            <td class="text-center">
-                                @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" })
-
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td>
-                            <h6>Nenhum Usuário encontrado.</h6>
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
-        </table>
-    </div>*@ 
 </div>
 
 <style>
