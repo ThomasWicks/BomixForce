@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Bomix_Force.Data.Entities
 {
-    public class Person
+    public class Comercial
     {
         [Key]
         public int Id { get; set; }
@@ -17,10 +17,7 @@ namespace Bomix_Force.Data.Entities
         public string Cargo { get; set; }
         [ForeignKey("User")]
         public string UserId { get; set; }
-        [ForeignKey("Company")]
-        public int? CompanyId { get; set; }
         public virtual IdentityUser User { get; set; }
-        public virtual Company Company { get; set; }
-        public virtual List<Order> Order { get; set; }
+        public virtual List<Company> Companies { get; set; }
     }
 }
