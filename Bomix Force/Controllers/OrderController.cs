@@ -48,7 +48,6 @@ namespace Bomix_Force.Controllers
                 else if (User.IsInRole("User"))
                 {
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    var test = _roleManager.FindByIdAsync(user);
                     Person person = _genericPersonService.Get(u => u.UserId == user).First();
 
                     //pega todos as orders cujo status não está finalizado e tem algum person com o id igual ao person que está logado
@@ -74,13 +73,14 @@ namespace Bomix_Force.Controllers
         }
 
         // GET: OrderController/Details/5
+        [Route("Order/Details/{id}")]
         public ActionResult Details(int id)
         {
             Order order = _genericOrderService.Get(g => g.Id == id).First();
             List<Item> itens = _genericItemService.Get(i => i.OrderId == order.Id).ToList();
             OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
             orderView.Item = itens;
-            return View(orderView);
+            return PartialView("_orderDetailsPartial", orderView);
         }
 
         // GET: OrderController/Create

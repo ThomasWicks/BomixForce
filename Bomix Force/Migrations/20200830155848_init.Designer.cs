@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bomix_Force.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    [Migration("20200825141540_update db server")]
-    partial class updatedbserver
+    [Migration("20200830155848_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -134,7 +134,7 @@ namespace Bomix_Force.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Emissao")
-                        .HasColumnName("EMISSAOGADATE")
+                        .HasColumnName("EMISSAODATE")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Entrega")
@@ -145,6 +145,9 @@ namespace Bomix_Force.Migrations
                         .HasColumnName("NUMBER")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PersonId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnName("STATUS")
@@ -153,6 +156,8 @@ namespace Bomix_Force.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("PersonId");
 
                     b.ToTable("ORDER");
                 });
@@ -182,9 +187,6 @@ namespace Bomix_Force.Migrations
                         .HasColumnName("NAME")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Setor")
                         .IsRequired()
                         .HasColumnName("SETOR")
@@ -201,9 +203,46 @@ namespace Bomix_Force.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("OrderId");
-
                     b.ToTable("PERSON");
+                });
+
+            modelBuilder.Entity("Bomix_Force.ViewModels.UserViewEdit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Cargo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CompanyId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Setor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Tel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserViewEdit");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -431,6 +470,10 @@ namespace Bomix_Force.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Bomix_Force.Data.Entities.Person", "Person")
+                        .WithMany("Order")
+                        .HasForeignKey("PersonId");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Person", b =>
@@ -438,10 +481,6 @@ namespace Bomix_Force.Migrations
                     b.HasOne("Bomix_Force.Data.Entities.Company", "Company")
                         .WithMany("Persons")
                         .HasForeignKey("CompanyId");
-
-                    b.HasOne("Bomix_Force.Data.Entities.Order", "Order")
-                        .WithMany("Person")
-                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

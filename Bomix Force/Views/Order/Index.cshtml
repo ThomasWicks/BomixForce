@@ -3,54 +3,9 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+    <div id="OrderDetailsHere"></div>
 <div class="clearfix mx-5">
     <h2 class="mt-3">Pedidos</h2>
-        <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog modal-lg">
-
-            <!-- Modal Cadastro-->
-            <div class="modal-content">
-                <div class="modal-header bg-dark">
-                    <h4 class="modal-title float-left text-white">Itens</h4>
-                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-sm-12 mt-3">
-                        <div class="card border border-primary">
-                            <div class="card-body">
-                                <h6 class="card-title"><strong>Produto: BALDE PP BX R 18 IML (R.I) BC</strong></h6>
-                                <p class="card-text"><strong>Quantidade: 130</strong></p>
-                                <p class="card-text"><strong>Stauts:<span class="badge badge-wide badge-success"> Aprovado</span></strong> </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="card border border-primary">
-                            <div class="card-body">
-                                <h6 class="card-title"><strong>Produto: TAMPA PP TX R 18 BR F/FLAT VERDE</strong></h6>
-                                <p class="card-text"><strong>Quantidade: 200</strong></p>
-                                <p class="card-text"><strong>Stauts:<span class="badge badge-wide badge-warning"> Pendente</span></strong> </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="card border border-primary">
-                            <div class="card-body">
-                                <h6 class="card-title"><strong>Produto: TAMPA PP TX R 18 BR F/FLAT VERDE</strong></h6>
-                                <p class="card-text"><strong>Quantidade: 20</strong></p>
-                                <p class="card-text"><strong>Stauts:<span class="badge badge-wide badge-danger"> Negado</span></strong> </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right"> Duplicar</button>
-                </div> 
-            </div>
-
-        </div>
-    </div>
 
     <div>
         <div class="row">
@@ -90,7 +45,7 @@
                                 }
                             </div>
                             <div class="card-footer bg-dark">
-                                <a href="" data-toggle="modal" data-target="#myModal"><i class="fas fa-info-circle fa-2x float-right"></i></a>
+                                <button type="button" class="btn btn-primary" data-toggle="ajax-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Id}")">Detalhes</button>
                             </div>
 
                         </div>

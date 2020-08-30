@@ -166,8 +166,6 @@ namespace Bomix_Force.Controllers
 
         // POST: UserController/Edit/5
         [HttpPost]
-        //[Route("User/Edit/{userviewEdit}")]
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserViewEdit userviewEdit)
         {
             try

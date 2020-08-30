@@ -29,4 +29,19 @@ $(function(){
         }
             )
     })
+
+
+    var OrderDetailsElement = $('#OrderDetailsHere');
+    $('button[data-toggle="ajax-modal"]').click(function (event) {
+        var url = $(this).data('url');
+        var decodedUrl = decodeURIComponent(url)
+        console.log(url)
+        console.log(decodedUrl)
+        $.get(decodedUrl).done(function (data) {
+            OrderDetailsElement.html(data);
+            OrderDetailsElement.find('.modal').modal('show');
+        })
+    })
+
+
 })
