@@ -10,6 +10,11 @@
 <div class="clearfix mx-5">
     <h2 class="mt-3">Pedidos</h2>
     <div class="table-responsive mt-4">
+        <b>Procurar por número:</b>
+        @using (Html.BeginForm())
+        {
+            @Html.TextBox("searchString") <input type="submit" id="SearchBtn" value="Procurar" /><br /><br />
+        }
         <table class="table table-striped">
             <thead class="thead-dark">
 
@@ -65,7 +70,7 @@
                         </td>
                     </tr>
                 }
-                @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, filter= ViewBag.filter }))
+                @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, filter= ViewBag.filter, searchString = ViewBag.searchString }))
             </tbody>
         </table>
     </div>

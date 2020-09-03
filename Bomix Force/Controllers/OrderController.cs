@@ -36,16 +36,21 @@ namespace Bomix_Force.Controllers
 
         }
         // GET: OrderController
-        public ActionResult Index(string filter, int? pageNumber)
+        public ActionResult Index(string filter,string searchString, int? pageNumber)
         {
             int page = (pageNumber ?? 1);
             try
             {
                 ViewBag.filter = filter;
+                ViewBag.searchString = searchString;
                 if (User.IsInRole("Admin"))
                 {
                     List<Order> orders = _genericOrderService.Get().ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                    if (!String.IsNullOrEmpty(searchString))
+                    {
+                        orderView = orderView.Where(o => o.NumeroPedido.ToString().Contains(searchString));
+                    }
                     switch (filter)
                     {
                         case ("Entrega"):
@@ -70,6 +75,10 @@ namespace Bomix_Force.Controllers
                     //pega todos as orders cujo status não está finalizado e tem algum person com o id igual ao person que está logado
                     List<Order> orders = _genericOrderService.Get(o => o.PersonId == person.Id && o.Status != "FINALIZADO").ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                    if (!String.IsNullOrEmpty(searchString))
+                    {
+                        orderView = orderView.Where(o => o.NumeroPedido.ToString().Contains(searchString));
+                    }
                     switch (filter)
                     {
                         case ("Entrega"):
@@ -91,6 +100,10 @@ namespace Bomix_Force.Controllers
                     Person person = _genericPersonService.Get(u => u.UserId == user).First();
                     List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status != "FINALIZADO").ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                    if (!String.IsNullOrEmpty(searchString))
+                    {
+                        orderView = orderView.Where(o => o.NumeroPedido.ToString().Contains(searchString));
+                    }
                     switch (filter)
                     {
                         case ("Entrega"):
