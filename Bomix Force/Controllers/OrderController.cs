@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Bomix_Force.Data.Entities;
 using Bomix_Force.Repo.Interface;
+using X.PagedList;
 using Bomix_Force.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -35,15 +36,31 @@ namespace Bomix_Force.Controllers
 
         }
         // GET: OrderController
-        public ActionResult Index()
+        public ActionResult Index(string filter, int? pageNumber)
         {
+            int page = (pageNumber ?? 1);
             try
             {
+                ViewBag.filter = filter;
                 if (User.IsInRole("Admin"))
                 {
                     List<Order> orders = _genericOrderService.Get().ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                    switch (filter)
+                    {
+                        case ("Entrega"):
+                            orderView = orderView.OrderByDescending(s => s.Entrega);
+                            break;
+                        case ("Emissao"):
+                            orderView = orderView.OrderByDescending(s => s.Emissao);
+                            break;
+                        default:
+                            break;
+
+                    }
+                    orderView.ToPagedList(page, 2);
                     return View(orderView);
+
                 }
                 else if (User.IsInRole("User"))
                 {
@@ -53,15 +70,41 @@ namespace Bomix_Force.Controllers
                     //pega todos as orders cujo status não está finalizado e tem algum person com o id igual ao person que está logado
                     List<Order> orders = _genericOrderService.Get(o => o.PersonId == person.Id && o.Status != "FINALIZADO").ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-                    return View(orderView);
+                    switch (filter)
+                    {
+                        case ("Entrega"):
+                            orderView = orderView.OrderByDescending(s => s.Entrega);
+                            break;
+                        case ("Emissao"):
+                            orderView = orderView.OrderByDescending(s => s.Emissao);
+                            break;
 
+                        default:
+                            break;
+                    }
+                    orderView = orderView.ToPagedList(page, 2);
+                    return View(orderView);
                 }
                 else
                 {
-                    string user =  User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person = _genericPersonService.Get(u => u.UserId == user).First();
                     List<Order> orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status != "FINALIZADO").ToList();
                     IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                    switch (filter)
+                    {
+                        case ("Entrega"):
+                            orderView = orderView.OrderByDescending(s => s.Entrega);
+                            break;
+
+                        case ("Emissao"):
+                            orderView = orderView.OrderByDescending(s => s.Emissao);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    orderView.ToPagedList(page, 2);
                     return View(orderView);
                 };
             }

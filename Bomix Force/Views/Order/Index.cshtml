@@ -1,112 +1,77 @@
-﻿@model IEnumerable<Bomix_Force.ViewModels.OrderViewModel>
+﻿@using X.PagedList.Mvc.Core
+@model X.PagedList.PagedList<Bomix_Force.ViewModels.OrderViewModel>
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewData["Title"] = "Index";
 }
-    <div id="OrderDetailsHere"></div>
-    <div class="clearfix mx-5">
-        <h2 class="mt-3">Pedidos</h2>
-        <div class="table-responsive mt-4">
-            <table class="table table-striped">
+<div id="OrderDetailsHere"></div>
+<div class="clearfix mx-5">
+    <h2 class="mt-3">Pedidos</h2>
+    <div class="table-responsive mt-4">
+        <table class="table table-striped">
             <thead class="thead-dark">
+
                 <tr>
+
                     <th class="text-center">
+
                         NumeroPedido
                     </th>
                     <th class="text-center">
-                        Emissao
+                        @Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })
                     </th>
                     <th class="text-center">
-                        Entrega
+                        @Html.ActionLink("Entrega", "Index", new { filter = "Entrega" })
                     </th>
                     <th class="text-center">
                         Status
                     </th>
                     <th class="text-center">
-                        Ações
+                        Detalhes
                     </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <th class="text-center">
-                        @item.NumeroPedido
-                    </th>
-                    <th class="text-center">
-                        @item.Emissao
-                    </th>
-                    <th class="text-center">
-                        @item.Entrega
-                    </th>
-                    <th class="text-center">
-                        @item.Status
-                    </th>
-                    <th class="text-center">
-                       <button class="btn" data-toggle="ajax-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Id}")"><i class="fas fa-info-circle fa-2x blue"></i></button>
-                    </th>
-                </tr>
-                }
-            </tbody>
-        </table>
-        </div>
-        @*<div>
-            <div class="row">
                 @if (Model?.Count() > 0)
                 {
                     foreach (var item in Model)
                     {
-                        <div class="col-sm-4 mt-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="card-title"><strong>Numero Pedido:  @Html.DisplayFor(modelItem => item.NumeroPedido)</strong></h6>
-                                    <p class="card-text"><strong>Emissão: @Html.DisplayFor(modelItem => item.Emissao)</strong></p>
-                                    <p class="card-text"><strong>Entrega: @Html.DisplayFor(modelItem => item.Entrega)</strong></p>
-                                    @if (item.Status == "Aprovado")
-                                    {
-                                        <p class="card-text">
-                                            <strong>
-                                                Stauts: <span class="badge badge-wide badge-success"> @Html.DisplayFor(modelItem => item.Status)</span>
-                                            </strong>
-                                        </p>
-                                    }
-                                    else if (item.Status == "Pendente")
-                                    {
-                                        <p class="card-text">
-                                            <strong>
-                                                Stauts: <span class="badge badge-wide badge-warning"> @Html.DisplayFor(modelItem => item.Status)</span>
-                                            </strong>
-                                        </p>
-                                    }
-                                    else
-                                    {
-                                        <p class="card-text">
-                                            <strong>
-                                                Stauts: <span class="badge badge-wide badge-danger"> @Html.DisplayFor(modelItem => item.Status)</span>
-                                            </strong>
-                                        </p>
-                                    }
-                                </div>
-                                <div class="card-footer bg-dark">
-                                    <button type="button" class="btn btn-primary" data-toggle="ajax-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Id}")">Detalhes</button>
-                                </div>
-
-                            </div>
-                        </div>
+                        <tr>
+                            <th class="text-center">
+                                @item.NumeroPedido
+                            </th>
+                            <th class="text-center">
+                                @item.Emissao
+                            </th>
+                            <th class="text-center">
+                                @item.Entrega
+                            </th>
+                            <th class="text-center">
+                                @item.Status
+                            </th>
+                            <th class="text-center">
+                                <button class="btn" data-toggle="ajax-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Id}")"><i class="fas fa-info-circle fa-2x blue"></i></button>
+                            </th>
+                        </tr>
                     }
                 }
                 else
                 {
                     <tr>
                         <td>
-                            <h6>Não foi possível achar as informações do usuário.</h6>
+                            <h6>Não há pedidos cadastrados.</h6>
                         </td>
                     </tr>
                 }
-            </div>
-        </div>*@
+                @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, filter= ViewBag.filter }))
+            </tbody>
+        </table>
     </div>
+
+
+</div>
 
 <style lang="scss" scoped>
     .badge {
@@ -118,7 +83,8 @@
         padding-right: 15px;
         border-radius: 25px;
     }
+
     .blue {
-        color: #007bff ;
+        color: #007bff;
     }
 </style>

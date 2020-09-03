@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System;
 using Bomix_Force.AppServices.Interface;
 using Bomix_Force.AppServices;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Bomix_Force
 {
@@ -56,6 +57,7 @@ namespace Bomix_Force
             services.AddRazorPages();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IAuthorizationHandler, AuthHendler>();
