@@ -16,18 +16,20 @@
     <b>Procurar por:</b>
     @using (Html.BeginForm())
     {
-        <form id="typeSearch" asp-controller="Order" asp-action="Index">
-            <select id="selectType" class="form-control" name="selectType">
-                <option value="Name">Nome</option>
-                <option value="Setor">Setor</option>
-                <option value="Cargo">Cargo</option>
-                @if (User.IsInRole("Admin"))
-                {
-                    < option value = "Company" > Companhia </ option >
-                }
-            </select>
-            @Html.TextBox("searchString") <input type="submit" id="SearchBtn" value="Procurar" />
-        </form>
+<form id="typeSearch" asp-controller="Order" asp-action="Index">
+    <div class="row ml-1 mt-3">
+        <select id="selectType" class="form-control col-6 mr-5" name="selectType">
+            <option value="Name">Nome</option>
+            <option value="Setor">Setor</option>
+            <option value="Cargo">Cargo</option>
+            @if (User.IsInRole("Admin"))
+            {
+                < option value = "Company" > Companhia </ option >
+            }
+        </select>
+        @Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
+    </div>
+</form>
     }
     <!-- Modal Cadastro-->
     <div class="modal fade" id="myModal" role="dialog">
@@ -98,7 +100,7 @@
                 <div class="col-sm-4 mt-3">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h6>
+                            <h5 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h5>
                             <p class="card-text"><strong>Email:  @Html.DisplayFor(modelItem => item.Email)</strong></p>
                             @if (User.IsInRole("Admin"))
                             {
