@@ -43,15 +43,16 @@ namespace Bomix_Force.Controllers
         }
         [Authorize]
         // GET: UserController
-        public ActionResult Index()
+        public ActionResult Index(string selectType, string searchString)
         {
+            UserViewIndex userList = new UserViewIndex
+            {
+                UserList = new List<UserViewModel>()
+            };
             var teste = User.IsInRole("Company");
             if (User.IsInRole("Admin"))
             {
-                UserViewIndex userList = new UserViewIndex
-                {
-                    UserList = new List<UserViewModel>()
-                };
+
                 List<Person> people = _genericPersonService.GetAll().ToList();
                 userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
                 foreach (var item in userList.UserList)
@@ -60,32 +61,38 @@ namespace Bomix_Force.Controllers
                     item.Company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First(); ;
                 }
 
-                return View(userList);
+
             }
             else if (User.IsInRole("Company"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person person = _genericPersonService.Get(u => u.UserId == user).First();
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
-                UserViewIndex userList = new UserViewIndex
-                {
-                    UserList = new List<UserViewModel>()
-                };
+
                 IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
                 userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
                 foreach (var item in userList.UserList)
                 {
                     item.Company = company;
                 }
-                return View(userList);
             }
             else if (User.IsInRole("User"))
             {
-                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                return RedirectToAction("Action", new { id = person.Id });
+                //todo user can't see user page
+                return View();
             }
-            return View();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                if (selectType == "Name")
+                {
+                    userList.UserList = userList.UserList.Where(s => s.Name.ToLower().Contains(searchString.ToLower()));
+                }
+                else if(selectType == "Company")
+                {
+                    userList.UserList = userList.UserList.Where(s => s.Company.Name.ToLower().Contains(searchString.ToLower()));
+                }
+            }
+            return View(userList);
         }
 
         // GET: UserController/Details/5
@@ -153,7 +160,7 @@ namespace Bomix_Force.Controllers
         }
 
         // GET: UserController/Edit/5
-    [Route("User/Edit/{id}")]
+        [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
             Person person = _genericPersonService.Get(u => u.Id == id).First();
@@ -170,7 +177,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-                
+
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
                 _genericPersonService.Save();

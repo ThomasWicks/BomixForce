@@ -10,8 +10,19 @@
     {
         <a class="d-flex flex-row-reverse">
 
-        <span class="p-2 btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Cadastrar</span>
+            <span class="p-2 btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Cadastrar</span>
         </a>
+    }
+    <b>Procurar por:</b>
+    @using (Html.BeginForm())
+    {
+        <form id="typeSearch" asp-controller="Order" asp-action="Index">
+            <select id="selectType" class="form-control" name="selectType">
+                <option value="Name">Nome</option>
+                <option value="Company">Companhia</option>
+            </select>
+            @Html.TextBox("searchString") <input type="submit" id="SearchBtn" value="Procurar" />
+        </form>
     }
     <!-- Modal Cadastro-->
     <div class="modal fade" id="myModal" role="dialog">
@@ -45,9 +56,9 @@
                                 <span asp-validation-for="@Model.User.Name" class="text-danger"></span>
                             </div>
                             <div class="col-6">
-                                    <label asp-for="@Model.User.Tel"></label>
-                                    <input asp-for="@Model.User.Tel" class="form-control" />
-                                    <span asp-validation-for="@Model.User.Tel" class="text-danger"></span>
+                                <label asp-for="@Model.User.Tel"></label>
+                                <input asp-for="@Model.User.Tel" class="form-control" />
+                                <span asp-validation-for="@Model.User.Tel" class="text-danger"></span>
                             </div>
 
                         </div>
@@ -58,9 +69,9 @@
                                 <span asp-validation-for="@Model.User.Cargo" class="text-danger"></span>
                             </div>
                             <div class="col-6">
-                                    <label asp-for="@Model.User.Setor"></label>
-                                    <input asp-for="@Model.User.Setor" class="form-control" />
-                                    <span asp-validation-for="@Model.User.Setor" class="text-danger"></span>
+                                <label asp-for="@Model.User.Setor"></label>
+                                <input asp-for="@Model.User.Setor" class="form-control" />
+                                <span asp-validation-for="@Model.User.Setor" class="text-danger"></span>
                             </div>
                         </div>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -74,48 +85,48 @@
 
 
 
-        <div class="row">
-            @if (@Model?.UserList?.Count() > 0)
+    <div class="row">
+        @if (@Model?.UserList?.Count() > 0)
+        {
+            foreach (var item in @Model.UserList)
             {
-                foreach (var item in @Model.UserList)
-                {
-                    <div class="col-sm-4 mt-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h6>
-                                <p class="card-text"><strong>Email:  @Html.DisplayFor(modelItem => item.Email)</strong></p>
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <p class="card-text"><strong>Empresa: @Html.DisplayFor(modelItem => item.Company.Name)</strong> </p>
-                                }
-                                <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
-                                <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
-                            </div>
-                            <div class="card-footer bg-dark">
-                                <button class="btn float-right" data-toggle="ajax-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x blue"></i></button>
-                                @*@Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })*@
-                            </div>
-
+                <div class="col-sm-4 mt-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h6>
+                            <p class="card-text"><strong>Email:  @Html.DisplayFor(modelItem => item.Email)</strong></p>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <p class="card-text"><strong>Empresa: @Html.DisplayFor(modelItem => item.Company.Name)</strong> </p>
+                            }
+                            <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
+                            <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
                         </div>
+                        <div class="card-footer bg-dark">
+                            <button class="btn float-right" data-toggle="ajax-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x blue"></i></button>
+                            @*@Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })*@
+                        </div>
+
                     </div>
+                </div>
 
-                    <!-- @Html.DisplayFor(modelItem => item.Name)
+                <!-- @Html.DisplayFor(modelItem => item.Name)
 
-            @Html.DisplayFor(modelItem => item.Email)
+                @Html.DisplayFor(modelItem => item.Email)
 
-            @Html.DisplayFor(modelItem => item.Company.Name)
-            @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
-                }
+                @Html.DisplayFor(modelItem => item.Company.Name)
+                @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
             }
-            else
-            {
-                <tr>
-                    <td>
-                        <h6>Não foi possível achar as informações do usuário.</h6>
-                    </td>
-                </tr>
-            }
-        </div>
+        }
+        else
+        {
+            <tr>
+                <td>
+                    <h6>Não foi possível achar as informações do usuário.</h6>
+                </td>
+            </tr>
+        }
+    </div>
 
 
 </div>
