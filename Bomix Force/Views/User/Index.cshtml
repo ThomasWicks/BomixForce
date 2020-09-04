@@ -19,7 +19,12 @@
         <form id="typeSearch" asp-controller="Order" asp-action="Index">
             <select id="selectType" class="form-control" name="selectType">
                 <option value="Name">Nome</option>
-                <option value="Company">Companhia</option>
+                <option value="Setor">Setor</option>
+                <option value="Cargo">Cargo</option>
+                @if (User.IsInRole("Admin"))
+                {
+                    < option value = "Company" > Companhia </ option >
+                }
             </select>
             @Html.TextBox("searchString") <input type="submit" id="SearchBtn" value="Procurar" />
         </form>
@@ -87,9 +92,9 @@
 
     <div class="row">
         @if (@Model?.UserList?.Count() > 0)
-        {
-            foreach (var item in @Model.UserList)
-            {
+                        {
+                            foreach (var item in @Model.UserList)
+                            {
                 <div class="col-sm-4 mt-3">
                     <div class="card">
                         <div class="card-body">

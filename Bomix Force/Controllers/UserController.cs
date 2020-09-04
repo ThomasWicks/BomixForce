@@ -91,6 +91,14 @@ namespace Bomix_Force.Controllers
                 {
                     userList.UserList = userList.UserList.Where(s => s.Company.Name.ToLower().Contains(searchString.ToLower()));
                 }
+                else if (selectType == "Cargo")
+                {
+                    userList.UserList = userList.UserList.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower()));
+                }
+                else if (selectType == "Setor")
+                {
+                    userList.UserList = userList.UserList.Where(s => s.Setor.ToLower().Contains(searchString.ToLower()));
+                }
             }
             return View(userList);
         }
