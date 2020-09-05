@@ -36,10 +36,10 @@
                     @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
                     @if (ViewBag.filter == "EmissaoAsc")
                     {
-                        <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><span class="glyphicon glyphicon-menu-up"></span></a>
+                        <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><span >up</span></a>
                     }
                     @if(ViewBag.filter != "EmissaoAsc") { 
-                    <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><span class="glyphicon glyphicon-menu-down"></span></a>
+                    <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><span>down</span></a>
                     }
                     
                     @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
@@ -51,11 +51,11 @@
                     @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
                     @if (ViewBag.filter == "EntregaAsc")
                     {
-                        <a href="@Url.Action("Index", "Order", new { filter = "EntregaDesc" })"><span class="glyphicon glyphicon-menu-up"></span></a>
+                        <a href="@Url.Action("Index", "Order", new { filter = "EntregaDesc" })"><span>up</span></a>
                     }
                     @if (ViewBag.filter != "EntregaAsc")
                     {
-                        <a href="@Url.Action("Index", "Order", new { filter = "EntregaAsc" })"><span class="glyphicon glyphicon-menu-down"></span></a>
+                        <a href="@Url.Action("Index", "Order", new { filter = "EntregaAsc" })"><span>down</span></a>
                     }
                 </th>
                 <th class="text-center">
