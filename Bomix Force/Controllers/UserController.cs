@@ -8,6 +8,7 @@ using Bomix_Force.Areas.Identity.Pages.Account;
 using Bomix_Force.Data.Entities;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
+using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using IEmailSender = Bomix_Force.AppServices.Interface.IEmailSender;
@@ -43,19 +44,19 @@ namespace Bomix_Force.Controllers
         }
         [Authorize]
         // GET: UserController
-        public ActionResult Index(string selectType, string searchString)
+        public ActionResult Index(string selectType, string searchString, int? pageNumber)
         {
-            UserViewIndex userList = new UserViewIndex
-            {
-                UserList = new List<UserViewModel>()
-            };
-            var teste = User.IsInRole("Company");
+
+            ViewBag.selectType = selectType;
+            ViewBag.searchString = searchString;
+            int page = (pageNumber ?? 1);
+            List<UserViewModel> userView = new List<UserViewModel>();
             if (User.IsInRole("Admin"))
             {
 
                 List<Person> people = _genericPersonService.GetAll().ToList();
-                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
-                foreach (var item in userList.UserList)
+                userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
+                foreach (var item in userView)
                 {
                     Person person = _genericPersonService.Get(u => u.Name == item.Name).First();
                     item.Company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First(); ;
@@ -70,8 +71,8 @@ namespace Bomix_Force.Controllers
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
 
                 IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
-                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
-                foreach (var item in userList.UserList)
+                userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
+                foreach (var item in userView)
                 {
                     item.Company = company;
                 }
@@ -85,21 +86,22 @@ namespace Bomix_Force.Controllers
             {
                 if (selectType == "Name")
                 {
-                    userList.UserList = userList.UserList.Where(s => s.Name.ToLower().Contains(searchString.ToLower()));
+                    userView = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
                 }
                 else if(selectType == "Company")
                 {
-                    userList.UserList = userList.UserList.Where(s => s.Company.Name.ToLower().Contains(searchString.ToLower()));
+                    userView = userView.Where(s => s.Company.Name.ToLower().Contains(searchString.ToLower())).ToList();
                 }
                 else if (selectType == "Cargo")
                 {
-                    userList.UserList = userList.UserList.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower()));
+                    userView = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
                 }
                 else if (selectType == "Setor")
                 {
-                    userList.UserList = userList.UserList.Where(s => s.Setor.ToLower().Contains(searchString.ToLower()));
+                    userView = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
                 }
             }
+            var userList = userView.ToPagedList(page, 2);
             return View(userList);
         }
 
@@ -112,13 +114,14 @@ namespace Bomix_Force.Controllers
         // GET: UserController/Create
         public ActionResult Create()
         {
-            return View();
+            UserViewModel userView = new UserViewModel();
+            return PartialView("_createUserModal", userView);
         }
 
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserViewIndex userviewIndex)
+        public async Task<ActionResult> Create(UserViewModel userVIew)
         {
             try
             {
@@ -131,13 +134,12 @@ namespace Bomix_Force.Controllers
                     string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person_owner = _genericPersonService.Get(u => u.UserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.Id == person_owner.CompanyId).First();
-                    UserViewModel userviewModel = userviewIndex.User;
-                    var user = new IdentityUser { UserName = userviewModel.UserName, Email = userviewModel.Email };
-                    var result = await _userManager.CreateAsync(user, userviewModel.Password);
+                    var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
+                    var result = await _userManager.CreateAsync(user, userVIew.Password);
 
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userviewModel.Name, Email = userviewModel.Email, Cargo = userviewModel.Cargo, Setor = userviewModel.Setor, Tel = userviewModel.Tel, CompanyId = company.Id, UserId = user.Id };
+                        Person person = new Person { Name = userVIew.Name, Email = userVIew.Email, Cargo = userVIew.Cargo, Setor = userVIew.Setor, Tel = userVIew.Tel, CompanyId = company.Id, UserId = user.Id };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Person = " + person.Tel);
@@ -172,13 +174,11 @@ namespace Bomix_Force.Controllers
         public ActionResult Edit(int id)
         {
             Person person = _genericPersonService.Get(u => u.Id == id).First();
-            UserViewIndex userView = new UserViewIndex
-            {
-                UserViewEdit = _mapper.Map<UserViewEdit>(person)
-            };
-            return PartialView("_userModelPartial", userView.UserViewEdit);
-        }
 
+            UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(person);
+
+            return PartialView("_userModelPartial", userViewEdit);
+        }
         // POST: UserController/Edit/5
         [HttpPost]
         public async Task<ActionResult> Edit(UserViewEdit userviewEdit)

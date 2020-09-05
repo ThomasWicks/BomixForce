@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 $(function(){
     var PlaceHolderHereElement = $('#PlaceHolderHere');
-    $('button[data-toggle="ajax-modal"]').click(function (event) {
+    $('button[data-toggle="edit-modal"]').click(function (event) {
         var url = $(this).data('url');
         var decodedUrl = decodeURIComponent(url)
         console.log(url)
@@ -14,7 +14,7 @@ $(function(){
             PlaceHolderHereElement.find('.modal').modal('show');
         })
     })
-    PlaceHolderHereElement.on('click', '[data-save="modal"]', function (event) {
+    PlaceHolderHereElement.on('click', '[data-save="modalEdit"]', function (event) {
         event.preventDefault();
         var form = $(this).parent('.modal').find('form');
         var actionUrl = form.attr('action');
@@ -28,6 +28,30 @@ $(function(){
 
         }
             )
+    })
+    $('#createModal').click(function (event) {
+        var url = $(this).data('url');
+        var decodedUrl = decodeURIComponent(url)
+        console.log(url)
+        console.log(decodedUrl)
+        $.get(decodedUrl).done(function (data) {
+            PlaceHolderHereElement.html(data);
+            PlaceHolderHereElement.find('.modal').modal('show');
+        })
+    })
+    PlaceHolderHereElement.on('click', '[data-save="modalCreate"]', function (event) {
+        event.preventDefault();
+        var form = $(this).parent('.modal').find('form');
+        var actionUrl = form.attr('action');
+        var sendData = form.serialize();
+        console.log(sendData)
+        console.log(actionUrl)
+
+        $.post(actionUrl, sendData).done(function (data) {
+            PlaceHolderHereElement.find('.modal').modal('hide');
+
+        }
+        )
     })
 
 

@@ -52,12 +52,6 @@ namespace Bomix_Force.ViewModels
         public string Setor { get; set; }
         public Company Company { get; set; }
     }
-    public class UserViewIndex
-    {
-        public IEnumerable<UserViewModel> UserList { get; set; }
-        public UserViewModel User { get; set; }
-        public UserViewEdit UserViewEdit { get; set; }
-    }
     public class UserViewEdit
     {
         public int Id { get; set; }
