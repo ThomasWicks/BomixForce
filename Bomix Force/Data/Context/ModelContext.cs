@@ -34,7 +34,6 @@ namespace Bomix_Force.Data.Context
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentConfiguration());
             modelBuilder.ApplyConfiguration(new PersonConfiguration());
-
         }
 
         public DbSet<Bomix_Force.ViewModels.UserViewEdit> UserViewEdit { get; set; }

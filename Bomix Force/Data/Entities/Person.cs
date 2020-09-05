@@ -9,8 +9,6 @@ namespace Bomix_Force.Data.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
-        public int Tel { get; set; }
         public string Setor { get; set; }
         public string Cargo { get; set; }
         public string UserId { get; set; }
