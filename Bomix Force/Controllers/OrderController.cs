@@ -77,11 +77,17 @@ namespace Bomix_Force.Controllers
                 }
                 switch (filter)
                 {
-                    case ("Entrega"):
+                    case ("EntregaDes"):
                         orderView = orderView.OrderByDescending(s => s.Entrega);
                         break;
-                    case ("Emissao"):
+                    case ("EntregaAsc"):
+                        orderView = orderView.OrderBy(s => s.Entrega);
+                        break;
+                    case ("EmissaoDesc"):
                         orderView = orderView.OrderByDescending(s => s.Emissao);
+                        break;
+                    case ("EmissaoAsc"):
+                        orderView = orderView.OrderBy(s => s.Emissao);
                         break;
                     default:
                         break;

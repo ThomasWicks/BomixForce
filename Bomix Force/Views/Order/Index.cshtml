@@ -32,18 +32,31 @@
                     NumeroPedido
                 </th>
                 <th class="text-center">
-
-                    @Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })
+                    Emissão
+                    @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
+                    @if (ViewBag.filter == "EmissaoAsc")
+                    {
+                        <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><span class="glyphicon glyphicon-menu-up"></span></a>
+                    }
+                    @if(ViewBag.filter != "EmissaoAsc") { 
+                    <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><span class="glyphicon glyphicon-menu-down"></span></a>
+                    }
+                    
                     @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
-                    <span class="glyphicon glyphicon-menu-up"></span> @*Botão virado pra cima*@
-                    <span class="glyphicon glyphicon-menu-down"></span> @*Botão virado pra baixo*@
+                    @*<span class="glyphicon glyphicon-menu-up"></span>*@ @*Botão virado pra cima*@
+                    @*<span class="glyphicon glyphicon-menu-down"></span>*@ @*Botão virado pra baixo*@
                 </th>
                 <th class="text-center">
-
-                    @Html.ActionLink("Entrega", "Index", new { filter = "Entrega" })
-                    @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
-                    <span class="glyphicon glyphicon-menu-up"></span>  @*Botão virado pra cima*@
-                    <span class="glyphicon glyphicon-menu-down"></span>  @*Botão virado pra baixo*@
+                    Entrega
+                    @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
+                    @if (ViewBag.filter == "EntregaAsc")
+                    {
+                        <a href="@Url.Action("Index", "Order", new { filter = "EntregaDesc" })"><span class="glyphicon glyphicon-menu-up"></span></a>
+                    }
+                    @if (ViewBag.filter != "EntregaAsc")
+                    {
+                        <a href="@Url.Action("Index", "Order", new { filter = "EntregaAsc" })"><span class="glyphicon glyphicon-menu-down"></span></a>
+                    }
                 </th>
                 <th class="text-center">
                     Status
