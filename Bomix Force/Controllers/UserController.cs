@@ -8,6 +8,7 @@ using Bomix_Force.Areas.Identity.Pages.Account;
 using Bomix_Force.Data.Entities;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
+using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using IEmailSender = Bomix_Force.AppServices.Interface.IEmailSender;
@@ -39,65 +40,69 @@ namespace Bomix_Force.Controllers
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
-           
+
         }
         [Authorize]
         // GET: UserController
-        public ActionResult Index()
+        public ActionResult Index(string selectType, string searchString, int? pageNumber)
         {
-            var teste = User.IsInRole("Company");
+
+            ViewBag.selectType = selectType;
+            ViewBag.searchString = searchString;
+            int page = (pageNumber ?? 1);
+            List<UserViewModel> userView = new List<UserViewModel>();
             if (User.IsInRole("Admin"))
             {
-                UserViewIndex userList = new UserViewIndex
-                {
-                    UserList = new List<UserViewModel>()
-                };
+
                 List<Person> people = _genericPersonService.GetAll().ToList();
-                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
-                foreach (var item in userList.UserList)
+                userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
+                foreach (var item in userView)
                 {
                     Person person = _genericPersonService.Get(u => u.Name == item.Name).First();
                     item.Company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First(); ;
                 }
 
-                return View(userList);
+
             }
             else if (User.IsInRole("Company"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                List<Person> listPerson = _genericPersonService.Get(u => u.UserId == user).ToList();
-                if(listPerson.Count > 0)
-                {
                 Person person = _genericPersonService.Get(u => u.UserId == user).First();
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
-                    UserViewIndex userList = new UserViewIndex
-                    {
-                        UserList = new List<UserViewModel>()
-                    };
-                    IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
-                userList.UserList = _mapper.Map<IEnumerable<UserViewModel>>(people);
-                foreach (var item in userList.UserList)
+
+                IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
+                userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
+                foreach (var item in userView)
                 {
                     item.Company = company;
-                }
-
-                return View(userList);
-
-                }
-                else
-                {
-                    UserViewIndex userList = new UserViewIndex();
-                    return View(userList);
-
                 }
             }
             else if (User.IsInRole("User"))
             {
-                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                return RedirectToAction("Action", new { id = person.Id });
+                //todo user can't see user page
+                return View();
             }
-            return View();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                if (selectType == "Name")
+                {
+                    userView = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                }
+                else if (selectType == "Company")
+                {
+                    userView = userView.Where(s => s.Company.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                }
+                else if (selectType == "Cargo")
+                {
+                    userView = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
+                }
+                else if (selectType == "Setor")
+                {
+                    userView = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
+                }
+            }
+            var userList = userView.ToPagedList(page, 2);
+            return View(userList);
         }
 
         // GET: UserController/Details/5
@@ -109,13 +114,14 @@ namespace Bomix_Force.Controllers
         // GET: UserController/Create
         public ActionResult Create()
         {
-            return View();
+            UserViewModel userView = new UserViewModel();
+            return PartialView("_createUserModal", userView);
         }
 
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserViewIndex userviewIndex)
+        public async Task<ActionResult> Create(UserViewModel userVIew)
         {
             try
             {
@@ -128,18 +134,17 @@ namespace Bomix_Force.Controllers
                     string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person_owner = _genericPersonService.Get(u => u.UserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.Id == person_owner.CompanyId).First();
-                    UserViewModel userviewModel = userviewIndex.User;
-                    var user = new IdentityUser { UserName = userviewModel.UserName, Email = userviewModel.Email, PhoneNumber = userviewModel.Tel.ToString() };
-                    var result = await _userManager.CreateAsync(user, userviewModel.Password);
+                    var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
+                    var result = await _userManager.CreateAsync(user, userVIew.Password);
 
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userviewModel.Name, Cargo=userviewModel.Cargo, Setor=userviewModel.Setor, CompanyId = company.Id, UserId = user.Id };
+                        Person person = new Person { Name = userVIew.Name, Cargo = userVIew.Cargo, Setor = userVIew.Setor, CompanyId = company.Id, UserId = user.Id };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
-                        _logger.LogInformation("Person = " + user.PhoneNumber);
+                        //_logger.LogInformation("Person = " + person.Tel);
                         _logger.LogInformation("Novo usuário criado.");
-                        await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário "+person.Name+" foi criado com sucesso");
+                        await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
 
 
                         return RedirectToAction(nameof(Index));
@@ -158,49 +163,37 @@ namespace Bomix_Force.Controllers
                     return View();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return RedirectToAction(nameof(Index));
             }
         }
 
         // GET: UserController/Edit/5
+        [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
             Person person = _genericPersonService.Get(u => u.Id == id).First();
-            UserViewIndex userView = new UserViewIndex
-            {
-                UserViewEdit = _mapper.Map<UserViewEdit>(person)
-            };
-            return View(userView.UserViewEdit);
-        }
 
+            UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(person);
+
+            return PartialView("_userModelPartial", userViewEdit);
+        }
         // POST: UserController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserViewEdit userviewEdit)
         {
             try
             {
-        
-                _genericPersonService.Save();
-                var user = await _userManager.FindByIdAsync(userviewEdit.UserID);
-                var changePasswordResult = await _userManager.ChangePasswordAsync(user, userviewEdit.OldPassword, userviewEdit.Password);
-                if (!changePasswordResult.Succeeded)
-                {
-                    foreach (var error in changePasswordResult.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
                 _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception x)
+            catch (Exception x)
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 

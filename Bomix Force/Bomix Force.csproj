@@ -9,11 +9,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Views\Home\Login.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Views\User\Deletee.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Migrations\20200905184916_init.cs" />
+    <Compile Include="Migrations\20200905184916_init.Designer.cs" />
+    <Compile Include="Migrations\20200905185912_CompanyUserId.cs" />
+    <Compile Include="Migrations\20200905185912_CompanyUserId.Designer.cs" />
+    <Compile Include="Migrations\ModelContextModelSnapshot.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,7 +48,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Views\Assets\" />
   </ItemGroup>
