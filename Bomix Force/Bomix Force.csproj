@@ -30,6 +30,8 @@
     <Compile Include="Migrations\20200905185912_CompanyUserId.Designer.cs" />
     <Compile Include="Migrations\20200907190111_User_update.cs" />
     <Compile Include="Migrations\20200907190111_User_update.Designer.cs" />
+    <Compile Include="Migrations\20200907191958_AddSeller.cs" />
+    <Compile Include="Migrations\20200907191958_AddSeller.Designer.cs" />
     <Compile Include="Migrations\ModelContextModelSnapshot.cs" />
   </ItemGroup>
 

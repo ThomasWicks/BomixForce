@@ -25,6 +25,7 @@ namespace Bomix_Force.Data.Context
         public virtual DbSet<Item> Item { get; set; }
         public virtual DbSet<Document> Document { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
+        public virtual DbSet<Employee_Seller> Employee_Seller { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
