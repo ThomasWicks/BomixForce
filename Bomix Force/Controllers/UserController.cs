@@ -67,7 +67,7 @@ namespace Bomix_Force.Controllers
             else if (User.IsInRole("Company"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
                 Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
 
                 IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
@@ -132,14 +132,14 @@ namespace Bomix_Force.Controllers
                 {
                     //TODO TEST IF COMPANY QUERY WORKS
                     string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    Person person_owner = _genericPersonService.Get(u => u.UserId == userId).First();
+                    Person person_owner = _genericPersonService.Get(u => u.IdentityUserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.Id == person_owner.CompanyId).First();
                     var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
                     var result = await _userManager.CreateAsync(user, userVIew.Password);
 
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userVIew.Name, Cargo = userVIew.Cargo, Setor = userVIew.Setor, CompanyId = company.Id, UserId = user.Id };
+                        Person person = new Person { Name = userVIew.Name, Cargo = userVIew.Cargo, Setor = userVIew.Setor, CompanyId = company.Id, IdentityUserId = user.Id };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         //_logger.LogInformation("Person = " + person.Tel);

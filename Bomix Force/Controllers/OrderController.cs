@@ -55,14 +55,14 @@ namespace Bomix_Force.Controllers
                 else if (User.IsInRole("User"))
                 {
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    Person person = _genericPersonService.Get(u => u.UserId == user).First();
-                    orders = _genericOrderService.Get(o => o.PersonId == person.Id && o.Status != "FINALIZADO").ToList();
+                    Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
+                    orders = _genericOrderService.Get(o => o.EmployeeId == person.Id && o.Status != "FINALIZADO").ToList();
                     orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 }
                 else
                 {
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    Person person = _genericPersonService.Get(u => u.UserId == user).First();
+                    Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
                     _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status != "FINALIZADO").ToList();
                     orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
 

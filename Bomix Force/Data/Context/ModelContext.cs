@@ -24,18 +24,17 @@ namespace Bomix_Force.Data.Context
         public virtual DbSet<N_conformity> N_conformity { get; set; }
         public virtual DbSet<Item> Item { get; set; }
         public virtual DbSet<Document> Document { get; set; }
+        public virtual DbSet<Employee> Employee { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new OrderConfiguration());
-            modelBuilder.ApplyConfiguration(new N_conformityConfiguration());
-            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
-            modelBuilder.ApplyConfiguration(new ItemConfiguration());
-            modelBuilder.ApplyConfiguration(new DocumentConfiguration());
-            modelBuilder.ApplyConfiguration(new PersonConfiguration());
+            //modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            //modelBuilder.ApplyConfiguration(new N_conformityConfiguration());
+            //modelBuilder.ApplyConfiguration(new CompanyConfiguration());
+            //modelBuilder.ApplyConfiguration(new ItemConfiguration());
+            //modelBuilder.ApplyConfiguration(new DocumentConfiguration());
+            //modelBuilder.ApplyConfiguration(new PersonConfiguration());
         }
-
-        public DbSet<Bomix_Force.ViewModels.UserViewEdit> UserViewEdit { get; set; }
     }
 }

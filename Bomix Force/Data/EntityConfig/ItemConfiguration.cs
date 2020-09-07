@@ -11,10 +11,6 @@ namespace Bomix_Force.Data.EntityConfig
             builder.ToTable("ITEM");
             builder.HasKey(e => new { e.Id });
 
-            builder.Property(u => u.Status_art)
-             .HasColumnName("STATUS_ART")
-             .IsRequired();
-
             builder.Property(u => u.Description)
              .HasColumnName("DESCRIPTION")
              .IsRequired();

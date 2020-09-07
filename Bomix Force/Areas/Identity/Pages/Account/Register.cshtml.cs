@@ -118,7 +118,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 
                 if (result.Succeeded)
                 {
-                    Person person = new Person { Name = Input.Name, CompanyId = company.Id, UserId = user.Id };
+                    Person person = new Person { Name = Input.Name, CompanyId = company.Id, IdentityUserId = user.Id };
                     _genericPersonService.Insert(person);
                     _genericPersonService.Save();
                     _logger.LogInformation("Person = " + user.PhoneNumber);
