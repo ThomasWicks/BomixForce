@@ -134,15 +134,15 @@ namespace Bomix_Force.Controllers
                     string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person_owner = _genericPersonService.Get(u => u.UserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.Id == person_owner.CompanyId).First();
-                    var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
+                    var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email, PhoneNumber = userVIew.Tel.ToString() };
                     var result = await _userManager.CreateAsync(user, userVIew.Password);
 
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userVIew.Name, Email = userVIew.Email, Cargo = userVIew.Cargo, Setor = userVIew.Setor, Tel = userVIew.Tel, CompanyId = company.Id, UserId = user.Id };
+                        Person person = new Person { Name = userVIew.Name, Cargo = userVIew.Cargo, Setor = userVIew.Setor, CompanyId = company.Id, UserId = user.Id };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
-                        _logger.LogInformation("Person = " + person.Tel);
+                        _logger.LogInformation("Person = " + user.PhoneNumber);
                         _logger.LogInformation("Novo usuário criado.");
                         await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
 

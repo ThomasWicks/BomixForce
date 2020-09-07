@@ -113,15 +113,15 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 var context = new ModelContext();
                 //TODO TEST IF COMPANY QUERY WORKS
                 Company company = _genericCompanyService.Get(c => c.Name == Input.CompanyName).First();
-                var user = new IdentityUser { UserName = Input.UserName, Email = Input.Email };
+                var user = new IdentityUser { UserName = Input.UserName, Email = Input.Email, PhoneNumber = Input.Tel.ToString() };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
                 if (result.Succeeded)
                 {
-                    Person person = new Person { Name = Input.Name, Email = Input.Email, Tel = Input.Tel, CompanyId = company.Id, UserId = user.Id };
+                    Person person = new Person { Name = Input.Name, CompanyId = company.Id, UserId = user.Id };
                     _genericPersonService.Insert(person);
                     _genericPersonService.Save();
-                    _logger.LogInformation("Person = " + person.Tel);
+                    _logger.LogInformation("Person = " + user.PhoneNumber);
                     _logger.LogInformation("Novo usuário criado.");
 
 

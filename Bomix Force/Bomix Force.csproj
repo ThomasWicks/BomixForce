@@ -41,6 +41,6 @@
     <None Include="wwwroot\Assets\LoginBomix.png" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json-schema.org/draft-04/schema" /></VisualStudio></ProjectExtensions>
 
 </Project>
