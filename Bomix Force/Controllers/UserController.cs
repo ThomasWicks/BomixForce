@@ -54,12 +54,8 @@ namespace Bomix_Force.Controllers
             if (User.IsInRole("Admin"))
             {
 
-                List<Person> people = _genericPersonService.GetAll().ToList();
-                foreach (var item in people)
-                {
-                    item.Company = _genericCompanyService.Get(g => g.Id == item.CompanyId).First();
-                }
-                userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
+                List<Company> Company = _genericCompanyService.GetAll().ToList();
+                userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
 
             }
             else if (User.IsInRole("Company"))
@@ -80,6 +76,11 @@ namespace Bomix_Force.Controllers
                 //todo user can't see user page
                 return View();
             }
+            else if (User.IsInRole("Employee"))
+            {
+                List<Company> Company = _genericCompanyService.GetAll().ToList();
+                userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
+            }
             if (!String.IsNullOrEmpty(searchString))
             {
                 if (selectType == "Name")
@@ -99,7 +100,7 @@ namespace Bomix_Force.Controllers
                     userView = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
                 }
             }
-            var userList = userView.ToPagedList(page, 2);
+            var userList = userView.ToPagedList(page, 9);
             return View(userList);
         }
 
@@ -171,11 +172,19 @@ namespace Bomix_Force.Controllers
         [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
-            Person person = _genericPersonService.Get(u => u.Id == id).First();
-
-            UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(person);
-
-            return PartialView("_userModelPartial", userViewEdit);
+            if (User.IsInRole("Company"))
+            {
+                Person person = _genericPersonService.Get(u => u.Id == id).First();
+                UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(person);
+                return PartialView("_userModelPartial", userViewEdit);
+            }
+            else if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+            {
+                Company company = _genericCompanyService.Get(u => u.Id == id).First();
+                UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(company);
+                return PartialView("_userModelPartial", userViewEdit);
+            }
+            return RedirectToAction(nameof(Index));
         }
         // POST: UserController/Edit/5
         [HttpPost]

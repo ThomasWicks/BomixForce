@@ -96,6 +96,43 @@ namespace Bomix_Force
                 }
 
             }
+            bool existAdmin = await _roleManager.RoleExistsAsync("Admin");
+            bool existEmployee = await _roleManager.RoleExistsAsync("Employee");
+            bool existCompany = await _roleManager.RoleExistsAsync("Company");
+            bool existUser = await _roleManager.RoleExistsAsync("User");
+
+            if (!existAdmin)
+            {
+                var admin = new IdentityRole
+                {
+                    Name = "Admin"
+                };
+                await _roleManager.CreateAsync(admin);
+            }
+            else if (!existEmployee)
+            {
+                var Employee = new IdentityRole
+                {
+                    Name = "Employee"
+                };
+                await _roleManager.CreateAsync(Employee);
+            }
+            else if(!existCompany)
+            {
+                var companyRole = new IdentityRole
+                {
+                    Name = "Company"
+                };
+                await _roleManager.CreateAsync(companyRole);
+            }
+            else if (!existUser)
+            {
+                var user = new IdentityRole
+                {
+                    Name = "User"
+                };
+                await _roleManager.CreateAsync(user);
+            }
             //bool x = await _roleManager.RoleExistsAsync("Admin");
             //    if (!x)
             //    {
@@ -106,69 +143,69 @@ namespace Bomix_Force
             //        };
             //        await _roleManager.CreateAsync(role);
 
-            //        //Here we create a Admin super user who will maintain the website                   
+                //        //Here we create a Admin super user who will maintain the website                   
 
-            //        var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com", EmailConfirmed = true };
-
-
-            //        string userPWD = "Admin123@";
-
-            //        IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);
-
-            //        //Add default User to Role Admin    
-            //        if (chkUser.Succeeded)
-            //        {
-            //            _ = await _userManager.AddToRoleAsync(user, "Admin");
-            //        }
-            //    }
-
-            //    // creating Creating Manager role     
-            //    x = await _roleManager.RoleExistsAsync("Company");
-            //    if (!x)
-            //    {
-            //        var role = new IdentityRole
-            //        {
-            //            Name = "Company"
-            //        };
-            //        await _roleManager.CreateAsync(role);
-
-            //        var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
+                //        var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com", EmailConfirmed = true };
 
 
-            //        string userPWD = "Admin123@";
+                //        string userPWD = "Admin123@";
 
-            //        var chkUser = await _userManager.CreateAsync(user, userPWD);
+                //        IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);
 
-            //        //Add default User to Role Admin
-            //        if (chkUser.Succeeded)
-            //        {
-            //            _ = await _userManager.AddToRoleAsync(user, "Company");
-            //        }
-            //    }
+                //        //Add default User to Role Admin    
+                //        if (chkUser.Succeeded)
+                //        {
+                //            _ = await _userManager.AddToRoleAsync(user, "Admin");
+                //        }
+                //    }
 
-            //    // creating Creating Employee role     
-            //    x = await _roleManager.RoleExistsAsync("User");
-            //    if (!x)
-            //    {
-            //        var role = new IdentityRole
-            //        {
-            //            Name = "User"
-            //        };
-            //        await _roleManager.CreateAsync(role);
+                //    // creating Creating Manager role     
+                //    x = await _roleManager.RoleExistsAsync("Company");
+                //    if (!x)
+                //    {
+                //        var role = new IdentityRole
+                //        {
+                //            Name = "Company"
+                //        };
+                //        await _roleManager.CreateAsync(role);
 
-            //        var user = new IdentityUser { UserName = "user.user@hotmail.com", Email = "user.user@hotmail.com", EmailConfirmed = true };
+                //        var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
 
 
-            //        string userPWD = "Admin123@";
+                //        string userPWD = "Admin123@";
 
-            //        var chkUser = await _userManager.CreateAsync(user, userPWD);
+                //        var chkUser = await _userManager.CreateAsync(user, userPWD);
 
-            //        //Add default User to Role Admin
-            //        if (chkUser.Succeeded)
-            //        {
-            //            _ = await _userManager.AddToRoleAsync(user, "User");
-            //        }
-            //    }
+                //        //Add default User to Role Admin
+                //        if (chkUser.Succeeded)
+                //        {
+                //            _ = await _userManager.AddToRoleAsync(user, "Company");
+                //        }
+                //    }
+
+                //    // creating Creating Employee role     
+                //    x = await _roleManager.RoleExistsAsync("User");
+                //    if (!x)
+                //    {
+                //        var role = new IdentityRole
+                //        {
+                //            Name = "User"
+                //        };
+                //        await _roleManager.CreateAsync(role);
+
+                //        var user = new IdentityUser { UserName = "user.user@hotmail.com", Email = "user.user@hotmail.com", EmailConfirmed = true };
+
+
+                //        string userPWD = "Admin123@";
+
+                //        var chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //        //Add default User to Role Admin
+                //        if (chkUser.Succeeded)
+                //        {
+                //            _ = await _userManager.AddToRoleAsync(user, "User");
+                //        }
+                //    }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
