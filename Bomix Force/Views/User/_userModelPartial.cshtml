@@ -1,0 +1,54 @@
+﻿@model Bomix_Force.ViewModels.UserViewEdit
+
+
+<div class="modal fade" id="detailsOrder">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h4 class="modal-title float-left text-white">Editar</h4>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="Edit" method="post">
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="hidden" asp-for="@Model.Id">
+                            <input type="hidden" asp-for="@Model.CompanyId">
+                            <input type="hidden" asp-for="@Model.UserID">
+                            <label asp-for="Name"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row py-2">
+                        <div class="col-6">
+                            <label asp-for="Setor"></label>
+                            <input asp-for="Setor" class="form-control" />
+                            <span asp-validation-for="Setor" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Cargo"></label>
+                            <input asp-for="Cargo" class="form-control" />
+                            <span asp-validation-for="Cargo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 mb-4">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <button type="button" class="btn btn-danger" data-dismiss="modalEdit">Cancelar</button>
+                    <button type="submit" class="btn btn-primary float-right">Editar</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

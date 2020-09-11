@@ -16,6 +16,8 @@ namespace Bomix_Force.Util
             #region User 
             CreateMap<UserViewModel, Person>().ReverseMap();
             CreateMap<UserViewEdit, Person>().ReverseMap();
+            CreateMap<UserViewModel, Company>().ReverseMap();
+            CreateMap<UserViewEdit, Company>().ReverseMap();
             #endregion
 
             #region Order

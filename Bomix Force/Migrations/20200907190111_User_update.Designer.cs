@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bomix_Force.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    [Migration("20200824224505_Init")]
-    partial class Init
+    [Migration("20200907190111_User_update")]
+    partial class User_update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,23 +29,19 @@ namespace Bomix_Force.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Cnpj")
-                        .IsRequired()
-                        .HasColumnName("CNPJ")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnName("EMAIL")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("NAME")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("COMPANY");
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("Company");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Document", b =>
@@ -55,9 +51,35 @@ namespace Bomix_Force.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("DOCUMENT");
+                    b.ToTable("Document");
+                });
+
+            modelBuilder.Entity("Bomix_Force.Data.Entities.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Idtotvs")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Login")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Item", b =>
@@ -68,12 +90,9 @@ namespace Bomix_Force.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnName("DESCRIPTION")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
-                        .IsRequired()
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<string>("ProductId")
@@ -82,16 +101,11 @@ namespace Bomix_Force.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status_art")
-                        .IsRequired()
-                        .HasColumnName("STATUS_ART")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("ITEM");
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.N_conformity", b =>
@@ -102,24 +116,19 @@ namespace Bomix_Force.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnName("DESCRIPTION")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Lot")
-                        .IsRequired()
-                        .HasColumnName("LOT")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OrderId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("N_CONFORMITY");
+                    b.ToTable("N_conformity");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Order", b =>
@@ -129,32 +138,36 @@ namespace Bomix_Force.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CompanyId")
-                        .IsRequired()
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Emissao")
-                        .HasColumnName("EMISSAOGADATE")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Entrega")
-                        .HasColumnName("ENTREGADATE")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("NumeroPedido")
-                        .HasColumnName("NUMBER")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PersonId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnName("STATUS")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("ORDER");
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Person", b =>
@@ -165,45 +178,27 @@ namespace Bomix_Force.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Cargo")
-                        .IsRequired()
-                        .HasColumnName("CARGO")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnName("EMAIL")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("NAME")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Setor")
-                        .IsRequired()
-                        .HasColumnName("SETOR")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Tel")
-                        .HasColumnName("TEL")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("IdentityUserId");
 
-                    b.ToTable("PERSON");
+                    b.ToTable("Person");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -406,6 +401,20 @@ namespace Bomix_Force.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Bomix_Force.Data.Entities.Company", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
+                });
+
+            modelBuilder.Entity("Bomix_Force.Data.Entities.Employee", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
+                });
+
             modelBuilder.Entity("Bomix_Force.Data.Entities.Item", b =>
                 {
                     b.HasOne("Bomix_Force.Data.Entities.Order", "Order")
@@ -419,9 +428,7 @@ namespace Bomix_Force.Migrations
                 {
                     b.HasOne("Bomix_Force.Data.Entities.Order", "Order")
                         .WithMany("N_Conformities")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Order", b =>
@@ -431,17 +438,29 @@ namespace Bomix_Force.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Bomix_Force.Data.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bomix_Force.Data.Entities.Person", null)
+                        .WithMany("Order")
+                        .HasForeignKey("PersonId");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Person", b =>
                 {
                     b.HasOne("Bomix_Force.Data.Entities.Company", "Company")
                         .WithMany("Persons")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Bomix_Force.Data.Entities.Order", "Order")
-                        .WithMany("Person")
-                        .HasForeignKey("OrderId");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

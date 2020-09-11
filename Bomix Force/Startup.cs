@@ -1,5 +1,3 @@
-     
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +16,7 @@ using System.Threading.Tasks;
 using System;
 using Bomix_Force.AppServices.Interface;
 using Bomix_Force.AppServices;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Bomix_Force
 {
@@ -58,6 +57,7 @@ namespace Bomix_Force
             services.AddRazorPages();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IAuthorizationHandler, AuthHendler>();
@@ -73,44 +73,15 @@ namespace Bomix_Force
             services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
         }
 
-        private async Task createRolesandUsers(IServiceProvider serviceProvider)
+        private async Task CreateRolesandUsers(IServiceProvider serviceProvider)
         {
             var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            bool x = await _roleManager.RoleExistsAsync("Admin");
-            if (!x)
+            var _dbSet = serviceProvider.GetRequiredService<IGenericRepository<Company>>();
+            var Company = _dbSet.Get(c => c.IdentityUserId == null);
+            foreach (var item in Company)
             {
-                // first we create Admin rool    
-                var role = new IdentityRole();
-                role.Name = "Admin";
-                await _roleManager.CreateAsync(role);
-
-                //Here we create a Admin super user who will maintain the website                   
-
-                var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com", EmailConfirmed = true };
-
-
-                string userPWD = "Admin123@";
-
-                IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);
-
-                //Add default User to Role Admin    
-                if (chkUser.Succeeded)
-                {
-                    var result1 = await _userManager.AddToRoleAsync(user, "Admin");
-                }
-            }
-
-            // creating Creating Manager role     
-            x = await _roleManager.RoleExistsAsync("Company");
-            if (!x)
-            {
-                var role = new IdentityRole();
-                role.Name = "Company";
-                await _roleManager.CreateAsync(role);
-
-                var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
-
+                var user = new IdentityUser { UserName = item.Cnpj, EmailConfirmed = false };
 
                 string userPWD = "Admin123@";
 
@@ -119,31 +90,122 @@ namespace Bomix_Force
                 //Add default User to Role Admin
                 if (chkUser.Succeeded)
                 {
-                    var result1 = await _userManager.AddToRoleAsync(user, "Company");
+                    _ = await _userManager.AddToRoleAsync(user, "Company");
+                    item.IdentityUser = user;
+                    _dbSet.Update(item);
                 }
-            }
 
-            // creating Creating Employee role     
-            x = await _roleManager.RoleExistsAsync("User");
-            if (!x)
+            }
+            bool existAdmin = await _roleManager.RoleExistsAsync("Admin");
+            bool existEmployee = await _roleManager.RoleExistsAsync("Employee");
+            bool existCompany = await _roleManager.RoleExistsAsync("Company");
+            bool existUser = await _roleManager.RoleExistsAsync("User");
+
+            if (!existAdmin)
             {
-                var role = new IdentityRole();
-                role.Name = "User";
-                await _roleManager.CreateAsync(role);
-
-                var user = new IdentityUser { UserName = "user.user@hotmail.com", Email = "user.user@hotmail.com", EmailConfirmed = true };
-
-
-                string userPWD = "Admin123@";
-
-                var chkUser = await _userManager.CreateAsync(user, userPWD);
-
-                //Add default User to Role Admin
-                if (chkUser.Succeeded)
+                var admin = new IdentityRole
                 {
-                    var result1 = await _userManager.AddToRoleAsync(user, "User");
-                }
+                    Name = "Admin"
+                };
+                await _roleManager.CreateAsync(admin);
             }
+            else if (!existEmployee)
+            {
+                var Employee = new IdentityRole
+                {
+                    Name = "Employee"
+                };
+                await _roleManager.CreateAsync(Employee);
+            }
+            else if(!existCompany)
+            {
+                var companyRole = new IdentityRole
+                {
+                    Name = "Company"
+                };
+                await _roleManager.CreateAsync(companyRole);
+            }
+            else if (!existUser)
+            {
+                var user = new IdentityRole
+                {
+                    Name = "User"
+                };
+                await _roleManager.CreateAsync(user);
+            }
+            //bool x = await _roleManager.RoleExistsAsync("Admin");
+            //    if (!x)
+            //    {
+            //        // first we create Admin rool    
+            //        var role = new IdentityRole
+            //        {
+            //            Name = "Admin"
+            //        };
+            //        await _roleManager.CreateAsync(role);
+
+                //        //Here we create a Admin super user who will maintain the website                   
+
+                //        var user = new IdentityUser { UserName = "thomas.wicks@hotmail.com", Email = "thomas.wicks@hotmail.com", EmailConfirmed = true };
+
+
+                //        string userPWD = "Admin123@";
+
+                //        IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //        //Add default User to Role Admin    
+                //        if (chkUser.Succeeded)
+                //        {
+                //            _ = await _userManager.AddToRoleAsync(user, "Admin");
+                //        }
+                //    }
+
+                //    // creating Creating Manager role     
+                //    x = await _roleManager.RoleExistsAsync("Company");
+                //    if (!x)
+                //    {
+                //        var role = new IdentityRole
+                //        {
+                //            Name = "Company"
+                //        };
+                //        await _roleManager.CreateAsync(role);
+
+                //        var user = new IdentityUser { UserName = "rubem.almeida@hotmail.com", Email = "rubem.almeida@hotmail.com", EmailConfirmed = true };
+
+
+                //        string userPWD = "Admin123@";
+
+                //        var chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //        //Add default User to Role Admin
+                //        if (chkUser.Succeeded)
+                //        {
+                //            _ = await _userManager.AddToRoleAsync(user, "Company");
+                //        }
+                //    }
+
+                //    // creating Creating Employee role     
+                //    x = await _roleManager.RoleExistsAsync("User");
+                //    if (!x)
+                //    {
+                //        var role = new IdentityRole
+                //        {
+                //            Name = "User"
+                //        };
+                //        await _roleManager.CreateAsync(role);
+
+                //        var user = new IdentityUser { UserName = "user.user@hotmail.com", Email = "user.user@hotmail.com", EmailConfirmed = true };
+
+
+                //        string userPWD = "Admin123@";
+
+                //        var chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                //        //Add default User to Role Admin
+                //        if (chkUser.Succeeded)
+                //        {
+                //            _ = await _userManager.AddToRoleAsync(user, "User");
+                //        }
+                //    }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -176,7 +238,7 @@ namespace Bomix_Force
                     pattern: "{controller=Home}/{action=Login}");
                 endpoints.MapRazorPages();
             });
-            createRolesandUsers(services).Wait();
+            CreateRolesandUsers(services).Wait();
         }
 
     }

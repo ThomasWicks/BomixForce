@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bomix_Force.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -71,6 +71,25 @@ namespace Bomix_Force.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DOCUMENT", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserViewEdit",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(nullable: false),
+                    UserID = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Tel = table.Column<int>(nullable: false),
+                    Cargo = table.Column<string>(nullable: false),
+                    Setor = table.Column<string>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserViewEdit", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,16 +199,40 @@ namespace Bomix_Force.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PERSON",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NAME = table.Column<string>(nullable: false),
+                    SETOR = table.Column<string>(nullable: false),
+                    CARGO = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PERSON", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PERSON_COMPANY_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "COMPANY",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ORDER",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NUMBER = table.Column<int>(nullable: false),
-                    EMISSAOGADATE = table.Column<DateTime>(nullable: false),
+                    EMISSAODATE = table.Column<DateTime>(nullable: false),
                     ENTREGADATE = table.Column<DateTime>(nullable: false),
                     STATUS = table.Column<string>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false)
+                    CompanyId = table.Column<int>(nullable: false),
+                    PersonId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -200,6 +243,12 @@ namespace Bomix_Force.Migrations
                         principalTable: "COMPANY",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ORDER_PERSON_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "PERSON",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -244,38 +293,6 @@ namespace Bomix_Force.Migrations
                         principalTable: "ORDER",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PERSON",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NAME = table.Column<string>(nullable: false),
-                    EMAIL = table.Column<string>(nullable: false),
-                    TEL = table.Column<int>(nullable: false),
-                    SETOR = table.Column<string>(nullable: false),
-                    CARGO = table.Column<string>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    CompanyId = table.Column<int>(nullable: true),
-                    OrderId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PERSON", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PERSON_COMPANY_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "COMPANY",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_PERSON_ORDER_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "ORDER",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -333,14 +350,14 @@ namespace Bomix_Force.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ORDER_PersonId",
+                table: "ORDER",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PERSON_CompanyId",
                 table: "PERSON",
                 column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PERSON_OrderId",
-                table: "PERSON",
-                column: "OrderId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -370,7 +387,7 @@ namespace Bomix_Force.Migrations
                 name: "N_CONFORMITY");
 
             migrationBuilder.DropTable(
-                name: "PERSON");
+                name: "UserViewEdit");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -380,6 +397,9 @@ namespace Bomix_Force.Migrations
 
             migrationBuilder.DropTable(
                 name: "ORDER");
+
+            migrationBuilder.DropTable(
+                name: "PERSON");
 
             migrationBuilder.DropTable(
                 name: "COMPANY");

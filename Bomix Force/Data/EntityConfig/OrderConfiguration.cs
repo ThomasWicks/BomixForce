@@ -19,7 +19,7 @@ namespace Bomix_Force.Data.EntityConfig
                .HasColumnName("ENTREGADATE")
                .IsRequired();
             builder.Property(u => u.Emissao)
-               .HasColumnName("EMISSAOGADATE")
+               .HasColumnName("EMISSAODATE")
                .IsRequired();
 
             builder.Property(u => u.Status)
