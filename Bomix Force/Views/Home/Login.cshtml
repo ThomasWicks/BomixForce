@@ -1,79 +1,67 @@
 ﻿
-@{  
+@{
     ViewData["Title"] = "Login";
 }
+@*<a>@User.IsInRole("User")</a>*@
 
 <div class="row justify-content-md-center">
-  <div class="col-5 col-xl-2 py-3 px-3 mt-5 ml-5">
-    <div class="card bg-Login">
-    <a class="text-white" href="@Url.Action("Index", "User")">
-      <div class="card-body text-center">
-        <i class="align-middle fas fa-user-alt fa-2x"></i>
-        <h6 class="card-title">Usuários</h6>
-      </div>
-    </a>
+    <div class="col-5 col-xl-2 py-3 px-3 mt-5 ml-5">
+        <div class="sheet">
+            <a class="text-white" href="@Url.Action("Index", "User")">
+                <div class="card-body text-center">
+                    @*--imagem do card--*@
+                    <img src="~/Assets/users.png" />
+                    <h6 class="card-title">Usuários</h6>
+                </div>
+            </a>
+        </div>
     </div>
-  </div>
-  <div class="col-5 col-xl-2 py-3 px-3 mt-5 mr-2">
-    <div class="card bg-Login">
-    <a class="text-white" href="@Url.Action("Index", "Order")">
-      <div class="card-body text-center">
-        <i class="text-align:center fa fa-archive fa-2x"> </i>
-        <h6 class="card-title">Pedidos</h6>
-      </div>
-    </a>
+    <div class="col-5 col-xl-2 py-3 px-3 mt-5 mr-2">
+        <div class="sheet">
+            <a class="text-white" href="@Url.Action("Index", "Order")">
+                <div class="card-body text-center">
+                    <img src="~/Assets/bag.png" />
+                    <h6 class="card-title">Pedidos</h6>
+                </div>
+            </a>
+        </div>
     </div>
-  </div>
 </div>
 <div class="row justify-content-md-center">
-  <div class="col-5 col-xl-2 py-3 px-3 mt-2 ml-5">
-    <div class="card bg-Login">
-    <a class="text-white" href="@Url.Action("Index", "User")">
-      <div class="card-body text-center">
-        <i class="fas fa-check-circle fa-2x"></i>
-        <h6 class="card-title">Pedidos Fechados</h6>
-      </div>
+    <div class="col-5 col-xl-2 py-3 px-3 mt-2 ml-5">
+        <div class="sheet">
+            <a class="text-white" href="@Url.Action("Index", "User")">
+                <div class="card-body text-center">
+                    <img src="~/Assets/warning.png" />
+                    <h6 class="card-title">Não conformidade</h6>
+                </div>
+            </a>
+        </div>
     </div>
-    </a>
-  </div>
-  <div class="col-5 col-xl-2 py-3 px-3 mt-2 mr-2">
-    <div class="card bg-Login">
-    <a class="text-white" href="@Url.Action("Index", "User")">
-      <div class="card-body text-center">
-        <i class="fas fa-exclamation-triangle fa-2x"></i>
-        <h6 class="card-title">Não conformidade</h6>
-      </div>
-    </a>
+    <div class="col-5 col-xl-2 py-3 px-3 mt-2 mr-2">
+        <div class="sheet">
+            <a class="text-white" href="@Url.Action("Index", "User")">
+                <div class="card-body text-center">
+                    <img src="~/Assets/doc.png" />
+                    <h6 class="card-title">Documentos</h6>
+                </div>
+            </a>
+        </div>
     </div>
-  </div>
 </div>
 <div class="row justify-content-md-center">
-  <div class="col-5 col-xl-2 py-3 px-3 mt-2 ml-5">
-    <div class="card bg-Login">
-    <a class="text-white" href="@Url.Action("Index", "User")">
-      <div class="card-body text-center">
-        <i class="fas fa-file-alt fa-2x"></i>
-        <h6 class="card-title">Documentos</h6>
-      </div>
-    </a>
+    <div class="col-5 col-xl-2 py-3 px-3 mt-2 ml-5">
+        <div class="sheet">
+            <a class="text-white" href="@Url.Action("Index", "User")">
+                <div class="card-body text-center">
+                    <img src="~/Assets/phone.png" />
+                    <h6 class="card-title">Contato</h6>
+                </div>
+            </a>
+        </div>
     </div>
-  </div>
-  <div class="col-5 col-xl-2 py-3 px-3 mt-2 mr-2">
-    <div class="card bg-Login">
-    <a class="text-white" href="@Url.Action("Index", "User")">
-      <div class="card-body text-center">
-        <i class="fas fa-phone-volume fa-2x"></i>
-        <h6 class="card-title">Contato</h6>
-      </div>
-    </a>
+    <div class="col-5 col-xl-2 py-3 px-3 mt-2 mr-2">
+
     </div>
-  </div>
 </div>
 
-<style lang="scss" scoped>
-
-.bg-Login {
-    background-color: #6670FF  !important;
-}
-
-</style>

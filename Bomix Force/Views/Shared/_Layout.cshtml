@@ -9,18 +9,24 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 
-<body>
+<body class="background-screen">
 @if(User.Identity.Name != null){
-    <header>   
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
+    <header class="background-screen">   
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow ">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Login">Bomix Force</a>
+                <img src="~/Assets/logo-bomix-header.png" asp-area="" asp-controller="Home" asp-action="Login"/>
+                @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Login">Bomix Force</a>*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
+                    <img src="~/Assets/profile-circle-person.png" />
+                    <img src="~/Assets/divider.png" class="margin-img" />
+                    <a>@User.Identity.Name</a>
+                    @*<partial name="_LoginPartial" />*@
+                </div>
+                <div>
                 </div>
             </div>
         </nav>
@@ -67,10 +73,78 @@
     </body>
 </html>
 
-<style lang="scss" scoped>
-html,
-/* body {
-  height: 100%;
-} */
+<style lang="scss" >
+    /*Custom styles
+-------------------------------------------------- */
 
+    .sheet {
+        width: 241px !important;
+        height: 137px !important;
+        border-radius: 8px !important;
+        border: solid 1px #ffffff !important;
+        background-color: #002a51 !important;
+    }
+
+    .background-screen {
+        background-color: #f7f8fc;
+    }
+
+    .text-label-menu {
+        width: 153px;
+        height: 18px;
+        font-family: Mulish;
+        font-size: 24px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 1px;
+        color: #ffffff;
+    }
+
+    .name-loged-navbar {
+        width: 112px;
+        height: 18px;
+        font-family: Muli;
+        font-size: 14px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: 0.2px;
+        color: #252733;
+    }
+
+    .name-loged {
+        width: 286px;
+        height: 36px;
+        font-family: Mulish;
+        font-size: 36px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 0.56;
+        letter-spacing: 0.2px;
+        color: #252733;
+    }
+
+    .pagina-atual {
+        width: 273px;
+        height: 22px;
+        font-family: Mulish;
+        font-size: 12px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: 0.2px;
+        color: #000000;
+    }
+
+    .pagina-atual .pagina-anterior {
+        font-weight: normal;
+    }
+    .margin-img {
+        margin: 0px 15px 0px 15px;
+    }
 </style>
