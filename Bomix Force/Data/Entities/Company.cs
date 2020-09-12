@@ -19,5 +19,7 @@ namespace Bomix_Force.Data.Entities
         public IdentityUser IdentityUser { get; set; }
         public virtual List<Order> Orders { get; set; }
         public virtual List<Person> Persons { get; set; }
+        [NotMapped]
+        public string Email { get; set; }
     }
 }

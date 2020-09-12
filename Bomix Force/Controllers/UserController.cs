@@ -29,9 +29,11 @@ namespace Bomix_Force.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
+        private readonly IGenericRepository<IdentityUser> _genericIdentityUserService;
         private readonly IMapper _mapper;
         public UserController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger,
+        IGenericRepository<IdentityUser> genericIdentityUserService)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
@@ -40,7 +42,7 @@ namespace Bomix_Force.Controllers
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
-
+            _genericIdentityUserService = genericIdentityUserService;
         }
         [Authorize]
         // GET: UserController
@@ -54,9 +56,8 @@ namespace Bomix_Force.Controllers
             if (User.IsInRole("Admin"))
             {
 
-                List<Company> Company = _genericCompanyService.GetAll().ToList();
+                List<Company> Company = _genericCompanyService.Get(g => g.IdentityUserId != null).ToList();
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
-
             }
             else if (User.IsInRole("Company"))
             {
@@ -78,7 +79,7 @@ namespace Bomix_Force.Controllers
             }
             else if (User.IsInRole("Employee"))
             {
-                List<Company> Company = _genericCompanyService.GetAll().ToList();
+                List<Company> Company = _genericCompanyService.Get(g => g.IdentityUserId != null).ToList();
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
             }
             if (!String.IsNullOrEmpty(searchString))

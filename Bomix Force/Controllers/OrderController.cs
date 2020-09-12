@@ -21,11 +21,13 @@ namespace Bomix_Force.Controllers
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IGenericRepository<Order> _genericOrderService;
+        private readonly IGenericRepository<Employee> _genericEmployeeService;
         private readonly IGenericRepository<Item> _genericItemService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         public OrderController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper
-            , IGenericRepository<Order> genericOrderService, IGenericRepository<Item> genericItemService, RoleManager<IdentityRole> roleManager)
+            , IGenericRepository<Order> genericOrderService, IGenericRepository<Item> genericItemService, RoleManager<IdentityRole> roleManager,
+            IGenericRepository<Employee> genericEmployeeService)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
@@ -33,6 +35,7 @@ namespace Bomix_Force.Controllers
             _genericCompanyService = genericCompanyService;
             _genericOrderService = genericOrderService;
             _genericItemService = genericItemService;
+            _genericEmployeeService = genericEmployeeService;
 
         }
         // GET: OrderController
@@ -49,23 +52,30 @@ namespace Bomix_Force.Controllers
                 ViewBag.searchString = searchString;
                 if (User.IsInRole("Admin"))
                 {
-                    orders = _genericOrderService.Get().ToList();
+                    orders = _genericOrderService.GetAll().ToList();
                     orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 }
                 else if (User.IsInRole("User"))
                 {
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
-                    orders = _genericOrderService.Get(o => o.EmployeeId == person.Id && o.Status != "FINALIZADO").ToList();
+                    orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status != "FINALIZADO").ToList();
                     orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 }
-                else
+                else if(User.IsInRole("Company"))
                 {
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
                     _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status != "FINALIZADO").ToList();
                     orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
 
+                }
+                else
+                {
+                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    Employee employee = _genericEmployeeService.Get(u => u.IdentityUserId == user).First();
+                    orders = _genericOrderService.Get(o => o.EmployeeId == employee.Id && o.Status != "FINALIZADO").ToList();
+                    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 }
                 if (!String.IsNullOrEmpty(searchString))
                 {
