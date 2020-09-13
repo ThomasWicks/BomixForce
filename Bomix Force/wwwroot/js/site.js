@@ -56,7 +56,7 @@ $(function(){
 
 
     var OrderDetailsElement = $('#OrderDetailsHere');
-    $('button[data-toggle="ajax-modal"]').click(function (event) {
+    $('button[data-toggle]').click(function (event) {
         var url = $(this).data('url');
         var decodedUrl = decodeURIComponent(url)
         console.log(url)

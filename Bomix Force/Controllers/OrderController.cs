@@ -88,8 +88,10 @@ namespace Bomix_Force.Controllers
         public ActionResult Details(int id)
         {
             string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, id.ToString()).ToList();
+            Bomix_PedidoVenda orders = _pedidoVendaRepository.GetParameters(user, id.ToString()).First();
+            List<Bomix_PedidoVendaItem> item = _pedidoItemRepository.GetParameters(user, id.ToString()).ToList();
             OrderViewModel orderView = _mapper.Map<OrderViewModel>(orders);
+            orderView.Item = item;
             return PartialView("_orderDetailsPartial", orderView);
         }
 
