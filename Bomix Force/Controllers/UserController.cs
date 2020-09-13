@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using IEmailSender = Bomix_Force.AppServices.Interface.IEmailSender;
 using Microsoft.AspNetCore.Identity;
-using Bomix_Force.AppServices;
+using Bomix_Force.Util;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,11 +29,9 @@ namespace Bomix_Force.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
-        private readonly IGenericRepository<IdentityUser> _genericIdentityUserService;
         private readonly IMapper _mapper;
         public UserController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger,
-        IGenericRepository<IdentityUser> genericIdentityUserService)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
@@ -42,7 +40,7 @@ namespace Bomix_Force.Controllers
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
-            _genericIdentityUserService = genericIdentityUserService;
+
         }
         [Authorize]
         // GET: UserController
@@ -56,13 +54,15 @@ namespace Bomix_Force.Controllers
             if (User.IsInRole("Admin"))
             {
 
-                List<Company> Company = _genericCompanyService.Get(g => g.IdentityUserId != null).ToList();
+                List<Company> Company = _genericCompanyService.GetAll().ToList();
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
+
             }
             else if (User.IsInRole("Company"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Company company = _genericCompanyService.Get(u => u.IdentityUserId == user).First();
+                //Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
+                Company company = _genericCompanyService.Get(g => g.IdentityUserId == user).First();
 
                 IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == company.Id);
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
@@ -78,7 +78,7 @@ namespace Bomix_Force.Controllers
             }
             else if (User.IsInRole("Employee"))
             {
-                List<Company> Company = _genericCompanyService.Get(g => g.IdentityUserId != null).ToList();
+                List<Company> Company = _genericCompanyService.GetAll().ToList();
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
             }
             if (!String.IsNullOrEmpty(searchString))
@@ -120,7 +120,7 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserViewModel userVIew)
+        public async Task<ActionResult> Create(UserViewModel userView)
         {
             try
             {
@@ -129,20 +129,23 @@ namespace Bomix_Force.Controllers
                 //{
                 if (User.IsInRole("Company"))
                 {
+                    RandomPasswordGenerator passwordGenerator = new RandomPasswordGenerator();
                     //TODO TEST IF COMPANY QUERY WORKS
                     string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Company company = _genericCompanyService.Get(g => g.IdentityUserId == userId).First();
-                    var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
-                    var result = await _userManager.CreateAsync(user, userVIew.Password);
+                    string randomPass = passwordGenerator.GeneratePassword();
+                    var user = new IdentityUser { UserName = userView.UserName, Email = userView.Email };
+                    var result = await _userManager.CreateAsync(user, randomPass);
 
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userVIew.Name, Cargo = userVIew.Cargo, Setor = userVIew.Setor, CompanyId = company.Id, IdentityUserId = user.Id, Email=userVIew.Email };
+                        Person person = new Person { Name = userView.Name, Cargo = userView.Cargo, Setor = userView.Setor, CompanyId = company.Id, IdentityUserId = user.Id };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         //_logger.LogInformation("Person = " + person.Tel);
                         _logger.LogInformation("Novo usuário criado.");
-                        await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
+                        await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass);
+                        //await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
 
 
                         return RedirectToAction(nameof(Index));
