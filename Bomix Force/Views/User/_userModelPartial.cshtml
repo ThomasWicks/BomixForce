@@ -27,14 +27,37 @@
                     </div>
                     <div class="row py-2">
                         <div class="col-6">
-                            <label asp-for="Setor"></label>
-                            <input asp-for="Setor" class="form-control" />
-                            <span asp-validation-for="Setor" class="text-danger"></span>
+                            <label asp-for="Cargo"></label>
+
+                            <select asp-for="Cargo" id="selectCargo" class="form-control col-6 mr-5" name="selectCargo">
+                                <option value="Propriétario">Propriétario</option>
+                                <option value="Diretor">Diretor</option>
+                                <option value="Gerente">Gerente</option>
+                                <option value="Coordenador">Coordenador</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="Analista">Analista</option>
+                                <option value="Assistente/Secretária">Assistente/Secretária</option>
+                                <option value="Genérico Industrial">Genérico Industrial</option>
+                                <option value="Genérico ADM">Genérico ADM</option>
+                            </select>
+                            <span asp-validation-for="Cargo" class="text-danger"></span>
                         </div>
                         <div class="col-6">
-                            <label asp-for="Cargo"></label>
-                            <input asp-for="Cargo" class="form-control" />
-                            <span asp-validation-for="Cargo" class="text-danger"></span>
+                            <label asp-for="Setor"></label>
+                            <select asp-for="Setor" id="selectSetor" class="form-control col-6 mr-5" name="selectSetor">
+                                <option value="Comercial">Comercial</option>
+                                <option value="PCP/S$OP">PCP/S$OP</option>
+                                <option value="Qualidade">Qualidade</option>
+                                <option value="Compras">Compras</option>
+                                <option value="Suprimentos">Suprimentos</option>
+                                <option value="Genérico Industrial">Genérico Industrial</option>
+                                <option value="Genérico ADM">Genérico ADM</option>
+                                <option value="Produção">Produção</option>
+                                <option value="Financeiro">Financeiro</option>
+                                <option value="Logística">Logística</option>
+                                <option value="Marketing">Marketing</option>
+                            </select>
+                            <span asp-validation-for="Setor" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 mb-4">
