@@ -28,35 +28,41 @@
             <tr>
 
                 <th class="text-center">
-
-                    NumeroPedido
+                    Numero Pedido
+                </th>
+                <th class="text-center">
+                    Cliente
                 </th>
                 <th class="text-center">
                     Emissão
                     @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
                     @if (ViewBag.filter == "EmissaoAsc")
                     {
-                        <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><span >up</span></a>
+                        <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><span>up</span></a>
                     }
-                    @if(ViewBag.filter != "EmissaoAsc") { 
-                    <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><span>down</span></a>
+                    @if (ViewBag.filter != "EmissaoAsc")
+                    {
+                        <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><span>down</span></a>
                     }
-                    
+
                     @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
                     @*<span class="glyphicon glyphicon-menu-up"></span>*@ @*Botão virado pra cima*@
                     @*<span class="glyphicon glyphicon-menu-down"></span>*@ @*Botão virado pra baixo*@
                 </th>
+                @*<th class="text-center">
+            Entrega
+            @Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })
+            @if (ViewBag.filter == "EntregaAsc")
+            {
+                <a href="@Url.Action("Index", "Order", new { filter = "EntregaDesc" })"><span>up</span></a>
+            }
+            @if (ViewBag.filter != "EntregaAsc")
+            {
+                <a href="@Url.Action("Index", "Order", new { filter = "EntregaAsc" })"><span>down</span></a>
+            }
+        </th>*@
                 <th class="text-center">
-                    Entrega
-                    @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
-                    @if (ViewBag.filter == "EntregaAsc")
-                    {
-                        <a href="@Url.Action("Index", "Order", new { filter = "EntregaDesc" })"><span>up</span></a>
-                    }
-                    @if (ViewBag.filter != "EntregaAsc")
-                    {
-                        <a href="@Url.Action("Index", "Order", new { filter = "EntregaAsc" })"><span>down</span></a>
-                    }
+                    Cidade - UF
                 </th>
                 <th class="text-center">
                     Status
@@ -71,20 +77,26 @@
             {
                 foreach (var item in Model)
                 {
-                    <tr>
-                        <th class="text-center">
-                            @item.Pedido
-                        </th>
-                        <th class="text-center">
-                            @item.Emissao
-                        </th>
-                        <th class="text-center">
-                            @item.Status
-                        </th>
-                        <th class="text-center">
-                            <button class="btn" id="details-modal" data-toggle="details-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Id}")"><i class="fas fa-info-circle fa-2x blue"></i></button>
-                        </th>
-                    </tr>
+            <tr>
+                <th class="text-center">
+                    @item.Pedido
+                </th>
+                <th class="text-center">
+                    @item.Cliente
+                </th>
+                <th class="text-center">
+                    @item.Emissao
+                </th>
+                <th class="text-center">
+                    @item.Cidade - @item.UF
+                </th>
+                <th class="text-center">
+                    @item.Status
+                </th>
+                <th class="text-center">
+                    <button class="btn" id="details-modal" data-toggle="details-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Id}")"><i class="fas fa-info-circle fa-2x blue"></i></button>
+                </th>
+            </tr>
                 }
             }
             else

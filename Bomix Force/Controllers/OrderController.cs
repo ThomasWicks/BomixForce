@@ -87,12 +87,12 @@ namespace Bomix_Force.Controllers
                 }
                 switch (filter)
                 {
-                    case ("EntregaDes"):
-                        orderView = orderView.OrderByDescending(s => s.Entrega);
-                        break;
-                    case ("EntregaAsc"):
-                        orderView = orderView.OrderBy(s => s.Entrega);
-                        break;
+                    //case ("EntregaDes"):
+                    //    orderView = orderView.OrderByDescending(s => s.Entrega);
+                    //    break;
+                    //case ("EntregaAsc"):
+                    //    orderView = orderView.OrderBy(s => s.Entrega);
+                    //    break;
                     case ("EmissaoDesc"):
                         orderView = orderView.OrderByDescending(s => s.Emissao);
                         break;
@@ -117,11 +117,11 @@ namespace Bomix_Force.Controllers
         [Route("Order/Details/{id}")]
         public ActionResult Details(int id)
         {
-            Order order = _genericOrderService.Get(g => g.Id == id).First();
-            List<Item> itens = _genericItemService.Get(i => i.OrderId == order.Id).ToList();
-            OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
-            orderView.Item = itens;
-            return PartialView("_orderDetailsPartial", orderView);
+            //Order order = _genericOrderService.Get(g => g.Id == id).First();
+            //List<Item> itens = _genericItemService.Get(i => i.OrderId == order.Id).ToList();
+            //OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
+            //orderView.Item = itens;
+            return PartialView("_orderDetailsPartial");
         }
 
         // GET: OrderController/Create

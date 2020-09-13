@@ -23,5 +23,7 @@ namespace Bomix_Force.Data.Entities
         public string Vendedor { get; set; }
         public string Gerente { get; set; }
         public DateTime CondPagamento { get; set; }
+        public virtual List<Bomix_PedidoVendaItem> Item { get; set; }
+
     }
 }
