@@ -8,8 +8,8 @@ namespace Bomix_Force.ViewModels
 {
     public class OrderViewModel
     {
-        public int Id { get; set; }
-        public int Pedido { get; set; }
+        public int id { get; set; }
+        public string Pedido { get; set; }
         public string Status { get; set; }
         public DateTime Emissao { get; set; }
         public string Cliente { get; set; }
