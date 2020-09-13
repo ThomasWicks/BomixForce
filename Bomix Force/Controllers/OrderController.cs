@@ -25,10 +25,11 @@ namespace Bomix_Force.Controllers
         private readonly IGenericRepository<Employee> _genericEmployeeService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IPedidoVendaRepository _pedidoVendaRepository;
+        private readonly IPedidoItemRepository _pedidoItemRepository;
         private readonly IMapper _mapper;
         public OrderController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper
             , RoleManager<IdentityRole> roleManager,
-            IGenericRepository<Employee> genericEmployeeService, IPedidoVendaRepository pedidoVendaRepository)
+            IGenericRepository<Employee> genericEmployeeService, IPedidoVendaRepository pedidoVendaRepository, IPedidoItemRepository pedidoItemRepository)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
@@ -36,6 +37,7 @@ namespace Bomix_Force.Controllers
             _genericCompanyService = genericCompanyService;
             _genericEmployeeService = genericEmployeeService;
             _pedidoVendaRepository = pedidoVendaRepository;
+            _pedidoItemRepository = pedidoItemRepository;
         }
         // GET: OrderController
         public ActionResult Index(string filter, string searchString, int? pageNumber,string selectType)
@@ -44,6 +46,7 @@ namespace Bomix_Force.Controllers
             try
             {
                 var teste = _pedidoVendaRepository.GetParameters("00a719de-e760-4b42-a335-c4eb04a7bd33", "052405");
+                var teste2 = _pedidoItemRepository.GetParameters("00a719de-e760-4b42-a335-c4eb04a7bd33", "052405");
                 //string selectType = typeSearch["selectType"].ToString();
                 List <Order> orders = new List<Order>();
                 IEnumerable<OrderViewModel> orderView;
