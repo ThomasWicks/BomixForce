@@ -35,7 +35,7 @@ namespace Bomix_Force.Data.EntityConfig
           .HasColumnName("TipoFrete")
           .IsRequired();
 
-            builder.Property(u => u.Client_ID)
+            builder.Property(u => u.Cliente_ID)
           .HasColumnName("Client_ID")
           .IsRequired();
 

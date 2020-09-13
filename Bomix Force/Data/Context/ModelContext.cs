@@ -22,6 +22,9 @@ namespace Bomix_Force.Data.Context
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<Employee_Seller> Employee_Seller { get; set; }
+        public virtual DbSet<Bomix_PedidoVenda> Bomix_PedidoVenda { get; set; }
+        public virtual DbSet<Bomix_PedidoVendaItem> Bomix_PedidoVendaItem { get; set; }
+
         //public virtual DbSet<Order> Order { get; set; }
         //public virtual DbSet<N_conformity> N_conformity { get; set; }
         //public virtual DbSet<Item> Item { get; set; }
@@ -30,6 +33,7 @@ namespace Bomix_Force.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Bomix_PedidoVendaItem>().HasNoKey();
             //modelBuilder.ApplyConfiguration(new OrderConfiguration());
             //modelBuilder.ApplyConfiguration(new N_conformityConfiguration());
             //modelBuilder.ApplyConfiguration(new CompanyConfiguration());

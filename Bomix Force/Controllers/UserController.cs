@@ -17,6 +17,9 @@ using Bomix_Force.Util;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Bomix_Force.Data.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 
 namespace Bomix_Force.Controllers
 {
@@ -46,7 +49,6 @@ namespace Bomix_Force.Controllers
         // GET: UserController
         public ActionResult Index(string selectType, string searchString, int? pageNumber)
         {
-
             ViewBag.selectType = selectType;
             ViewBag.searchString = searchString;
             int page = (pageNumber ?? 1);
@@ -136,11 +138,11 @@ namespace Bomix_Force.Controllers
                     var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
                     var result = await _userManager.CreateAsync(user, userVIew.Password);
 
-                    if(company.Id == 0)
+                    if (company.Id == 0)
                         _ = await _userManager.AddToRoleAsync(user, "Admin");
-                    else 
+                    else
                         _ = await _userManager.AddToRoleAsync(user, "User");
-      
+
 
                     if (result.Succeeded)
                     {
