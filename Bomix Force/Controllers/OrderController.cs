@@ -40,18 +40,27 @@ namespace Bomix_Force.Controllers
             _pedidoItemRepository = pedidoItemRepository;
         }
         // GET: OrderController
-        public ActionResult Index(string filter, string searchString, int? pageNumber,string selectType)
+        public ActionResult Index(string filter, string searchString, int? pageNumber, string selectType)
         {
             int page = (pageNumber ?? 1);
             try
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
-   
+                Company company = _genericCompanyService.Get(c => c.IdentityUserId == user).First();
+                List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
+                if (company.Id == 0)
+                {
+                    orders = _pedidoVendaRepository.GetAll().ToList();
+                }
+                else
+                {
+                    orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
+                }
+
                 ViewBag.filter = filter;
                 ViewBag.selectType = selectType;
                 ViewBag.searchString = searchString;
-                
+
                 IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 if (!String.IsNullOrEmpty(searchString))
                 {
