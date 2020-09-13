@@ -80,7 +80,7 @@ namespace Bomix_Force.Controllers
                 if (!String.IsNullOrEmpty(searchString))
                 {
                     if(selectType=="nOrder")
-                    orderView = orderView.Where(o => o.NumeroPedido.ToString().ToLower().Contains(searchString.ToLower()));
+                    orderView = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower()));
                     else if(selectType == "status")
                         orderView = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower()));
                     
