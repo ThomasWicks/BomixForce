@@ -11,12 +11,30 @@
         <img src="~/Assets/divider.png" class="margin-img" />
 
     </li>
-        <li class="nav-item">
+    <div class="dropdown open">
+                <button  class="btn btn-white dropdown-toggle"
+          type="button" id="dropdownMenu5" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false"><img src="~/Assets/profile-circle-person.png" /></button>
+  <!-- <button class="btn btn-secondary dropdown-toggle"
+          type="button" id="dropdownMenu5" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+    Dropdown
+  </button> -->
+  <div class="dropdown-menu">
+              <form class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Login", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"> Logout</i></button>
+                @*<img src="~/Assets/divider.png" class="margin-img" />*@
+            </form>
+    <!-- <a class="dropdown-item" href="#">Action</a>
+    <a class="dropdown-item" href="#">Another action</a> -->
+  </div>
+</div>
+        <!-- <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Login", "Home", new { area = "" })">
                 <button type="submit" class="nav-link btn btn-link text-dark"><img src="~/Assets/profile-circle-person.png" /></button>
                 @*<img src="~/Assets/divider.png" class="margin-img" />*@
             </form>
-        </li>
+        </li> -->
     }
     else
     {
