@@ -70,6 +70,8 @@ namespace Bomix_Force
             //services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
             services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
+            services.AddScoped<IGenericRepository<Bomix_PedidoVenda>, GenericRepository<Bomix_PedidoVenda>>();
+            services.AddScoped<IGenericRepository<Bomix_PedidoVendaItem>, GenericRepository<Bomix_PedidoVendaItem>>();
             //services.AddScoped<IGenericRepository<Item>, GenericRepository<Item>>();
             //services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
             services.AddScoped<IGenericRepository<IdentityUser>, GenericRepository<IdentityUser>>();

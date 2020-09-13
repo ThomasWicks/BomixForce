@@ -81,8 +81,15 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
-            if (!changePasswordResult.Succeeded)
+            if (changePasswordResult.Succeeded)
             {
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmEmailResult = await _userManager.ConfirmEmailAsync(user, code);
+            }
+            else if (!changePasswordResult.Succeeded)
+            {
+                
+                
                 foreach (var error in changePasswordResult.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
