@@ -25,10 +25,11 @@ namespace Bomix_Force.Controllers
         private readonly IGenericRepository<Employee> _genericEmployeeService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IPedidoVendaRepository _pedidoVendaRepository;
+        private readonly IPedidoItemRepository _pedidoItemRepository;
         private readonly IMapper _mapper;
         public OrderController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper
             , RoleManager<IdentityRole> roleManager,
-            IGenericRepository<Employee> genericEmployeeService, IPedidoVendaRepository pedidoVendaRepository)
+            IGenericRepository<Employee> genericEmployeeService, IPedidoVendaRepository pedidoVendaRepository, IPedidoItemRepository pedidoItemRepository)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
@@ -36,6 +37,7 @@ namespace Bomix_Force.Controllers
             _genericCompanyService = genericCompanyService;
             _genericEmployeeService = genericEmployeeService;
             _pedidoVendaRepository = pedidoVendaRepository;
+            _pedidoItemRepository = pedidoItemRepository;
         }
         // GET: OrderController
         public ActionResult Index(string filter, string searchString, int? pageNumber,string selectType)
