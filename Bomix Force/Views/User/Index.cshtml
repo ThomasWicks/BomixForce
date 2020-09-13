@@ -7,7 +7,7 @@
 
     <div class="clearfix mx-5">
         <h2 class="mt-3">Usuário</h2>
-        @if (User.IsInRole("Company"))
+        @if (User.IsInRole("Company")|| User.IsInRole("Admin"))
         {
             <a class="d-flex flex-row-reverse">
 
