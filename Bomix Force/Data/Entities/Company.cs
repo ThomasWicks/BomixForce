@@ -17,6 +17,7 @@ namespace Bomix_Force.Data.Entities
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
+        public string Idtotvs { get; set; }
         [NotMapped]
         public virtual List<Order> Orders { get; set; }
         public virtual List<Person> Persons { get; set; }
