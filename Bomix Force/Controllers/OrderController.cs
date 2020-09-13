@@ -46,16 +46,7 @@ namespace Bomix_Force.Controllers
             try
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Company company = _genericCompanyService.Get(c => c.IdentityUserId == user).First();
-                List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
-                if (company.Id == 0)
-                {
-                    orders = _pedidoVendaRepository.GetAll().ToList();
-                }
-                else
-                {
-                    orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
-                }
+                List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
 
                 ViewBag.filter = filter;
                 ViewBag.selectType = selectType;
