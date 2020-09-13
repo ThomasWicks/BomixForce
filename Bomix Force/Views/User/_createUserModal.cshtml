@@ -40,7 +40,7 @@
                     <div class="row py-2 mb-4">
                         <div class="col-6">
                             <label asp-for="@Model.Cargo"></label>
-                            <select asp-for="@Model.Cargo" id="selectCargoCreate" class="form-control" name="selectCargoCreate">
+                            <select asp-for="@Model.Cargo" class="form-control " >
                                 <option value="Propriétario">Propriétario</option>
                                 <option value="Diretor">Diretor</option>
                                 <option value="Gerente">Gerente</option>
@@ -55,7 +55,7 @@
                         </div>
                         <div class="col-6">
                             <label asp-for="@Model.Setor"></label>
-                            <select asp-for="@Model.Setor" id="selectSetorCreate" class="form-control" name="selectSetorCreate">
+                            <select asp-for="@Model.Setor" class="form-control" >
                                 <option value="Comercial">Comercial</option>
                                 <option value="PCP/S$OP">PCP/S$OP</option>
                                 <option value="Qualidade">Qualidade</option>
