@@ -62,10 +62,9 @@ namespace Bomix_Force.Controllers
             else if (User.IsInRole("Company"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
-                Company company = _genericCompanyService.Get(g => g.Id == person.CompanyId).First();
+                Company company = _genericCompanyService.Get(u => u.IdentityUserId == user).First();
 
-                IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == person.CompanyId);
+                IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == company.Id);
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
                 foreach (var item in userView)
                 {
@@ -132,17 +131,22 @@ namespace Bomix_Force.Controllers
                 {
                     //TODO TEST IF COMPANY QUERY WORKS
                     string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    Person person_owner = _genericPersonService.Get(u => u.IdentityUserId == userId).First();
-                    Company company = _genericCompanyService.Get(g => g.Id == person_owner.CompanyId).First();
+                    //Person person_owner = _genericPersonService.Get(u => u.IdentityUserId == userId).First();
+                    Company company = _genericCompanyService.Get(g => g.IdentityUserId == userId).First();
                     var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
                     var result = await _userManager.CreateAsync(user, userVIew.Password);
 
+                    if(company.Id == 0)
+                        _ = await _userManager.AddToRoleAsync(user, "Admin");
+                    else 
+                        _ = await _userManager.AddToRoleAsync(user, "User");
+      
+
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userVIew.Name, Cargo = userVIew.Cargo, Setor = userVIew.Setor, CompanyId = company.Id, IdentityUserId = user.Id };
+                        Person person = new Person { Name = userVIew.Name, Cargo = userVIew.Cargo, Setor = userVIew.Setor, CompanyId = company.Id, IdentityUserId = user.Id, Email = userVIew.Email };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
-                        //_logger.LogInformation("Person = " + person.Tel);
                         _logger.LogInformation("Novo usuário criado.");
                         await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
 
