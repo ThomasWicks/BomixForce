@@ -24,6 +24,7 @@ namespace Bomix_Force.Util
 
             #region Order
             CreateMap<OrderViewModel, Order>().ReverseMap();
+            CreateMap<OrderViewModel, Bomix_PedidoVenda>().ReverseMap();
             #endregion
         }
     }

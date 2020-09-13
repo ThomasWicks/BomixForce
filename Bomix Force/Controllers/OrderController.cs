@@ -43,68 +43,36 @@ namespace Bomix_Force.Controllers
             int page = (pageNumber ?? 1);
             try
             {
-                var teste = _pedidoVendaRepository.GetParameters("00a719de-e760-4b42-a335-c4eb04a7bd33", "052405");
-                //string selectType = typeSearch["selectType"].ToString();
-                List <Order> orders = new List<Order>();
-                IEnumerable<OrderViewModel> orderView;
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
+   
                 ViewBag.filter = filter;
                 ViewBag.selectType = selectType;
                 ViewBag.searchString = searchString;
-                //if (User.IsInRole("Admin"))
-                //{
-                //    orders = _genericOrderService.GetAll().ToList();
-                //    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-                //}
-                //else if (User.IsInRole("User"))
-                //{
-                //    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                //    Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
-                //    orders = _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status != "FINALIZADO").ToList();
-                //    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-                //}
-                //else if(User.IsInRole("Company"))
-                //{
-                //    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                //    Person person = _genericPersonService.Get(u => u.IdentityUserId == user).First();
-                //    _genericOrderService.Get(o => o.CompanyId == person.CompanyId && o.Status != "FINALIZADO").ToList();
-                //    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                
+                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    if (selectType == "nOrder")
+                        orderView = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower()));
+                    else if (selectType == "status")
+                        orderView = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower()));
 
-                //}
-                //else
-                //{
-                //    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                //    Employee employee = _genericEmployeeService.Get(u => u.IdentityUserId == user).First();
-                //    orders = _genericOrderService.Get(o => o.EmployeeId == employee.Id && o.Status != "FINALIZADO").ToList();
-                //    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-                //}
-                //if (!String.IsNullOrEmpty(searchString))
-                //{
-                //    if(selectType=="nOrder")
-                //    orderView = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower()));
-                //    else if(selectType == "status")
-                //        orderView = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower()));
-                    
-                //}
-                //switch (filter)
-                //{
-                //    case ("EntregaDes"):
-                //        orderView = orderView.OrderByDescending(s => s.Entrega);
-                //        break;
-                //    case ("EntregaAsc"):
-                //        orderView = orderView.OrderBy(s => s.Entrega);
-                //        break;
-                //    case ("EmissaoDesc"):
-                //        orderView = orderView.OrderByDescending(s => s.Emissao);
-                //        break;
-                //    case ("EmissaoAsc"):
-                //        orderView = orderView.OrderBy(s => s.Emissao);
-                //        break;
-                //    default:
-                //        break;
+                }
+                switch (filter)
+                {
+                    case ("EmissaoDesc"):
+                        orderView = orderView.OrderByDescending(s => s.Emissao);
+                        break;
+                    case ("EmissaoAsc"):
+                        orderView = orderView.OrderBy(s => s.Emissao);
+                        break;
+                    default:
+                        break;
 
-                //}
-                //orderView=orderView.ToPagedList(page, 2);
-                return View();
+                }
+                orderView = orderView.ToPagedList(page, 10);
+                return View(orderView);
             }
             catch (Exception ex)
             {
@@ -117,11 +85,10 @@ namespace Bomix_Force.Controllers
         [Route("Order/Details/{id}")]
         public ActionResult Details(int id)
         {
-            //Order order = _genericOrderService.Get(g => g.Id == id).First();
-            //List<Item> itens = _genericItemService.Get(i => i.OrderId == order.Id).ToList();
-            //OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
-            //orderView.Item = itens;
-            return PartialView("_orderDetailsPartial");
+            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, id.ToString()).ToList();
+            OrderViewModel orderView = _mapper.Map<OrderViewModel>(orders);
+            return PartialView("_orderDetailsPartial", orderView);
         }
 
         // GET: OrderController/Create
