@@ -15,17 +15,17 @@
     <header class="background-screen">   
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow ">
             <div class="container">
-                <img src="~/Assets/logo-bomix-header.png" asp-area="" asp-controller="Home" asp-action="Login"/>
+                <a asp-area="" asp-controller="Home" asp-action="Login"><img src="~/Assets/logo-bomix-header.png" /></a>
                 @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Login">Bomix Force</a>*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <img src="~/Assets/profile-circle-person.png" />
+                    @*<img src="~/Assets/profile-circle-person.png" />
                     <img src="~/Assets/divider.png" class="margin-img" />
-                    <a>@User.Identity.Name</a>
-                    @*<partial name="_LoginPartial" />*@
+                    <a>@User.Identity.Name</a>*@
+                    <partial name="_LoginPartial" />
                 </div>
                 <div>
                 </div>
@@ -79,9 +79,9 @@
 -------------------------------------------------- */
 
     .sheet {
-        width: 241px !important;
+        /* width: 241px !important; */
         height: 137px !important;
-        border-radius: 8px !important;
+        /* border-radius: 8px !important; */
         border: solid 1px #ffffff !important;
         background-color: #002a51 !important;
     }
