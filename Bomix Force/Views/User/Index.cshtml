@@ -42,7 +42,7 @@
                 foreach (var item in @Model)
                 {
                     <div class="col-sm-4 mt-3">
-                        <div class="card">
+                        <div class="cardss">
                             <div class="card-body">
                                 <h5 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h5>
                                 <p class="card-text"><strong>Email:  @Html.DisplayFor(modelItem => item.Email)</strong></p>
@@ -85,9 +85,20 @@
     </div>
 
     <style>
-        .testee {
-            max-width: inherit
-        }
+    .cardss {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  max-height: inherit;
+  /*min-width: 250px;*/
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
 
         .blue {
             color: #007bff;
