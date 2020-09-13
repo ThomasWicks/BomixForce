@@ -42,16 +42,20 @@
                 foreach (var item in @Model)
                 {
                     <div class="col-sm-4 mt-3">
-                        <div class="card">
+                        <div class="cardss">
                             <div class="card-body">
                                 <h5 class="card-title"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h5>
                                 <p class="card-text"><strong>Email:  @Html.DisplayFor(modelItem => item.Email)</strong></p>
-                                @if (User.IsInRole("Admin"))
+                                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                                 {
-                                    <p class="card-text"><strong>Empresa: @Html.DisplayFor(modelItem => item.Company.Name)</strong> </p>
+                                  <p class="card-text"><strong>Telefone:  @Html.DisplayFor(modelItem => item.PhoneNumber)</strong></p>
                                 }
-                                <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
-                                <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
+                                else
+                                {
+                                    <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
+                                    <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
+
+                                }
                             </div>
                             <div class="card-footer bg-dark">
                                 <button class="btn float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x blue"></i></button>
@@ -85,9 +89,20 @@
     </div>
 
     <style>
-        .testee {
-            max-width: inherit
-        }
+    .cardss {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  max-height: inherit;
+  /*min-width: 250px;*/
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
 
         .blue {
             color: #007bff;
