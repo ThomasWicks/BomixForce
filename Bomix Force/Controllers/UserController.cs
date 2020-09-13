@@ -31,13 +31,16 @@ namespace Bomix_Force.Controllers
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IGenericRepository<Company> _genericCompanyService;
+        private readonly IGenericRepository<Employee> _genericEmployeeService;
         private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IMapper _mapper;
-        public UserController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService,
+        public UserController(IGenericRepository<Person> genericPersonService,
+            IGenericRepository<Company> genericCompanyService, IGenericRepository<Employee> genericEmployeeService,
         IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
+            _genericEmployeeService = genericEmployeeService;
             _genericCompanyService = genericCompanyService;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -53,11 +56,14 @@ namespace Bomix_Force.Controllers
             ViewBag.searchString = searchString;
             int page = (pageNumber ?? 1);
             List<UserViewModel> userView = new List<UserViewModel>();
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin")|| User.IsInRole("Employee"))
             {
-
+                List<Employee> employees = _genericEmployeeService.GetAll().ToList();
+                List<Person> people = _genericPersonService.GetAll().ToList();
                 List<Company> Company = _genericCompanyService.GetAll().ToList();
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
+                userView.AddRange(_mapper.Map<IEnumerable<UserViewModel>>(people).ToList());
+                userView.AddRange(_mapper.Map<IEnumerable<UserViewModel>>(employees).ToList());
 
             }
             else if (User.IsInRole("Company"))
@@ -67,6 +73,7 @@ namespace Bomix_Force.Controllers
 
                 IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == company.Id);
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
+         
                 foreach (var item in userView)
                 {
                     item.Company = company;
@@ -76,11 +83,6 @@ namespace Bomix_Force.Controllers
             {
                 //todo user can't see user page
                 return View();
-            }
-            else if (User.IsInRole("Employee"))
-            {
-                List<Company> Company = _genericCompanyService.GetAll().ToList();
-                userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
             }
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -128,17 +130,18 @@ namespace Bomix_Force.Controllers
                 //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                 //if (ModelState.IsValid)
                 //{
-                if (User.IsInRole("Company"))
+                if (User.IsInRole("Company") || User.IsInRole("Admin"))
                 {
                     RandomPasswordGenerator passwordGenerator = new RandomPasswordGenerator();
                     //TODO TEST IF COMPANY QUERY WORKS
                     string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    string randomPass = passwordGenerator.GeneratePassword();
                     //Person person_owner = _genericPersonService.Get(u => u.IdentityUserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.IdentityUserId == userId).First();
                     var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
-                    var result = await _userManager.CreateAsync(user, userVIew.Password);
+                    var result = await _userManager.CreateAsync(user, randomPass);
 
-                    if (company.Id == 0)
+                    if (company.Id == 0 && User.IsInRole("Admin"))
                         _ = await _userManager.AddToRoleAsync(user, "Admin");
                     else
                         _ = await _userManager.AddToRoleAsync(user, "User");
@@ -150,7 +153,7 @@ namespace Bomix_Force.Controllers
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Novo usuário criado.");
-                        await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + userVIew.Password);
+                        await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass);
                         //await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
 
 
