@@ -119,7 +119,7 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserViewModel userView)
+        public async Task<ActionResult> Create(UserViewModel userVIew)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace Bomix_Force.Controllers
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Novo usuário criado.");
-                        await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass);
+                        await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + userVIew.Password);
                         //await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
 
 
