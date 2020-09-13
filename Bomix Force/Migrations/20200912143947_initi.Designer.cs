@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bomix_Force.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    [Migration("20200907190111_User_update")]
-    partial class User_update
+    [Migration("20200912143947_initi")]
+    partial class initi
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace Bomix_Force.Migrations
                     b.Property<string>("Cnpj")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -44,27 +47,13 @@ namespace Bomix_Force.Migrations
                     b.ToTable("Company");
                 });
 
-            modelBuilder.Entity("Bomix_Force.Data.Entities.Document", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Document");
-                });
-
             modelBuilder.Entity("Bomix_Force.Data.Entities.Employee", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(450)");
@@ -75,6 +64,9 @@ namespace Bomix_Force.Migrations
                     b.Property<string>("Login")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityUserId");
@@ -82,92 +74,24 @@ namespace Bomix_Force.Migrations
                     b.ToTable("Employee");
                 });
 
-            modelBuilder.Entity("Bomix_Force.Data.Entities.Item", b =>
+            modelBuilder.Entity("Bomix_Force.Data.Entities.Employee_Seller", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("Item");
-                });
-
-            modelBuilder.Entity("Bomix_Force.Data.Entities.N_conformity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Lot")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("N_conformity");
-                });
-
-            modelBuilder.Entity("Bomix_Force.Data.Entities.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Emissao")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Entrega")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("NumeroPedido")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PersonId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("SellerId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
-
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("Order");
+                    b.ToTable("Employee_Seller");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Person", b =>
@@ -182,6 +106,9 @@ namespace Bomix_Force.Migrations
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(450)");
@@ -415,39 +342,13 @@ namespace Bomix_Force.Migrations
                         .HasForeignKey("IdentityUserId");
                 });
 
-            modelBuilder.Entity("Bomix_Force.Data.Entities.Item", b =>
+            modelBuilder.Entity("Bomix_Force.Data.Entities.Employee_Seller", b =>
                 {
-                    b.HasOne("Bomix_Force.Data.Entities.Order", "Order")
-                        .WithMany("Item")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Bomix_Force.Data.Entities.N_conformity", b =>
-                {
-                    b.HasOne("Bomix_Force.Data.Entities.Order", "Order")
-                        .WithMany("N_Conformities")
-                        .HasForeignKey("OrderId");
-                });
-
-            modelBuilder.Entity("Bomix_Force.Data.Entities.Order", b =>
-                {
-                    b.HasOne("Bomix_Force.Data.Entities.Company", "Company")
-                        .WithMany("Orders")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Bomix_Force.Data.Entities.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Bomix_Force.Data.Entities.Person", null)
-                        .WithMany("Order")
-                        .HasForeignKey("PersonId");
                 });
 
             modelBuilder.Entity("Bomix_Force.Data.Entities.Person", b =>

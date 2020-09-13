@@ -10,8 +10,10 @@ namespace Bomix_Force.Data.Entities
 {
     public class Employee
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
         public string Login { get; set; }
         public string Idtotvs { get; set; }
         [ForeignKey("IdentityUser")]

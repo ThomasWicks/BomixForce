@@ -18,14 +18,14 @@ namespace Bomix_Force.Data.Context
            : base(options)
         {
         }
-        public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<Person> Person { get; set; }
         public virtual DbSet<Company> Company { get; set; }
-        public virtual DbSet<N_conformity> N_conformity { get; set; }
-        public virtual DbSet<Item> Item { get; set; }
-        public virtual DbSet<Document> Document { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<Employee_Seller> Employee_Seller { get; set; }
+        //public virtual DbSet<Order> Order { get; set; }
+        //public virtual DbSet<N_conformity> N_conformity { get; set; }
+        //public virtual DbSet<Item> Item { get; set; }
+        //public virtual DbSet<Document> Document { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

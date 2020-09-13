@@ -14,7 +14,8 @@ namespace Bomix_Force.Data.Entities
         public string Lot { get; set; }
         public string Description { get; set; }
         [ForeignKey("Order")]
-        public int? OrderId { get; set; }
+        //public int? OrderId { get; set; }
+        [NotMapped]
         public virtual Order Order { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bomix_Force.Migrations
 {
-    public partial class init : Migration
+    public partial class initi : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,52 +44,6 @@ namespace Bomix_Force.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "COMPANY",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NAME = table.Column<string>(nullable: false),
-                    EMAIL = table.Column<string>(nullable: false),
-                    CNPJ = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_COMPANY", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DOCUMENT",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DOCUMENT", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserViewEdit",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(nullable: false),
-                    UserID = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Tel = table.Column<int>(nullable: false),
-                    Cargo = table.Column<string>(nullable: false),
-                    Setor = table.Column<string>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserViewEdit", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -199,98 +153,95 @@ namespace Bomix_Force.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PERSON",
+                name: "Company",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NAME = table.Column<string>(nullable: false),
-                    SETOR = table.Column<string>(nullable: false),
-                    CARGO = table.Column<string>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    CompanyId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    Cnpj = table.Column<string>(nullable: true),
+                    IdentityUserId = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PERSON", x => x.Id);
+                    table.PrimaryKey("PK_Company", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PERSON_COMPANY_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "COMPANY",
+                        name: "FK_Company_AspNetUsers_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ORDER",
+                name: "Employee",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NUMBER = table.Column<int>(nullable: false),
-                    EMISSAODATE = table.Column<DateTime>(nullable: false),
-                    ENTREGADATE = table.Column<DateTime>(nullable: false),
-                    STATUS = table.Column<string>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false),
-                    PersonId = table.Column<int>(nullable: true)
+                    Id = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Login = table.Column<string>(nullable: true),
+                    Idtotvs = table.Column<string>(nullable: true),
+                    IdentityUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ORDER", x => x.Id);
+                    table.PrimaryKey("PK_Employee", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ORDER_COMPANY_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "COMPANY",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ORDER_PERSON_PersonId",
-                        column: x => x.PersonId,
-                        principalTable: "PERSON",
+                        name: "FK_Employee_AspNetUsers_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ITEM",
+                name: "Person",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    STATUS_ART = table.Column<string>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false),
-                    ProductId = table.Column<string>(nullable: true),
-                    DESCRIPTION = table.Column<string>(nullable: false),
-                    OrderId = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: true),
+                    Setor = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Cargo = table.Column<string>(nullable: true),
+                    IdentityUserId = table.Column<string>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ITEM", x => x.Id);
+                    table.PrimaryKey("PK_Person", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ITEM_ORDER_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "ORDER",
+                        name: "FK_Person_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Person_AspNetUsers_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "N_CONFORMITY",
+                name: "Employee_Seller",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LOT = table.Column<string>(nullable: false),
-                    DESCRIPTION = table.Column<string>(nullable: false),
-                    OrderId = table.Column<int>(nullable: false)
+                    EmployeeId = table.Column<int>(nullable: false),
+                    SellerId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_N_CONFORMITY", x => x.Id);
+                    table.PrimaryKey("PK_Employee_Seller", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_N_CONFORMITY_ORDER_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "ORDER",
+                        name: "FK_Employee_Seller_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -335,29 +286,29 @@ namespace Bomix_Force.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ITEM_OrderId",
-                table: "ITEM",
-                column: "OrderId");
+                name: "IX_Company_IdentityUserId",
+                table: "Company",
+                column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_N_CONFORMITY_OrderId",
-                table: "N_CONFORMITY",
-                column: "OrderId");
+                name: "IX_Employee_IdentityUserId",
+                table: "Employee",
+                column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ORDER_CompanyId",
-                table: "ORDER",
+                name: "IX_Employee_Seller_EmployeeId",
+                table: "Employee_Seller",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_CompanyId",
+                table: "Person",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ORDER_PersonId",
-                table: "ORDER",
-                column: "PersonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PERSON_CompanyId",
-                table: "PERSON",
-                column: "CompanyId");
+                name: "IX_Person_IdentityUserId",
+                table: "Person",
+                column: "IdentityUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -378,31 +329,22 @@ namespace Bomix_Force.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DOCUMENT");
+                name: "Employee_Seller");
 
             migrationBuilder.DropTable(
-                name: "ITEM");
-
-            migrationBuilder.DropTable(
-                name: "N_CONFORMITY");
-
-            migrationBuilder.DropTable(
-                name: "UserViewEdit");
+                name: "Person");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Employee");
+
+            migrationBuilder.DropTable(
+                name: "Company");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "ORDER");
-
-            migrationBuilder.DropTable(
-                name: "PERSON");
-
-            migrationBuilder.DropTable(
-                name: "COMPANY");
         }
     }
 }

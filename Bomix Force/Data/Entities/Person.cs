@@ -12,6 +12,7 @@ namespace Bomix_Force.Data.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Setor { get; set; }
+        public string Email { get; set; }
         public string Cargo { get; set; }
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
@@ -19,6 +20,7 @@ namespace Bomix_Force.Data.Entities
         public int CompanyId { get; set; }
         public IdentityUser IdentityUser { get; set; }
         public virtual Company Company { get; set; }
+        [NotMapped]
         public virtual List<Order> Order { get; set; }
     }
 }
