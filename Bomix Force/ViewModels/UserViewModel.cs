@@ -45,8 +45,11 @@ namespace Bomix_Force.ViewModels
         [Display(Name = "Telefone")]
         [DataType(DataType.PhoneNumber)]
         public int PhoneNumber { get; set; }
+        [Display(Name = "Cargo")]
         [Required]
         public string Cargo { get; set; }
+        [Display(Name = "Setor")]
+        [Required]
         public string Setor { get; set; }
         public Company Company { get; set; }
     }
