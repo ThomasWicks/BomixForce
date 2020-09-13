@@ -79,9 +79,29 @@
                 <th class="text-center">
                     @item.Cidade - @item.UF
                 </th>
-                <th class="text-center">
+                @if(@item.Status == "ENCERRADO"){
+                <th class="mt-2 badge bg-danger">
+
                     @item.Status
                 </th>
+                    
+                }else if(@item.Status == "ABERTO"){
+                <th class="mt-2 badge bg-primary">
+                    @item.Status
+                </th>
+                }else if(@item.Status == "LIBERADO"){
+                <th class="mt-2 badge bg-success">
+                    @item.Status
+                </th>
+                }else if(@item.Status == "ORCAMENTO"){
+                <th class="mt-2 badge bg-warning">
+                    @item.Status
+                </th>
+                }else{
+                <th class="mt-2 badge bg-secondary">
+                    @item.Status
+                </th>
+                }
                 <th class="text-center">
                     <button class="btn" data-toggle="details-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Pedido}")"><i class="fas fa-info-circle fa-2x blue"></i></button>
                 </th>
@@ -106,15 +126,12 @@
 
 <style lang="scss" scoped>
     .badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-weight: 500;
-        text-transform: uppercase;
-        margin-right: 10px;
-        margin-left: 10px;
-        padding-left: 15px;
-        padding-right: 15px;
         border-radius: 25px;
     }
-
     .blue {
         color: #007bff;
     }
