@@ -67,5 +67,18 @@ $(function(){
         })
     })
 
+    OrderDetailsElement.on('click', '[data-save="editUser"]', function (event) {
+        event.preventDefault();
+        var form = $(this).parent('.modal').find('form');
+        var actionUrl = form.attr('action');
+        var sendData = form.serialize();
+
+        $.post(actionUrl, sendData).done(function (data) {
+            PlaceHolderHereElement.find('.modal').modal('hide');
+
+        }
+        )
+    })
+
 
 })

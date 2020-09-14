@@ -8,6 +8,7 @@ using Bomix_Force.Data.Entities;
 using Bomix_Force.Repo.Interface;
 using X.PagedList;
 using Bomix_Force.ViewModels;
+using IEmailSender = Bomix_Force.AppServices.Interface.IEmailSender;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,16 +25,18 @@ namespace Bomix_Force.Controllers
         private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IGenericRepository<Employee> _genericEmployeeService;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailSender _emailSender;
         private readonly IPedidoVendaRepository _pedidoVendaRepository;
         private readonly IPedidoItemRepository _pedidoItemRepository;
         private readonly IMapper _mapper;
         public OrderController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper
             , RoleManager<IdentityRole> roleManager,
-            IGenericRepository<Employee> genericEmployeeService, IPedidoVendaRepository pedidoVendaRepository, IPedidoItemRepository pedidoItemRepository)
+            IGenericRepository<Employee> genericEmployeeService, IEmailSender emailSender, IPedidoVendaRepository pedidoVendaRepository, IPedidoItemRepository pedidoItemRepository)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
             _roleManager = roleManager;
+            _emailSender = emailSender;
             _genericCompanyService = genericCompanyService;
             _genericEmployeeService = genericEmployeeService;
             _pedidoVendaRepository = pedidoVendaRepository;
@@ -94,12 +97,24 @@ namespace Bomix_Force.Controllers
             orderView.Item = item;
             return PartialView("_orderDetailsPartial", orderView);
         }
-
+        // Get: OrderController/Duplicate/5
+        public async Task<ActionResult> Duplicate(OrderViewModel order)
+        {
+         
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                //Person person = _genericPersonService.Get(u => u.Id.ToString() == user).First();
+                //Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
+                await _emailSender.SendEmailAsync("rubemdealmeida@hotmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {order.Pedido}");
+                return RedirectToAction(nameof(Index));
+            
+        
+        }
         // GET: OrderController/Create
         public ActionResult Create()
         {
             return View();
         }
+
 
         // POST: OrderController/Create
         [HttpPost]

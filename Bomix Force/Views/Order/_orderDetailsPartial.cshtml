@@ -13,6 +13,7 @@
                     {
                         <div class="card border border-primary mt-2">
                             <div class="card-body">
+                                
                                 <h6 class="card-title"><strong>Produto: @item.C6_Recno </strong></h6>
                                 <p class="card-text"><strong>Quantidade: @item.Quantidade</strong></p>
                                 <p class="card-text"><strong>Stauts: @item.Arte</strong> </p>
@@ -22,9 +23,12 @@
                     }
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
-            </div>
+            <form method="post"  asp-controller="Order" asp-action="Duplicate">
+                <div class="modal-footer">
+                    <input type="hidden" asp-for="@Model.Pedido">
+                    <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
+                </div>
+            </form>
         </div>
 
     </div>

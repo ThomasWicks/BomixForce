@@ -82,20 +82,20 @@
                 @if(@item.Status == "ENCERRADO"){
                 <th class="mt-2 badge bg-danger">
 
-                    @item.Status
+                    Encerrado
                 </th>
                     
                 }else if(@item.Status == "ABERTO"){
                 <th class="mt-2 badge bg-primary">
-                    @item.Status
+                    Aberto
                 </th>
                 }else if(@item.Status == "LIBERADO"){
                 <th class="mt-2 badge bg-success">
-                    @item.Status
+                    Liberado
                 </th>
                 }else if(@item.Status == "ORCAMENTO"){
                 <th class="mt-2 badge bg-warning">
-                    @item.Status
+                    Orçamento
                 </th>
                 }else{
                 <th class="mt-2 badge bg-secondary">
@@ -107,6 +107,7 @@
                 </th>
             </tr>
                 }
+    <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, filter = ViewBag.filter, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
             }
             else
             {
@@ -118,7 +119,6 @@
             }
         </tbody>
     </table>
-    <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, filter = ViewBag.filter, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
 </div>
 
 

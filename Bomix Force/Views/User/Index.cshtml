@@ -73,6 +73,7 @@
                 @Html.DisplayFor(modelItem => item.Company.Name)
                 @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
                 }
+        <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
             }
             else
             {
@@ -83,7 +84,6 @@
                 </tr>
             }
         </div>
-        <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
 
 
 

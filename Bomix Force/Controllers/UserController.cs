@@ -56,7 +56,7 @@ namespace Bomix_Force.Controllers
             ViewBag.searchString = searchString;
             int page = (pageNumber ?? 1);
             List<UserViewModel> userView = new List<UserViewModel>();
-            if (User.IsInRole("Admin")|| User.IsInRole("Employee"))
+            if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
                 List<Employee> employees = _genericEmployeeService.GetAll().ToList();
                 List<Person> people = _genericPersonService.GetAll().ToList();
@@ -73,7 +73,7 @@ namespace Bomix_Force.Controllers
 
                 IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == company.Id);
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
-         
+
                 foreach (var item in userView)
                 {
                     item.Company = company;
@@ -203,10 +203,16 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
                 _genericPersonService.Save();
+                if (User.IsInRole("Company"))
+                {
+                    Company company = _genericCompanyService.Get(c => c.IdentityUserId == user).First();
+                    await _emailSender.SendEmailAsync("rubemdealmeida@hotmail.com", "Usuário Editado", "O Usuário " + newperson.Name + " foi editado pela companhia " + company.Name);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception x)
