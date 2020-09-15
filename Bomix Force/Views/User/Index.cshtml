@@ -1,113 +1,134 @@
 ﻿@using X.PagedList.Mvc.Core
 @model X.PagedList.PagedList<Bomix_Force.ViewModels.UserViewModel>
-    @{
-        ViewData["Title"] = "Index";
+@{
+    ViewData["Title"] = "Index";
+}
+<div id="PlaceHolderHere"></div>
+
+
+
+<div class="clearfix mx-5">
+    @if (User.IsInRole("Employee"))
+    {
+        <p>
+            <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
+            <text class="pagina-atual">Clientes</text>
+        </p>
     }
-    <div id="PlaceHolderHere"></div>
+    else if (User.IsInRole("Company"))
+    {
+        <p>
+            <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
+            <text class="pagina-atual">Funcionários</text>
+        </p>
+    }
+    else
+    {
+        <p>
+            <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
+            <text class="pagina-atual">Usuários</text>
+        </p>
+    }
+    @if (User.IsInRole("Company") || User.IsInRole("Admin"))
+    {
+        <a class="d-flex flex-row-reverse">
 
-    <div class="clearfix mx-5">
-        <h2 class="mt-3">Usuário</h2>
-        @if (User.IsInRole("Company")|| User.IsInRole("Admin"))
+            <span class="p-2 btn btn-primary btn-lg" id="createModal" data-url="@Url.Action("Create")" data-target="#CreateUserModal">Cadastrar</span>
+        </a>
+    }
+    <b>Procurar por:</b>
+    @using (Html.BeginForm())
+    {
+        <form id="typeSearch" asp-controller="User" asp-action="Index">
+            <div class="row ml-1 mt-3">
+                <select id="selectType" class="form-control col-6 mr-5" name="selectType">
+                    <option value="Name">Nome</option>
+                    <option value="Setor">Setor</option>
+                    <option value="Cargo">Cargo</option>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        < option value = "Company" > Companhia </ option >
+                    }
+                </select>
+                @Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
+            </div>
+        </form>
+    }
+
+
+
+
+    <div class="row">
+        @if (@Model?.Count() > 0)
         {
-            <a class="d-flex flex-row-reverse">
-
-                <span class="p-2 btn btn-primary btn-lg" id="createModal" data-url="@Url.Action("Create")" data-target="#CreateUserModal">Cadastrar</span>
-            </a>
-        }
-        <b>Procurar por:</b>
-        @using (Html.BeginForm())
-        {
-            <form id="typeSearch" asp-controller="User" asp-action="Index">
-                <div class="row ml-1 mt-3">
-                    <select id="selectType" class="form-control col-6 mr-5" name="selectType">
-                        <option value="Name">Nome</option>
-                        <option value="Setor">Setor</option>
-                        <option value="Cargo">Cargo</option>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            < option value = "Company" > Companhia </ option >
-                        }
-                    </select>
-                    @Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
-                </div>
-            </form>
-        }
-
-
-
-
-        <div class="row">
-            @if (@Model?.Count() > 0)
+            foreach (var item in @Model)
             {
-                foreach (var item in @Model)
-                {
-                    <div class="col-sm-4 mt-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title text-dark"><strong>@Html.DisplayFor(modelItem => item.Name)</strong></h5>
-                                <p class="mb-0">Email:</p>
-                                <h6 class="card-text">@Html.DisplayFor(modelItem => item.Email)</h6>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
-                                {
-                                <p class="mb-0">Telefone:</p>
-                                <h6 class="card-text">@Html.DisplayFor(modelItem => item.PhoneNumber)</h6>
-                                }
-                                else
-                                {
-                                    <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
-                                    <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
+                <div class="col-sm-4 mt-3">
+                    <div class="card-white">
+                        <div class="card-body">
+                            <p class="title-card-white">@Html.DisplayFor(modelItem => item.Name)</p>
+                            <p class="info-card-white">Email: @Html.DisplayFor(modelItem => item.Email)</p>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                            {
+                                <p class="info-card-white">Telefone: @Html.DisplayFor(modelItem => item.PhoneNumber)</p>
+                                <p class="info-card-white">CNPJ: @Html.DisplayFor(modelItem => item.Company.Cnpj)</p>
+                            }
+                            else
+                            {
+                                <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
+                                <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
 
-                                }
-    
-                            </div>
-                            <div class="card-footer bg-dark">
-                                <button class="btn float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x text-light"></i></button>
-                                @*@Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })*@
-                            </div>
+                            }
 
                         </div>
-                    </div>
+                        <!--<div class="card-footer bg-dark">
+                            <button class="btn float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x text-light"></i></button>-->
+                            @*@Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })*@
+                        <!--</div>-->
 
-                    <!-- @Html.DisplayFor(modelItem => item.Name)
+                    </div>
+                </div>
+
+                <!-- @Html.DisplayFor(modelItem => item.Name)
 
                 @Html.DisplayFor(modelItem => item.Email)
 
                 @Html.DisplayFor(modelItem => item.Company.Name)
                 @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
-                }
-        <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
             }
-            else
-            {
-                <tr>
-                    <td>
-                        <h6>Não foi possível achar as informações do usuário.</h6>
-                    </td>
-                </tr>
-            }
-        </div>
-
-
-
+            <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
+        }
+        else
+        {
+            <tr>
+                <td>
+                    <h6>Não foi possível achar as informações do usuário.</h6>
+                </td>
+            </tr>
+        }
     </div>
 
-    <style>
-    .cardss {
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  max-height: inherit;
-  /*min-width: 250px;*/
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
-}
 
-        .blue {
-            color: #007bff;
-        }
-    </style>
+
+</div>
+
+<style>
+    .cardss {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        max-height: inherit;
+        /*min-width: 250px;*/
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+    }
+
+    .blue {
+        color: #007bff;
+    }
+</style>

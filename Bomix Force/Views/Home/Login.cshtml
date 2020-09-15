@@ -1,8 +1,7 @@
 ﻿
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Home";
 }
-@*<a>@User.IsInRole("User")</a>*@
 
 <div class="row justify-content-md-center">
     <div class="col-5 col-lg-2 col-sm-6 col-md-2 col-xl-2 py-3 px-3 mt-5 ml-5">
@@ -10,8 +9,19 @@
             <a class="text-white" href="@Url.Action("Index", "User")">
                 <div class="card-body text-center">
                     @*--imagem do card--*@
-                    <img src="~/Assets/users.png" />    
-                    <h6 class="card-title">Usuários</h6>
+                    <img src="~/Assets/users.png" />
+                    @if (User.IsInRole("Employee"))
+                    {
+                        <p class="text-label-menu">Clientes</p>
+                    }
+                    else if (User.IsInRole("Company"))
+                    {
+                        <p class="text-label-menu">Funcionários</p>
+                    }
+                    else
+                    {
+                        <p class="text-label-menu">Usuários</p>
+                    }
                 </div>
             </a>
         </div>
@@ -20,8 +30,8 @@
         <div class="sheet-menu">
             <a class="text-white" href="@Url.Action("Index", "Order")">
                 <div class="card-body text-center">
-                    <img src="~/Assets/bag.png" />
-                    <h6 class="card-title">Pedidos</h6>
+                    <img src="~/Assets/bag.png"/>
+                    <p class="text-label-menu" style="margin-top:15px">Pedidos</p>
                 </div>
             </a>
         </div>
@@ -33,7 +43,7 @@
             <a class="text-white" href="@Url.Action("Index", "User")">
                 <div class="card-body text-center">
                     <img src="~/Assets/warning.png" />
-                    <h6 class="card-title">Não conformidade</h6>
+                    <p class="text-label-menu" style="width:101%">Não conformidade</p>
                 </div>
             </a>
         </div>
@@ -43,7 +53,7 @@
             <a class="text-white" href="@Url.Action("Index", "User")">
                 <div class="card-body text-center">
                     <img src="~/Assets/doc.png" />
-                    <h6 class="card-title">Documentos</h6>
+                    <p class="text-label-menu">Documentos</p>
                 </div>
             </a>
         </div>
@@ -55,7 +65,7 @@
             <a class="text-white" href="@Url.Action("Index", "User")">
                 <div class="card-body text-center">
                     <img src="~/Assets/phone.png" />
-                    <h6 class="card-title">Contato</h6>
+                    <p class="text-label-menu" style="margin-top:10px">Contato</p>
                 </div>
             </a>
         </div>
