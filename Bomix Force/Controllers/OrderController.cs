@@ -104,7 +104,7 @@ namespace Bomix_Force.Controllers
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 //Person person = _genericPersonService.Get(u => u.Id.ToString() == user).First();
                 //Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
-                await _emailSender.SendEmailAsync("rubemdealmeida@hotmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {order.Pedido}");
+                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {order.Pedido}");
                 return RedirectToAction(nameof(Index));
             
         
