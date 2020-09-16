@@ -50,9 +50,8 @@ namespace Bomix_Force.Controllers
         }
         [Authorize]
         // GET: UserController
-        public ActionResult Index(string selectType, string searchString, int? pageNumber)
+        public ActionResult Index(string searchString, int? pageNumber)
         {
-            ViewBag.selectType = selectType;
             ViewBag.searchString = searchString;
             int page = (pageNumber ?? 1);
             List<UserViewModel> userView = new List<UserViewModel>();
@@ -64,6 +63,15 @@ namespace Bomix_Force.Controllers
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
                 userView.AddRange(_mapper.Map<IEnumerable<UserViewModel>>(people).ToList());
                 userView.AddRange(_mapper.Map<IEnumerable<UserViewModel>>(employees).ToList());
+                if (!String.IsNullOrEmpty(searchString))
+                {
+
+                    var userViewCompany = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewTel = userView.Where(s => s.PhoneNumber.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
+                    userView = userViewCompany.Union(userViewTel).Union(userViewEmail).ToList();
+
+                }
 
             }
             else if (User.IsInRole("Company"))
@@ -78,31 +86,23 @@ namespace Bomix_Force.Controllers
                 {
                     item.Company = company;
                 }
+                if (!String.IsNullOrEmpty(searchString))
+                {
+
+                    var userViewName = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewCargo = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewSetor = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
+                    userView = userViewName.Union(userViewCargo).Union(userViewSetor).Union(userViewEmail).Union(userViewName).ToList();
+
+                }
             }
             else if (User.IsInRole("User"))
             {
                 //todo user can't see user page
                 return View();
             }
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                if (selectType == "Name")
-                {
-                    userView = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                }
-                else if (selectType == "Company")
-                {
-                    userView = userView.Where(s => s.Company.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                }
-                else if (selectType == "Cargo")
-                {
-                    userView = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
-                }
-                else if (selectType == "Setor")
-                {
-                    userView = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
-                }
-            }
+         
             var userList = userView.ToPagedList(page, 9);
             return View(userList);
         }

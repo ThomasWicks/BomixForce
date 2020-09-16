@@ -13,10 +13,10 @@
     {
         <form id="typeSearch" asp-controller="Order" asp-action="Index">
             <div class="row ml-1 mt-3">
-                <select id="selectType" class="form-control col-6 mr-5" name="selectType">
+                @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
                     <option value="nOrder">Número pedido</option>
                     <option value="status">Status</option>
-                </select>
+                </select>*@
                 @Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
             </div>
         </form>
@@ -118,7 +118,7 @@
 
                         </tr>
                     }
-                    <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, filter = ViewBag.filter, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
+                    <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, filter = ViewBag.filter, searchString = ViewBag.searchString}))</div>
                 }
                 else
                 {

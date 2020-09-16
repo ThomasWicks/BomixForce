@@ -43,7 +43,7 @@ namespace Bomix_Force.Controllers
             _pedidoItemRepository = pedidoItemRepository;
         }
         // GET: OrderController
-        public ActionResult Index(string filter, string searchString, int? pageNumber, string selectType)
+        public ActionResult Index(string filter, string searchString, int? pageNumber)
         {
             int page = (pageNumber ?? 1);
             try
@@ -52,16 +52,19 @@ namespace Bomix_Force.Controllers
                 List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
 
                 ViewBag.filter = filter;
-                ViewBag.selectType = selectType;
                 ViewBag.searchString = searchString;
 
                 IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    if (selectType == "nOrder")
-                        orderView = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower()));
-                    else if (selectType == "status")
-                        orderView = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower()));
+
+                    var orderViewPedido = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewEmissao = orderView.Where(o => o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewStatus = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
+                    orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewCidade).Union(orderViewStatus).Union(orderViewUF).Union(orderViewCliente).ToList();
 
                 }
                 switch (filter)
