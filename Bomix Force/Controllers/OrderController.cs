@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Bomix_Force.Data.Entities;
 using Bomix_Force.Repo.Interface;
-using X.PagedList;
 using Bomix_Force.ViewModels;
 using IEmailSender = Bomix_Force.AppServices.Interface.IEmailSender;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +14,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Bomix_Force.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.IO;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace Bomix_Force.Controllers
 {
@@ -43,9 +45,9 @@ namespace Bomix_Force.Controllers
             _pedidoItemRepository = pedidoItemRepository;
         }
         // GET: OrderController
-        public ActionResult Index(string filter, string searchString, int? pageNumber)
+        public ActionResult Index(string filter, string searchString)
         {
-            int page = (pageNumber ?? 1);
+ 
             try
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -79,7 +81,7 @@ namespace Bomix_Force.Controllers
                         break;
 
                 }
-                orderView = orderView.ToPagedList(page, 10);
+                orderView = orderView.Take(20).ToList();
                 return View(orderView);
             }
             catch (Exception ex)
@@ -132,6 +134,55 @@ namespace Bomix_Force.Controllers
             {
                 return View();
             }
+        }
+        //}
+        [HttpPost]
+        [Route("Order/InfiniteScroll")]
+        public ActionResult InfiniteScroll(int? pageNumber, int pageSize,string filter, string searchString)
+        {
+            int page = (pageNumber ?? 1);
+            try
+            {
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
+
+                ViewBag.filter= filter ;
+                ViewBag.searchString= searchString ;
+
+                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
+                if (!String.IsNullOrEmpty(searchString))
+                {
+
+                    var orderViewPedido = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewEmissao = orderView.Where(o => o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewStatus = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
+                    orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewCidade).Union(orderViewStatus).Union(orderViewUF).Union(orderViewCliente).ToList();
+
+                }
+                switch (filter)
+                {
+                    case ("EmissaoDesc"):
+                        orderView = orderView.OrderByDescending(s => s.Emissao);
+                        break;
+                    case ("EmissaoAsc"):
+                        orderView = orderView.OrderBy(s => s.Emissao);
+                        break;
+                    default:
+                        break;
+
+                }
+                orderView = orderView.Skip(page * pageSize).Take(pageSize).ToList();
+                return PartialView("_orderScrollPartial", orderView);
+            }
+            catch (Exception ex)
+            {
+                //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
+                return null;
+            }
+
         }
 
         // GET: OrderController/Edit/5

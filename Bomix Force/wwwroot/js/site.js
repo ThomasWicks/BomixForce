@@ -7,9 +7,8 @@ $(function(){
     $('button[data-toggle="edit-modal"]').click(function (event) {
         var url = $(this).data('url');
         var decodedUrl = decodeURIComponent(url)
-        console.log(url)
-        console.log(decodedUrl)
         $.get(decodedUrl).done(function (data) {
+      
             PlaceHolderHereElement.html(data);
             PlaceHolderHereElement.find('.modal').modal('show');
         })
@@ -20,7 +19,6 @@ $(function(){
         var actionUrl = form.attr('action');
         var sendData = form.serialize();
         console.log(sendData)
-        console.log(actionUrl)
 
         $.post(actionUrl, sendData).done(function (data)
         {
@@ -32,8 +30,6 @@ $(function(){
     $('#createModal').click(function (event) {
         var url = $(this).data('url');
         var decodedUrl = decodeURIComponent(url)
-        console.log(url)
-        console.log(decodedUrl)
         $.get(decodedUrl).done(function (data) {
             PlaceHolderHereElement.html(data);
             PlaceHolderHereElement.find('.modal').modal('show');
@@ -44,9 +40,6 @@ $(function(){
         var form = $(this).parent('.modal').find('form');
         var actionUrl = form.attr('action');
         var sendData = form.serialize();
-        console.log(sendData)
-        console.log(actionUrl)
-
         $.post(actionUrl, sendData).done(function (data) {
             PlaceHolderHereElement.find('.modal').modal('hide');
 
@@ -59,8 +52,6 @@ $(function(){
     $('button[data-toggle]').click(function (event) {
         var url = $(this).data('url');
         var decodedUrl = decodeURIComponent(url)
-        console.log(url)
-        console.log(decodedUrl)
         $.get(decodedUrl).done(function (data) {
             OrderDetailsElement.html(data);
             OrderDetailsElement.find('.modal').modal('show');
@@ -72,7 +63,6 @@ $(function(){
         var form = $(this).parent('.modal').find('form');
         var actionUrl = form.attr('action');
         var sendData = form.serialize();
-
         $.post(actionUrl, sendData).done(function (data) {
             PlaceHolderHereElement.find('.modal').modal('hide');
 
