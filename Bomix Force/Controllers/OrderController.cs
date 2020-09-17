@@ -45,44 +45,23 @@ namespace Bomix_Force.Controllers
             _pedidoItemRepository = pedidoItemRepository;
         }
         // GET: OrderController
-        public ActionResult Index(string filter, string searchString)
+        public static volatile List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
+        public ActionResult Index()
         {
  
             try
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
-
-                ViewBag.filter = filter;
-                ViewBag.searchString = searchString;
-
-                IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
-                if (!String.IsNullOrEmpty(searchString))
+                orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
+                List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList() ;
+                if (orders.Count == 0)
                 {
-
-                    var orderViewPedido = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewEmissao = orderView.Where(o => o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewStatus = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
-                    orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewCidade).Union(orderViewStatus).Union(orderViewUF).Union(orderViewCliente).ToList();
-
+                    return View();
                 }
-                switch (filter)
+                else
                 {
-                    case ("EmissaoDesc"):
-                        orderView = orderView.OrderByDescending(s => s.Emissao);
-                        break;
-                    case ("EmissaoAsc"):
-                        orderView = orderView.OrderBy(s => s.Emissao);
-                        break;
-                    default:
-                        break;
-
+                    return View(orderView);
                 }
-                orderView = orderView.Take(20).ToList();
-                return View(orderView);
             }
             catch (Exception ex)
             {
@@ -144,7 +123,6 @@ namespace Bomix_Force.Controllers
             try
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                List<Bomix_PedidoVenda> orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
 
                 ViewBag.filter= filter ;
                 ViewBag.searchString= searchString ;

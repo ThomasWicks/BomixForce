@@ -63,60 +63,7 @@
             <tbody id="tableOrderbody">
                 @if (Model?.Count() > 0)
                 {
-                    foreach (var item in Model)
-                    {
-                        <tr>
-                            <th class="text-center">
-                                @item.Pedido
-                            </th>
-                            <th class="text-center">
-                                @item.Cliente
-                            </th>
-                            <th class="text-center">
-                                @Html.DisplayFor(modelItem => @item.Emissao)
-                            </th>
-                            <th class="text-center">
-                                @item.Cidade - @item.UF
-                            </th>
-                            @if (@item.Status == "ENCERRADO")
-                            {
-                                <th class="mt-2 badge bg-danger">
-
-                                    Encerrado
-                                </th>
-
-                            }
-                            else if (@item.Status == "ABERTO")
-                            {
-                                <th class="mt-2 badge bg-primary">
-                                    Aberto
-                                </th>
-                            }
-                            else if (@item.Status == "LIBERADO")
-                            {
-                                <th class="mt-2 badge bg-success">
-                                    Liberado
-                                </th>
-                            }
-                            else if (@item.Status == "ORCAMENTO")
-                            {
-                                <th class="mt-2 badge bg-warning">
-                                    Orçamento
-                                </th>
-                            }
-                            else
-                            {
-                                <th class="mt-2 badge bg-secondary">
-                                    @item.Status
-                                </th>
-                            }
-
-                            <th class="text-center">
-                                <button class="btn" data-toggle="details-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Pedido}")"><i class="fas fa-info-circle fa-2x blue"></i></button>
-                            </th>
-
-                        </tr>
-                    }
+                    
                 }
                 else
                 {
@@ -126,6 +73,7 @@
                         </td>
                     </tr>
                 }
+
             </tbody>
         </table>
         <div id="loadingdiv">CARREGANDO......</div>
@@ -139,10 +87,15 @@
         $("#loadingdiv").hide();
         var filter = '@(ViewBag.filter)'
         var searchString = '@(ViewBag.searchString)'
+        var orders = '@(ViewBag.orders)'
+        var dataexist = true
+
         var inProgress = false
         currentPageNumber = 0;
+        loadData(currentPageNumber)
         $(window).scroll(function () {
-            if ($(window).scrollTop() > this.Number($("#tableOrderbody").height())*3/4  && !inProgress) {
+            dataexist = currentPageNumber * 20 <@Model.Count
+            if ($(window).scrollTop() > this.Number($("#tableOrderbody").height())*3/4  && !inProgress && dataexist ) {
                 inProgress = true;
                 currentPageNumber += 1;
                 loadData(currentPageNumber);
@@ -153,10 +106,13 @@
         function loadData(currentPage) {
             $.ajax({
                 url: 'InfiniteScroll',
-                data: { pageNumber: currentPage, pageSize: 20, filter: filter, searchString: searchString },
+                data: {
+                    pageNumber: currentPage, pageSize: 20, filter: filter, searchString: searchString
+                },
                 method: 'Post',
                 dataType: 'html',
                 success: function (data) {
+                    dataexist = data;
                     var ordertable = $('#tableOrderbody');
                     ordertable.append(data)
                     inProgress = false;
