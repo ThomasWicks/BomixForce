@@ -153,6 +153,10 @@ namespace Bomix_Force.Controllers
 
                 }
                 orderView = orderView.Skip(page * pageSize).Take(pageSize).ToList();
+                foreach(var order in orderView)
+                {
+                    order.Item=_pedidoItemRepository.GetParameters(user, order.id.ToString()).ToList();
+                }
                 return PartialView("_orderScrollPartial", orderView);
             }
             catch (Exception ex)

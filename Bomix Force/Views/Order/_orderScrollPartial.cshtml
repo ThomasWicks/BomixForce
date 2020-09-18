@@ -11,9 +11,15 @@
             <th class="text-center">
                 @item.Pedido
             </th>
+                @if (item.Item.Count>0) { 
             <th class="text-center">
-                @item.Cliente
+                @item.Item[0].C6_Recno
             </th>
+                }
+                else
+                {
+                    <th><h1>NÃO HÁ DADOS</h1></th>
+                }
             <th class="text-center">
                 @Html.DisplayFor(modelItem => @item.Emissao)
             </th>
