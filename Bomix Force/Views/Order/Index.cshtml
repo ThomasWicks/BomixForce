@@ -95,7 +95,7 @@
         loadData(currentPageNumber)
         $(window).scroll(function () {
             dataexist = currentPageNumber * 20 <@Model.Count
-            if ($(window).scrollTop() > this.Number($("#tableOrderbody").height())*3/4  && !inProgress && dataexist ) {
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 20 && !inProgress && dataexist) {
                 inProgress = true;
                 currentPageNumber += 1;
                 loadData(currentPageNumber);
