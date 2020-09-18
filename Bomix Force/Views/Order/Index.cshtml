@@ -94,7 +94,7 @@
         currentPageNumber = 0;
         loadData(currentPageNumber)
         $(window).scroll(function () {
-            dataexist = currentPageNumber * 20 <@Model.Count
+
             if ($(window).scrollTop() + $(window).height() > $(document).height() - 20 && !inProgress && dataexist) {
                 inProgress = true;
                 currentPageNumber += 1;
@@ -104,6 +104,9 @@
         }
             )
         function loadData(currentPage) {
+            if (currentPageNumber * 20 >@Model.Count) {
+                dataexist=false
+            }
             $.ajax({
                 url: 'InfiniteScroll',
                 data: {
@@ -112,7 +115,6 @@
                 method: 'Post',
                 dataType: 'html',
                 success: function (data) {
-                    
                     var ordertable = $('#tableOrderbody');
                     ordertable.append(data)
                     inProgress = false;
