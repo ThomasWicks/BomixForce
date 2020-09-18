@@ -46,11 +46,13 @@ namespace Bomix_Force.Controllers
         }
         // GET: OrderController
         public static volatile List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
-        public ActionResult Index()
+        public ActionResult Index(string searchString, string filter)
         {
  
             try
             {
+                ViewBag.filter = filter;
+                ViewBag.searchString = searchString;
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
                 List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList() ;
