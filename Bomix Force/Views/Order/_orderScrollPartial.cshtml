@@ -5,64 +5,81 @@
 
 @if (Model?.Count() > 0)
 {
+
     foreach (var item in Model)
     {
-        <tr>
-            <th class="text-center">
-                @item.Pedido
-            </th>
-                @if (item.Item.Count>0) { 
-            <th class="text-center">
-                @item.Item[0].C6_Recno
-            </th>
-                }
-                else
-                {
-                    <th><h1>NÃO HÁ DADOS</h1></th>
-                }
-            <th class="text-center">
-                @Html.DisplayFor(modelItem => @item.Emissao)
-            </th>
-            <th class="text-center">
-                @item.Cidade - @item.UF
-            </th>
-            @if (@item.Status == "ENCERRADO")
-            {
-                <th class="mt-2 badge bg-danger">
 
-                    Encerrado
-                </th>
+    <tr>
+        <th class="text-center">
+            @item.Pedido
 
-            }
-            else if (@item.Status == "ABERTO")
-            {
-                <th class="mt-2 badge bg-primary">
-                    Aberto
-                </th>
-            }
-            else if (@item.Status == "LIBERADO")
-            {
-                <th class="mt-2 badge bg-success">
-                    Liberado
-                </th>
-            }
-            else if (@item.Status == "ORCAMENTO")
-            {
-                <th class="mt-2 badge bg-warning">
-                    Orçamento
-                </th>
-            }
-            else
-            {
-                <th class="mt-2 badge bg-secondary">
-                    @item.Status
-                </th>
-            }
-
+        </th>
             <th class="text-center">
-                <button class="btn" data-toggle="details-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Pedido}")"><i class="fas fa-info-circle fa-2x blue"></i></button>
+                @item.Cliente
             </th>
+        <th class="text-center">
+            @Html.DisplayFor(modelItem => @item.Emissao)
+        </th>
+        <th class="text-center">
+            @item.Cidade - @item.UF
+        </th>
+        @if (@item.Status == "ENCERRADO")
+        {
+            <th class="mt-2 badge bg-danger">
+
+                Encerrado
+            </th>
+
+        }
+        else if (@item.Status == "ABERTO")
+        {
+            <th class="mt-2 badge bg-primary">
+                Aberto
+            </th>
+        }
+        else if (@item.Status == "LIBERADO")
+        {
+            <th class="mt-2 badge bg-success">
+                Liberado
+            </th>
+        }
+        else if (@item.Status == "ORCAMENTO")
+        {
+            <th class="mt-2 badge bg-warning">
+                Orçamento
+            </th>
+        }
+        else
+        {
+            <th class="mt-2 badge bg-secondary">
+                @item.Status
+            </th>
+        }
+        @if (User.IsInRole("User"))
+        {
+            <th>
+                <form method="post" asp-controller="Order" asp-action="Duplicate">
+                    <div class="modal-footer">
+                        <input type="hidden" asp-for="@item.Pedido">
+                        <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
+                    </div>
+                </form>
+            </th>
+        }
 
         </tr>
+        foreach (var SubItem in item.Item)
+        {
+            @if (item.Item.Count > 0)
+            {
+                <tr class="collapse bg-dark" id="collapseExample">
+                    <td class="text-center text-white" colspan="6">
+                        Quantidade: @SubItem.Quantidade  / Arte: @SubItem.Arte / Personalizado: @SubItem.Personalizacao / Tipo Registro: @SubItem.TipoRegistro
+                    </td>
+                </tr>
+            }
+        }
+
+
     }
 }

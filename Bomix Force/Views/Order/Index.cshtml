@@ -11,15 +11,22 @@
     @using (Html.BeginForm())
     {
         <form id="typeSearch" asp-controller="Order" asp-action="Index">
-            <div class="row ml-1 mt-3">
+            <div class="row mt-3">
                 @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
-                    <option value="nOrder">Número pedido</option>
-                    <option value="status">Status</option>
-                </select>*@
-                @Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
+            <option value="nOrder">Número pedido</option>
+            <option value="status">Status</option>
+        </select>*@
+                <div class="col-11">
+                    @Html.TextBox("searchString") <button class="mr-5" type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
+                </div>
+                <a class="btn btn-primary float-right mr-1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Expandir pedidos
+                </a>
             </div>
         </form>
+
     }
+
     <div class="table-responsive mt-5">
         <table id="#tableOrder" class="table table-striped">
             <thead class="thead-dark">
@@ -55,15 +62,18 @@
                     <th class="text-center">
                         Status
                     </th>
-                    <th class="text-center">
-                        Detalhes
-                    </th>
-                </tr>
+                    @if (User.IsInRole("User"))
+                    {
+                        <th class="text-center">
+                            Detalhes
+                        </th>
+                    }
+                    </tr>
             </thead>
             <tbody id="tableOrderbody">
                 @if (Model?.Count() > 0)
                 {
-                    
+
                 }
                 else
                 {
