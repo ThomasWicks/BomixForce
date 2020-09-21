@@ -1,128 +1,141 @@
 ﻿@using X.PagedList.Mvc.Core
-@model X.PagedList.PagedList<Bomix_Force.ViewModels.OrderViewModel>
+@model List<Bomix_Force.ViewModels.OrderViewModel>
 
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewData["Title"] = "Index";
 }
 <div id="OrderDetailsHere"></div>
 <div class="clearfix mx-5">
     <h2 class="mt-3">Pedidos</h2>
-        <b>Procurar por:</b>
-        @using (Html.BeginForm())
-        {
-            <form  id="typeSearch" asp-controller="Order" asp-action="Index">
-                <div class="row ml-1 mt-3">
-                    <select id="selectType" class="form-control col-6 mr-5" name="selectType">
-                        <option value="nOrder">Número pedido</option>
-                        <option value="status">Status</option>
-                    </select>
-                    @Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
+    <b>Procurar por:</b>
+    @using (Html.BeginForm())
+    {
+        <form id="typeSearch" asp-controller="Order" asp-action="Index">
+            <div class="row mt-3">
+                @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
+            <option value="nOrder">Número pedido</option>
+            <option value="status">Status</option>
+        </select>*@
+                <div class="col-11">
+                    @Html.TextBox("searchString") <button class="mr-5" type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
                 </div>
-            </form>
-        }
-<div class="table-responsive mt-5">
-    <table class="table table-striped">
-        <thead class="thead-dark">
+                <a class="btn btn-primary float-right mr-1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Expandir pedidos
+                </a>
+            </div>
+        </form>
 
-            <tr>
+    }
 
-                <th class="text-center">
-                    Numero Pedido
-                </th>
-                <th class="text-center">
-                    Cliente
-                </th>
-                <th class="text-center">
-                    Emissão
-                    @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
-                    @if (ViewBag.filter == "EmissaoAsc")
-                    {
-                        <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
-                    }
-                    @if (ViewBag.filter != "EmissaoAsc")
-                    {
-                        <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
-                    }
+    <div class="table-responsive mt-5">
+        <table id="#tableOrder" class="table table-striped">
+            <thead class="thead-dark">
 
-                    @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
-                    @*<span class="glyphicon glyphicon-menu-up"></span>*@ @*Botão virado pra cima*@
-                    @*<span class="glyphicon glyphicon-menu-down"></span>*@ @*Botão virado pra baixo*@
-                </th>
-          
-                <th class="text-center">
-                    Cidade - UF
-                </th>
-                <th class="text-center">
-                    Status
-                </th>
-                <th class="text-center">
-                    Detalhes
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model?.Count() > 0)
-            {
-                foreach (var item in Model)
-                {
-            <tr>
-                <th class="text-center">
-                    @item.Pedido
-                </th>
-                <th class="text-center">
-                    @item.Cliente
-                </th>
-                <th class="text-center">
-                    @item.Emissao
-                </th>
-                <th class="text-center">
-                    @item.Cidade - @item.UF
-                </th>
-                @if(@item.Status == "ENCERRADO"){
-                <th class="mt-2 badge bg-danger">
-
-                    Encerrado
-                </th>
-                    
-                }else if(@item.Status == "ABERTO"){
-                <th class="mt-2 badge bg-primary">
-                    Aberto
-                </th>
-                }else if(@item.Status == "LIBERADO"){
-                <th class="mt-2 badge bg-success">
-                    Liberado
-                </th>
-                }else if(@item.Status == "ORCAMENTO"){
-                <th class="mt-2 badge bg-warning">
-                    Orçamento
-                </th>
-                }else{
-                <th class="mt-2 badge bg-secondary">
-                    @item.Status
-                </th>
-                }
-                <th class="text-center">
-                    <button class="btn" data-toggle="details-modal" data-target="#detailsOrder" data-url="@Url.Action($"Details/{item.Pedido}")"><i class="fas fa-info-circle fa-2x blue"></i></button>
-                </th>
-            </tr>
-                }
-    <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, filter = ViewBag.filter, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
-            }
-            else
-            {
                 <tr>
-                    <td>
-                        <h6>Não há pedidos cadastrados.</h6>
-                    </td>
-                </tr>
+
+                    <th class="text-center">
+                        Numero Pedido
+                    </th>
+                    <th class="text-center">
+                        Cliente
+                    </th>
+                    <th class="text-center">
+                        Emissão
+                        @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
+                        @if (ViewBag.filter == "EmissaoAsc")
+                        {
+                            <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
+                        }
+                        @if (ViewBag.filter != "EmissaoAsc")
+                        {
+                            <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
+                        }
+
+                        @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
+                        @*<span class="glyphicon glyphicon-menu-up"></span>*@ @*Botão virado pra cima*@
+                        @*<span class="glyphicon glyphicon-menu-down"></span>*@ @*Botão virado pra baixo*@
+                    </th>
+
+                    <th class="text-center">
+                        Cidade - UF
+                    </th>
+                    <th class="text-center">
+                        Status
+                    </th>
+                    @if (User.IsInRole("User"))
+                    {
+                        <th class="text-center">
+                            Detalhes
+                        </th>
+                    }
+                    </tr>
+            </thead>
+            <tbody id="tableOrderbody">
+                @if (Model?.Count() > 0)
+                {
+
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <h6>Não há pedidos cadastrados.</h6>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <div id="loadingdiv">CARREGANDO......</div>
+    </div>
+
+
+</div>
+<script src="~/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#loadingdiv").hide();
+        var filter = '@(ViewBag.filter)'
+        var searchString = '@(ViewBag.searchString)'
+        var orders = '@(ViewBag.orders)'
+        var dataexist = true
+
+        var inProgress = false
+        currentPageNumber = 0;
+        loadData(currentPageNumber)
+        $(window).scroll(function () {
+
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 20 && !inProgress && dataexist) {
+                inProgress = true;
+                currentPageNumber += 1;
+                loadData(currentPageNumber);
+                $("#loadingdiv").show();
             }
-        </tbody>
-    </table>
-</div>
+        }
+            )
+        function loadData(currentPage) {
+            if (currentPageNumber * 20 >@Model.Count) {
+                dataexist=false
+            }
+            $.ajax({
+                url: 'InfiniteScroll',
+                data: {
+                    pageNumber: currentPage, pageSize: 20, filter: filter, searchString: searchString
+                },
+                method: 'Post',
+                dataType: 'html',
+                success: function (data) {
+                    var ordertable = $('#tableOrderbody');
+                    ordertable.append(data)
+                    inProgress = false;
+                    $("#loadingdiv").hide();
+                }
+            })
+        }
+    })
+</script>
 
 
-</div>
 
 <style lang="scss" scoped>
     .badge {
@@ -132,6 +145,7 @@
         font-weight: 500;
         border-radius: 25px;
     }
+
     .blue {
         color: #007bff;
     }
