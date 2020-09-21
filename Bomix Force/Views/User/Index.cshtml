@@ -36,13 +36,13 @@
             <span class="p-2 btn btn-primary btn-lg" id="createModal" data-url="@Url.Action("Create")" data-target="#CreateUserModal">Cadastrar</span>
         </a>
     }
-    <b>Procurar por:</b>
+    <text class="pagina-atual">Procurar por:</text>
     @using (Html.BeginForm())
     {
         <form id="typeSearch" asp-controller="User" asp-action="Index">
             <div class="row ml-1 mt-3">
-                <select id="selectType" class="form-control col-6 mr-5" name="selectType">
-                    <option value="Name">Nome</option>
+                <select id="selectType" class="-dropdown background-color-dropdown col-6 mr-5" name="selectType">
+                    <option value="Name" >Nome</option>
                     <option value="Setor">Setor</option>
                     <option value="Cargo">Cargo</option>
                     @if (User.IsInRole("Admin"))
@@ -50,7 +50,11 @@
                         < option value = "Company" > Companhia </ option >
                     }
                 </select>
-                @Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar"> <i class="fas fa-search"></i></button>
+                @*@Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar" > <i class="search fas fa-search"></i></button>*@
+                <div class="search">
+                    <img src="~/Assets/ic_search.png" style="margin-left: 3px;"/>
+                    <input id="searchString" class="input-search" name="searchString" type="text" value="" placeholder="Pesquisar" />
+                </div>
             </div>
         </form>
     }
@@ -96,7 +100,7 @@
                 @Html.DisplayFor(modelItem => item.Company.Name)
                 @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
             }
-            <div class="float-right">@Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType, @class = "float-right" }))</div>
+            @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType }))   
         }
         else
         {
