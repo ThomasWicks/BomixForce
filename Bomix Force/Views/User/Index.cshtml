@@ -41,7 +41,7 @@
     {
         <form id="typeSearch" asp-controller="User" asp-action="Index">
             <div class="row ml-1 mt-3">
-                <select id="selectType" class="-dropdown background-color-dropdown col-6 mr-5" name="selectType">
+                @*<select id="selectType" class="-dropdown background-color-dropdown col-6 mr-5" name="selectType">
                     <option value="Name" >Nome</option>
                     <option value="Setor">Setor</option>
                     <option value="Cargo">Cargo</option>
@@ -49,11 +49,11 @@
                     {
                         < option value = "Company" > Companhia </ option >
                     }
-                </select>
-                @*@Html.TextBox("searchString") <button type="submit" id="SearchBtn" value="Procurar" > <i class="search fas fa-search"></i></button>*@
+                </select>*@
+                @* <button type="submit" id="SearchBtn" value="Procurar" > <i class="search fas fa-search"></i></button>*@
                 <div class="search">
-                    <img src="~/Assets/ic_search.png" style="margin-left: 3px;"/>
-                    <input id="searchString" class="input-search" name="searchString" type="text" value="" placeholder="Pesquisar" />
+                    <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
+                    @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
                 </div>
             </div>
         </form>
@@ -100,7 +100,15 @@
                 @Html.DisplayFor(modelItem => item.Company.Name)
                 @Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit" }) -->
             }
-            @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType }))   
+            @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, typeSearch = ViewBag.typeSearch, selectType = ViewBag.selectType }),
+           new X.PagedList.Mvc.Core.Common.PagedListRenderOptions()
+           {
+               ContainerDivClasses = new[] { "container-pagination" },
+               LiElementClasses = new [] { "page-item" },
+               PageClasses = new[] { "attributes-pag" },
+               MaximumPageNumbersToDisplay = 4,
+               ActiveLiElementClass = "page-active"
+           })   
         }
         else
         {
@@ -116,23 +124,3 @@
 
 </div>
 
-<style>
-    .cardss {
-        position: relative;
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        max-height: inherit;
-        /*min-width: 250px;*/
-        word-wrap: break-word;
-        background-color: #fff;
-        background-clip: border-box;
-        border: 1px solid rgba(0, 0, 0, 0.125);
-        border-radius: 0.25rem;
-    }
-
-    .blue {
-        color: #007bff;
-    }
-</style>
