@@ -36,7 +36,6 @@
             <span class="p-2 btn btn-primary btn-lg" id="createModal" data-url="@Url.Action("Create")" data-target="#CreateUserModal">Cadastrar</span>
         </a>
     }
-    <text class="pagina-atual">Procurar por:</text>
     @using (Html.BeginForm())
     {
         <form id="typeSearch" asp-controller="User" asp-action="Index">
@@ -70,6 +69,15 @@
                 <div class="col-sm-4 mt-3">
                     <div class="card-white">
                         <div class="card-body">
+                            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                            {
+                                <img style="float: right;" src="~/Assets/ic_info_square.png" />
+                            }
+                            else
+                            {
+                                <img style="float: right;" src="~/Assets/ic_edit.png" />
+                                <img style="float: right;" src="~/Assets/ic_remove.png" />
+                            }
                             <p class="title-card-white">@Html.DisplayFor(modelItem => item.Name)</p>
                             <p class="info-card-white">Email: @Html.DisplayFor(modelItem => item.Email)</p>
                             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
