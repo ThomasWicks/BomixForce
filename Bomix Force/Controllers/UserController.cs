@@ -199,10 +199,12 @@ namespace Bomix_Force.Controllers
         }
         // POST: UserController/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(UserViewEdit userviewEdit)
+        public async Task<ActionResult> Edit(UserViewEdit userviewEdit, string selectCargo, string selectSetor)
         {
             try
             {
+                userviewEdit.Cargo = selectCargo;
+                userviewEdit.Setor = selectSetor;
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
