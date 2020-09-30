@@ -53,6 +53,7 @@ namespace Bomix_Force.Controllers
         public ActionResult Index(string searchString, int? pageNumber)
         {
             ViewBag.searchString = searchString;
+            ViewBag.indexEmployees = false;
             int page = (pageNumber ?? 1);
             List<UserViewModel> userView = new List<UserViewModel>();
             if (User.IsInRole("Admin") || User.IsInRole("Employee"))
@@ -102,6 +103,35 @@ namespace Bomix_Force.Controllers
          
             var userList = userView.ToPagedList(page, 9);
             return View(userList);
+        }
+        public ActionResult indexEmployees(int id, string searchString, int? pageNumber)
+        {
+            int page = (pageNumber ?? 1);
+            ViewBag.searchString = searchString;
+            ViewBag.indexEmployeeID = id;
+            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            Company company = _genericCompanyService.Get(c => c.Id == id).First();
+            IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId ==id);
+            List<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
+            ViewBag.indexEmployees = true;
+            foreach (var item in userView)
+            {
+                item.Company = company;
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+
+                var userViewName = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                var userViewCargo = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
+                var userViewSetor = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
+                var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
+                userView = userViewName.Union(userViewCargo).Union(userViewSetor).Union(userViewEmail).Union(userViewName).ToList();
+
+            }
+            var userList = userView.ToPagedList(page, 9);
+            return View(nameof(Index), userList);
+
+
         }
 
         // GET: UserController/Details/5
