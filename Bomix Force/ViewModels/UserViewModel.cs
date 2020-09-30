@@ -53,32 +53,7 @@ namespace Bomix_Force.ViewModels
         [Required]
         public string Setor { get; set; }
         public Company Company { get; set; }
-        public List<SelectListItem> Setores { get; } = new List<SelectListItem>
-        {
-            new SelectListItem { Value = "Propriétario", Text = "Propriétario" },
-            new SelectListItem { Value = "Diretor", Text = "Diretor" },
-            new SelectListItem { Value = "Gerente", Text = "Gerente"  },
-            new SelectListItem { Value = "Coordenador", Text = "Coordenador"  },
-            new SelectListItem { Value = "Supervisor", Text = "Supervisor"  },
-            new SelectListItem { Value = "Analista", Text = "Analista"  },
-            new SelectListItem { Value = "Assistente/Secretária", Text = "Assistente/Secretária"  },
-            new SelectListItem { Value = "Genérico Industrial", Text = "Genérico Industrial"  },
-            new SelectListItem { Value = "Genérico ADM", Text = "Genérico ADM"  },
-        };
-        public List<SelectListItem> Cargos { get; } = new List<SelectListItem>
-        {
-            new SelectListItem { Value = "Comercial", Text = "Comercial" },
-            new SelectListItem { Value = "PCP/S$OP", Text = "PCP/S$OP" },
-            new SelectListItem { Value = "Qualidade", Text = "Qualidade"  },
-            new SelectListItem { Value = "Compras", Text = "Compras"  },
-            new SelectListItem { Value = "Suprimentos", Text = "Suprimentos"  },
-            new SelectListItem { Value = "Genérico Industrial", Text = "Genérico Industrial"  },
-            new SelectListItem { Value = "Genérico ADM", Text = "Genérico ADM"  },
-            new SelectListItem { Value = "Produção", Text = "Produção"  },
-            new SelectListItem { Value = "Financeiro", Text = "Financeiro"  },
-            new SelectListItem { Value = "Logística", Text = "Logística"  },
-            new SelectListItem { Value = "Marketing", Text = "Marketing"  },
-        };
+        public string Cnpj { get; set; }
     }
     public class UserViewEdit
     {
@@ -104,31 +79,5 @@ namespace Bomix_Force.ViewModels
         public int? CompanyId { get; set; }
 
 
-        public List<SelectListItem> Setores { get; } = new List<SelectListItem>
-        {
-            new SelectListItem { Value = "Propriétario", Text = "Propriétario" },
-            new SelectListItem { Value = "Diretor", Text = "Diretor" },
-            new SelectListItem { Value = "Gerente", Text = "Gerente"  },
-            new SelectListItem { Value = "Coordenador", Text = "Coordenador"  },
-            new SelectListItem { Value = "Supervisor", Text = "Supervisor"  },
-            new SelectListItem { Value = "Analista", Text = "Analista"  },
-            new SelectListItem { Value = "Assistente/Secretária", Text = "Assistente/Secretária"  },
-            new SelectListItem { Value = "Genérico Industrial", Text = "Genérico Industrial"  },
-            new SelectListItem { Value = "Genérico ADM", Text = "Genérico ADM"  },
-        };
-        public List<SelectListItem> Cargos { get; } = new List<SelectListItem>
-        {
-            new SelectListItem { Value = "Comercial", Text = "Comercial" },
-            new SelectListItem { Value = "PCP/S$OP", Text = "PCP/S$OP" },
-            new SelectListItem { Value = "Qualidade", Text = "Qualidade"  },
-            new SelectListItem { Value = "Compras", Text = "Compras"  },
-            new SelectListItem { Value = "Suprimentos", Text = "Suprimentos"  },
-            new SelectListItem { Value = "Genérico Industrial", Text = "Genérico Industrial"  },
-            new SelectListItem { Value = "Genérico ADM", Text = "Genérico ADM"  },
-            new SelectListItem { Value = "Produção", Text = "Produção"  },
-            new SelectListItem { Value = "Financeiro", Text = "Financeiro"  },
-            new SelectListItem { Value = "Logística", Text = "Logística"  },
-            new SelectListItem { Value = "Marketing", Text = "Marketing"  },
-        };
     }
 }

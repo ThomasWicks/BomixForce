@@ -40,16 +40,6 @@
     {
         <form id="typeSearch" asp-controller="User" asp-action="Index">
             <div class="row ml-1 mt-3">
-                @*<select id="selectType" class="-dropdown background-color-dropdown col-6 mr-5" name="selectType">
-                    <option value="Name" >Nome</option>
-                    <option value="Setor">Setor</option>
-                    <option value="Cargo">Cargo</option>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        < option value = "Company" > Companhia </ option >
-                    }
-                </select>*@
-                @* <button type="submit" id="SearchBtn" value="Procurar" > <i class="search fas fa-search"></i></button>*@
                 <div class="search">
                     <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
                     @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
@@ -83,7 +73,7 @@
                             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                             {
                                 <p class="info-card-white">Telefone: @Html.DisplayFor(modelItem => item.PhoneNumber)</p>
-                                <p class="info-card-white">CNPJ: @Html.DisplayFor(modelItem => item.Company.Cnpj)</p>
+                                <p class="info-card-white">CNPJ: @Html.DisplayFor(modelItem => item.Cnpj)</p>
                             }
                             else
                             {

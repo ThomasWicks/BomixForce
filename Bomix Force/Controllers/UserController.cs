@@ -57,12 +57,9 @@ namespace Bomix_Force.Controllers
             List<UserViewModel> userView = new List<UserViewModel>();
             if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
-                List<Employee> employees = _genericEmployeeService.GetAll().ToList();
-                List<Person> people = _genericPersonService.GetAll().ToList();
+
                 List<Company> Company = _genericCompanyService.GetAll().ToList();
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
-                userView.AddRange(_mapper.Map<IEnumerable<UserViewModel>>(people).ToList());
-                userView.AddRange(_mapper.Map<IEnumerable<UserViewModel>>(employees).ToList());
                 if (!String.IsNullOrEmpty(searchString))
                 {
 
