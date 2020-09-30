@@ -210,18 +210,11 @@ namespace Bomix_Force.Controllers
         [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
-            if (User.IsInRole("Company"))
-            {
+     
                 Person person = _genericPersonService.Get(u => u.Id == id).First();
                 UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(person);
                 return PartialView("_userModelPartial", userViewEdit);
-            }
-            else if (User.IsInRole("Employee") || User.IsInRole("Admin"))
-            {
-                Company company = _genericCompanyService.Get(u => u.Id == id).First();
-                UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(company);
-                return PartialView("_userModelPartial", userViewEdit);
-            }
+       
             return RedirectToAction(nameof(Index));
         }
         // POST: UserController/Edit/5

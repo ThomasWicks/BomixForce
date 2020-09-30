@@ -60,7 +60,7 @@
                 <div class="col-sm-4 mt-3">
                     <div class="card-white">
                         <div class="card-body">
-                            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                            @if (!ViewBag.indexEmployees && (User.IsInRole("Admin") || User.IsInRole("Employee")))
                             {
                             <form method="post" asp-controller="User" asp-action="indexEmployees">
                                 <input type="hidden" id="id" name="id" value="@item.Id">
@@ -90,12 +90,11 @@
                             }
 
                         </div>
+                        @if(User.IsInRole("Company") || ViewBag.indexEmployees) { 
                         <div class="container-btn">
-                            <button class="btn float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><img src="~/Assets/ic_edit.png" /></button>
-                            @*<a>aaa</a>*@
-                            <!--<button class="btn text-white float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x"></i></button>-->
-                            @*@Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })*@
+                            <button class="btn float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><img src="~/Assets/ic_edit.png" /></button> 
                         </div>
+                        }
 
                     </div>
                 </div>
