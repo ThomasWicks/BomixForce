@@ -58,7 +58,7 @@
             foreach (var item in @Model)
             {
                 <div class="col-sm-4 mt-3">
-                    <div class="card">
+                    <div class="card-white">
                         <div class="card-body">
                             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                             {
@@ -74,6 +74,7 @@
                                 @*<img style="float: right;" src="~/Assets/ic_edit.png" />*@
                                 @*<img style="float: right;" src="~/Assets/ic_remove.png" />*@
                             }
+
                             <p class="title-card-white">@Html.DisplayFor(modelItem => item.Name)</p>
                             <p class="info-card-white">Email: @Html.DisplayFor(modelItem => item.Email)</p>
                             @if (!ViewBag.indexEmployees &&( User.IsInRole("Admin") || User.IsInRole("Employee") ))
@@ -83,15 +84,16 @@
                             }
                             else
                             {
-                                <p class="card-text"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
-                                <p class="card-text"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
+                                <p class="info-card-white"><strong>Setor:  @Html.DisplayFor(modelItem => item.Setor)</strong> </p>
+                                <p class="info-card-white"><strong>Cargo:  @Html.DisplayFor(modelItem => item.Cargo)</strong></p>
 
                             }
 
                         </div>
-                        <div class="card-footer bg-dark">
+                        <div class="container-btn">
+                            <button class="btn float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><img src="~/Assets/ic_edit.png" /></button>
                             @*<a>aaa</a>*@
-                            <button class="btn text-white float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x"></i></button>
+                            <!--<button class="btn text-white float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><i class="fas fa-user-edit fa-2x"></i></button>-->
                             @*@Html.ActionLink("", "Edit", "User", new { item.Id }, new { @class = "fas fa-user-edit fa-2x float-right" })*@
                         </div>
 
