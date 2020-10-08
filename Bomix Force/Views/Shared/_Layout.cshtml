@@ -70,10 +70,85 @@
     </body>
 </html>
 
-<style lang="scss" >
+<style lang="scss">
 
     /*Custom styles*/
-/*-------------------------------------------------- */
+    /*-------------------------------------------------- */
+
+    @@media only screen and (max-width: 768px) {
+        [class="login-box"] {
+            width: 55% !important;
+        }
+    }
+    @@media only screen and (width: 320px) {
+        [class="login-box"] {
+            width: 80% !important;
+        }
+    }
+
+    .login-container {
+        align-items: center;
+        width: 100%;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .login-box {
+        width: 25%;
+        background: #FFFFFF;
+        border: 0.2px solid #C4C4C4;
+        border-radius: 6px;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        padding-top: 2.5%;
+        padding-bottom: 2.5%;
+    }
+
+    .login-center-button {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        flex-direction:column;
+    }
+
+    .login-form {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .login-inputs {
+        display: flex;
+        flex-direction: column;
+        align-items:flex-start;
+    }
+    .login-label {
+        font-family: 'Mulish', sans-serif;
+        font-style: normal;
+        font-size: 14px;
+        line-height: 20px;
+        /* or 143% */
+        letter-spacing: 0.2px;
+        color: #000000;
+    }
 
     .sheet-menu {
         width: 100%;
@@ -179,9 +254,10 @@
         padding: 3.5px;
     }
 
-    .input-search{
+    .input-search {
         border: 0px;
     }
+
     .input-search:focus {
         outline: none;
     }
@@ -221,14 +297,14 @@
         line-height: 20px;
         /* or 111% */
         letter-spacing: 0.2px;
-        word-wrap:break-word;
+        word-wrap: break-word;
         color: #000000;
         margin: 0px 7px 2px 4px;
     }
 
     .container-btn {
         position: absolute;
-        width:100%;
+        width: 100%;
         bottom: 0;
     }
 
@@ -237,7 +313,7 @@
         height: 39px;
         margin-top: 20px;
         align-content: center;
-        margin-left:5px;
+        margin-left: 5px;
         margin-right: 5px;
     }
 
@@ -248,7 +324,7 @@
         border-radius: .25rem;
         color: red;
     }
-    
+
     .page-item {
         background: #8DC7FD;
         border-radius: 3px;
@@ -284,7 +360,7 @@
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
         background-color: #002a51;
     }
-    
+
     .options-account {
         position: absolute;
         height: 56px;
@@ -293,21 +369,21 @@
         top: 0px;
         background: #c4c4c4;
     }
-    
+
     .option-account-selected {
         width: 177px;
         height: 28px;
         border-radius: 4px;
         background-color: #002a51;
     }
-    
+
     .option-account-unselected {
         width: 177px;
         height: 28px;
         border-radius: 4px;
         background-color: #c4c4c4;
     }
-    
+
     .bg-account-data {
         width: 632px;
         height: 285px;
@@ -315,20 +391,24 @@
         border: solid 0.2px #c4c4c4;
         background-color: #ffffff;
     }
-    
+
     .input {
-        width: 268px;
-        height: 24px;
         border-radius: 6px;
-        border: solid 0.2px #000000;
+        border: solid 0.01px #000000;
         background-color: #f7f8fc;
     }
-    
+
     .bt-save {
-        width: 131px;
         height: 26px;
+        width: 60%;
+        margin-top: 10px;
         border-radius: 5px;
         background-color: #002a51;
+        color: white;
+        border: none;
+        margin-left: auto;
+        margin-right: auto;
+        
     }
 
     .bt-disable-account {
@@ -343,7 +423,7 @@
         letter-spacing: 0.2px;
         color: #ffffff;
     }
-    
+
     .bt-duplicate-order {
         width: 127px;
         height: 34px;
@@ -351,5 +431,4 @@
         border: solid 1px rgba(29, 28, 29, 0.5);
         background-color: #8dc7fd;
     }
-
 </style>
