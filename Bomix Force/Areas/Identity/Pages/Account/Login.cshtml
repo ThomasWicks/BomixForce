@@ -7,31 +7,31 @@ ViewData["Title"] = "Log in";
 
 <!-- <h1>@ViewData["Title"]</h1> -->
 <body class="">
-  <div class="d-flex w-100 h-100 mx-auto">
-    <div class="col bg-login"></div>
-    <div class="col px-5 align-self-center">
-      <div class="col-xl-9 col-lg-9">
-        <form id="account" method="post">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Usuário</label>
-                                <input asp-for="Input.UserName" placeholder="Usuario"  class="form-control" />
-                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Senha</label>
-                                <input asp-for="Input.Password" placeholder="Senha" class="form-control" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-          </div>
-          <button type="submit" class="btn btn-primary float-right">Entrar</button>
-        </form>
-      </div>
+    <div class="login-container">
+        <img style="display: block; margin-left: auto; margin-right: auto; margin-bottom: 1%; " src="~/Assets/logo-bomix-header.png" />
+        <div class="login-box">
+            <div class="login-form">
+                <form id="account" method="post">
+                    <div class="login-center-button">
+                        <div class="login-inputs">
+                            <label class="login-label" for="exampleInputEmail1">Usuário</label>
+                            <input asp-for="Input.UserName" placeholder="Usuario" class="input" />
+                            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                            <label class="login-label" for="exampleInputPassword1">Senha</label>
+                            <input asp-for="Input.Password" placeholder="Senha" class="input" />
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="bt-save">Entrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-  <!-- <footer class="mastfoot mt-auto">
-    <div class="inner">
-Email de contato: teste@teste.com
-    </div>
-  </footer> -->
+    <!-- <footer class="mastfoot mt-auto">
+        <div class="inner">
+    Email de contato: teste@teste.com
+        </div>
+      </footer> -->
 </body>
 <!-- <div class="row d-flex">
     <div class="col-6">
@@ -74,32 +74,14 @@ Email de contato: teste@teste.com
     </div>
 </div> -->
 <style lang="scss" scoped>
-html,
-body {
-  height: 100%;
-  background-color: #fff;
-}
-
-body {
-  display: -ms-flexbox;
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-}
-label {
-    color: black
-}
-footer {
-  text-align: center;
-  padding:10px 0;
-  background-color: #4D4B4B;
-}
-.bg-login {
-  background: url(../../../Assets/Bomix.jfif);
-  background-size: cover;
-}
+    html,
+    body {
+        display: -ms-flexbox;
+        display: flex;
+        flex-direction: column;
+        color: #F7F8FC;
+        height: 100%;
+    }
 </style>
 
 @section Scripts {
