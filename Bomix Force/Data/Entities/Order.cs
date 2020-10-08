@@ -19,6 +19,6 @@ namespace Bomix_Force.Data.Entities
         public virtual Company Company { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual List<Item> Item { get; set; }
-        public virtual List<N_conformity> N_Conformities { get; set; }
+        public virtual List<Nonconformity> N_Conformities { get; set; }
     }
 }
