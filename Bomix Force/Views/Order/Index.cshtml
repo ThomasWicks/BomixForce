@@ -4,96 +4,98 @@
 @{
     ViewData["Title"] = "Index";
 }
-<div id="OrderDetailsHere"></div>
-<div class="clearfix mx-5">
-    <p>
-        <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
-        <text class="pagina-atual">Pedidos</text>
-    </p>
-    @using (Html.BeginForm())
-    {
-        <form id="typeSearch" asp-controller="Order" asp-action="Index">
-            <div class="row mt-3">
-                @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
-            <option value="nOrder">Número pedido</option>
-            <option value="status">Status</option>
-        </select>*@
-                <div class="search">
-                    <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
-                    @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
-                </div>
-                <a class="btn btn-primary float-right mr-1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <div class="container">
+
+        <div id="OrderDetailsHere"></div>
+        <div class="clearfix mx-5">
+            <p>
+                <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
+                <text class="pagina-atual">Pedidos</text>
+            </p>
+            @using (Html.BeginForm())
+            {
+                <form id="typeSearch" asp-controller="Order" asp-action="Index">
+                    <div class="row mt-3">
+                        @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
+                            <option value="nOrder">Número pedido</option>
+                            <option value="status">Status</option>
+                        </select>*@
+                        <div class="search">
+                            <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
+                            @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                        </div>
+                    </div>
+                </form>
+                <a class="btn btn-primary float-right mr-1" style="float: right" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                     Expandir pedidos
                 </a>
+
+            }
+            <div class="table-responsive mt-5">
+                <table id="#tableOrder" class="table table-striped">
+                    <thead class="thead-dark">
+
+                        <tr>
+
+                            <th class="text-center">
+                                Numero Pedido
+                            </th>
+                            <th class="text-center">
+                                Cliente
+                            </th>
+                            <th class="text-center">
+                                Emissão
+                                @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
+                                @if (ViewBag.filter == "EmissaoAsc")
+                                {
+                                    <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
+                                }
+                                @if (ViewBag.filter != "EmissaoAsc")
+                                {
+                                    <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
+                                }
+
+                                @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
+                                @*<span class="glyphicon glyphicon-menu-up"></span>*@ @*Botão virado pra cima*@
+                                @*<span class="glyphicon glyphicon-menu-down"></span>*@ @*Botão virado pra baixo*@
+                            </th>
+
+                            <th class="text-center">
+                                Cidade - UF
+                            </th>
+                            <th class="text-center">
+                                Status
+                            </th>
+                            @if (User.IsInRole("User"))
+                            {
+                                <th class="text-center">
+                                    Detalhes
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody id="tableOrderbody">
+                        @if (Model?.Count() > 0)
+                        {
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>
+                                    <h6>Não há pedidos cadastrados.</h6>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+                <div id="loadingdiv">CARREGANDO...</div>
             </div>
-        </form>
+        </div>
 
-    }
 
-    <div class="table-responsive mt-5">
-        <table id="#tableOrder" class="table table-striped">
-            <thead class="thead-dark">
-
-                <tr>
-
-                    <th class="text-center">
-                        Numero Pedido
-                    </th>
-                    <th class="text-center">
-                        Cliente
-                    </th>
-                    <th class="text-center">
-                        Emissão
-                        @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
-                        @if (ViewBag.filter == "EmissaoAsc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
-                        }
-                        @if (ViewBag.filter != "EmissaoAsc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
-                        }
-
-                        @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
-                        @*<span class="glyphicon glyphicon-menu-up"></span>*@ @*Botão virado pra cima*@
-                        @*<span class="glyphicon glyphicon-menu-down"></span>*@ @*Botão virado pra baixo*@
-                    </th>
-
-                    <th class="text-center">
-                        Cidade - UF
-                    </th>
-                    <th class="text-center">
-                        Status
-                    </th>
-                    @if (User.IsInRole("User"))
-                    {
-                        <th class="text-center">
-                            Detalhes
-                        </th>
-                    }
-                    </tr>
-            </thead>
-            <tbody id="tableOrderbody">
-                @if (Model?.Count() > 0)
-                {
-
-                }
-                else
-                {
-                    <tr>
-                        <td>
-                            <h6>Não há pedidos cadastrados.</h6>
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
-        </table>
-        <div id="loadingdiv">CARREGANDO...</div>
     </div>
-
-
-</div>
 <script src="~/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {

@@ -9,75 +9,109 @@
     foreach (var item in Model)
     {
 
-    <tr>
-        <th class="text-center">
-            @item.Pedido
+        <tr>
+            <th class="text-center">
+                @item.Pedido
 
-        </th>
+            </th>
             <th class="text-center">
                 @item.Cliente
             </th>
-        <th class="text-center">
-            @Html.DisplayFor(modelItem => @item.Emissao)
-        </th>
-        <th class="text-center">
-            @item.Cidade - @item.UF
-        </th>
-        @if (@item.Status == "ENCERRADO")
-        {
-            <th class="mt-2 badge bg-danger">
+            <th class="text-center">
+                @Html.DisplayFor(modelItem => @item.Emissao)
+            </th>
+            <th class="text-center">
+                @item.Cidade - @item.UF
+            </th>
+            @if (@item.Status == "ENCERRADO")
+            {
+                <th class="mt-2 badge bg-danger">
 
-                Encerrado
-            </th>
+                    Encerrado
+                </th>
 
-        }
-        else if (@item.Status == "ABERTO")
-        {
-            <th class="mt-2 badge bg-primary">
-                Aberto
-            </th>
-        }
-        else if (@item.Status == "LIBERADO")
-        {
-            <th class="mt-2 badge bg-success">
-                Liberado
-            </th>
-        }
-        else if (@item.Status == "ORCAMENTO")
-        {
-            <th class="mt-2 badge bg-warning">
-                Orçamento
-            </th>
-        }
-        else
-        {
-            <th class="mt-2 badge bg-secondary">
-                @item.Status
-            </th>
-        }
-        @if (User.IsInRole("User"))
-        {
-            <th>
-                <form method="post" asp-controller="Order" asp-action="Duplicate">
-                    <div class="modal-footer">
-                        <input type="hidden" asp-for="@item.Pedido">
-                        <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
-                    </div>
-                </form>
-            </th>
-        }
+            }
+            else if (@item.Status == "ABERTO")
+            {
+                <th class="mt-2 badge bg-primary">
+                    Aberto
+                </th>
+            }
+            else if (@item.Status == "LIBERADO")
+            {
+                <th class="mt-2 badge bg-success">
+                    Liberado
+                </th>
+            }
+            else if (@item.Status == "ORCAMENTO")
+            {
+                <th class="mt-2 badge bg-warning">
+                    Orçamento
+                </th>
+            }
+            else
+            {
+                <th class="mt-2 badge bg-secondary">
+                    @item.Status
+                </th>
+            }
+            @if (User.IsInRole("User"))
+            {
+                <th>
+                    <form method="post" asp-controller="Order" asp-action="Duplicate">
+                        <div class="modal-footer">
+                            <input type="hidden" asp-for="@item.Pedido">
+                            <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
+                        </div>
+                    </form>
+                </th>
+            }
 
         </tr>
-        foreach (var SubItem in item.Item)
+        @foreach (var SubItem in item.Item.Select((x, i) => new { Value = x, Index = i }))
         {
             @if (item.Item.Count > 0)
             {
-                <tr class="collapse bg-dark" id="collapseExample">
-                    <td class="text-center text-white" colspan="6">
-                        Quantidade: @SubItem.Quantidade  / Arte: @SubItem.Arte / Personalizado: @SubItem.Personalizacao / Tipo Registro: @SubItem.TipoRegistro
+                if (SubItem.Index == 0)
+                {
+                    <tr class="collapse bg-dark" id="collapseExample">
+                        <td class="text-center text-white">
+                            Quantidade
+                        </td>
+                        <td class="text-center text-white">
+                            Arte
+                        </td>
+                        <td class="text-center text-white">
+                            Personalizado
+                        </td>
+                        <td class="text-center text-white">
+                            Tipo Registro
+                        </td>
+                        <td class="text-center text-white">
+                            
+                        </td>
+                    </tr>
+                }
+                <tr class="collapse bg-dark" id="collapseExample" colapse="6">
+                    <td class="text-center text-white">
+                        @SubItem.Value.Quantidade
+                    </td>
+                    <td class="text-center text-white">
+                        @SubItem.Value.Arte
+                    </td>
+                    <td class="text-center text-white">
+                        @SubItem.Value.Personalizacao
+                    </td>
+                    <td class="text-center text-white">
+                        @SubItem.Value.TipoRegistro
+                    </td>
+                    <td class="text-center text-white">
+                        -
                     </td>
                 </tr>
+
             }
+
         }
 
 
