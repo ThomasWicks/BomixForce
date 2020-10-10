@@ -20,15 +20,15 @@
                             <option value="nOrder">Número pedido</option>
                             <option value="status">Status</option>
                         </select>*@
-                        <div class="search">
+                        <div class="search ml-2">
                             <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
                             @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
                         </div>
                     </div>
                 </form>
-                <a class="btn btn-primary float-right mr-1" style="float: right" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <!-- <a class="btn btn-primary float-right mr-1" style="float: right" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                     Expandir pedidos
-                </a>
+                </a> -->
 
             }
             <div class="table-responsive mt-5">
@@ -41,10 +41,19 @@
                                 Numero Pedido
                             </th>
                             <th class="text-center">
+                                Quantidade
+                            </th>
+                            <th class="text-center">
+                                Arte
+                            </th>
+                            <th class="text-center">
+                                Personalizado
+                            </th>
+                            <th class="text-center">
                                 Cliente
                             </th>
                             <th class="text-center">
-                                Emissão
+                                PCP
                                 @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
                                 @if (ViewBag.filter == "EmissaoAsc")
                                 {
