@@ -158,6 +158,17 @@ namespace Bomix_Force.Controllers
                 foreach(var order in orderView)
                 {
                     order.Item=_pedidoItemRepository.GetParameters(user, order.id.ToString()).ToList();
+                    order.Pedido = !String.IsNullOrEmpty(order.Pedido) ? order.Pedido : "-";
+                    order.Status = !String.IsNullOrEmpty(order.Status) ? order.Status : "-";
+                    order.Cliente = !String.IsNullOrEmpty(order.Cliente) ? order.Cliente : "-";
+                    foreach (var item in order.Item)
+                    {
+                        item.Arte = !String.IsNullOrEmpty(item.Arte) ? item.Arte : "-";
+                        item.Produto = !String.IsNullOrEmpty(item.Produto) ? item.Produto : "-";
+                        item.Personalizacao = !String.IsNullOrEmpty(item.Personalizacao) ? item.Personalizacao : "-";
+                        item.Quantidade = !String.IsNullOrEmpty(item.Quantidade.ToString()) ? item.Quantidade : 0;
+                    }
+
                 }
                 return PartialView("_orderScrollPartial", orderView);
             }
