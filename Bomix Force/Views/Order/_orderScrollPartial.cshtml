@@ -69,12 +69,12 @@
             @if (User.IsInRole("User"))
             {
                 <th>
-                    <form method="post" asp-controller="Order" asp-action="Duplicate">
+                   
                         <div class="modal-footer">
-                            <input type="hidden" asp-for="@item.Pedido">
-                            <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
+                           
+                            <button type="submit" onclick="duplicate(@item.Pedido)" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
                         </div>
-                    </form>
+                
                 </th>
             }
 
@@ -138,14 +138,12 @@
             }
                         @if (User.IsInRole("User"))
             {
-                <th>
-                    <form method="post" asp-controller="Order" asp-action="Duplicate">
-                        <div class="modal-footer">
-                            <input type="hidden" asp-for="@item.Pedido">
-                            <button type="submit" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
-                        </div>
-                    </form>
-                </th>
+             <th>
+                 <div class="modal-footer">
+
+                     <button type="submit" onclick="duplicate(@item.Pedido)" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
+                 </div>
+             </th>
             }
 
         </tr>
@@ -153,3 +151,15 @@
 
     }
 }
+<script>
+    function duplicate(Pedido) {
+        $.ajax({
+            url: 'Duplicate',
+            data: {
+                Pedido: Pedido
+            },
+            method: 'Post',
+            dataType: 'json',
+        })
+    }
+</script>
