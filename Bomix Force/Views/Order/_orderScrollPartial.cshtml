@@ -120,7 +120,7 @@
             }
             else if (@item.Status == "LIBERADO")
             {
-                <th class="mt-2 badge bg-success">
+                <th class="mt-2 badge bg-success ">
                     Liberado
                 </th>
             }
@@ -139,7 +139,7 @@
                         @if (User.IsInRole("User"))
             {
              <th>
-                 <div class="modal-footer">
+                 <div>
 
                      <button type="submit" onclick="duplicate(@item.Pedido)" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
                  </div>
