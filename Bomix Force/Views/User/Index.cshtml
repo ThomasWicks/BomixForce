@@ -11,44 +11,45 @@
     <div class="clearfix mx-5">
         @if (User.IsInRole("Employee"))
         {
-            <p>
-                <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
-                <text class="pagina-atual">Clientes</text>
-            </p>
+            <div class="pagination-history">
+                <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+                <a class="pagina-atual">Clientes</a>
+            </div>
         }
         else if (User.IsInRole("Company"))
         {
-            <p>
-                <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
-                <text class="pagina-atual">Funcionários</text>
-            </p>
+            <div class="pagination-history">
+                <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+                <a class="pagina-atual">Funcionários</a>
+            </div>
         }
         else
         {
-            <p>
-                <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
-                <text class="pagina-atual">Usuários</text>
-            </p>
+            <div class="pagination-history">
+                <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+                <a class="pagina-atual">Usuários</a>
+            </div>
         }
-        @if (User.IsInRole("Company") || User.IsInRole("Admin"))
-        {
-            <a class="d-flex flex-row-reverse">
-
-                <span class="p-2 btn btn-primary btn-lg" id="createModal" data-url="@Url.Action("Create")" data-target="#CreateUserModal">Cadastrar</span>
-            </a>
-        }
-        @using (Html.BeginForm())
-        {
-            <form id="typeSearch" asp-controller="User" asp-action="Index">
-                <div class="row ml-1 mt-3">
+        <div style="width: 100%; margin: 0;" class="row">
+            @using (Html.BeginForm())
+            {
+                <form id="typeSearch" asp-controller="User" asp-action="Index">
                     <div class="search">
                         <input type="hidden" id="id" name="id" value="@ViewBag.indexEmployeeID">
                         <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
                         @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
                     </div>
-                </div>
-            </form>
-        }
+                </form>
+            }
+            @if (User.IsInRole("Company") || User.IsInRole("Admin"))
+            {
+                <a class="margin-add-user">
+                    <span type="button" id="createModal" data-url="@Url.Action("Create")" data-target="#CreateUserModal"><img class="ic-size" src="~/Assets/ic_add_user.png" /></span>
+                </a>
+            }
+        </div>
+        
+
 
 
 
@@ -102,14 +103,17 @@
                     </div>
                 }
                 @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, id = ViewBag.indexEmployeeID }),
-               new X.PagedList.Mvc.Core.Common.PagedListRenderOptions()
-               {
-                   ContainerDivClasses = new[] { "container-pagination" },
-                   LiElementClasses = new[] { "page-item" },
-                   PageClasses = new[] { "attributes-pag" },
-                   MaximumPageNumbersToDisplay = 4,
-                   ActiveLiElementClass = "page-active"
-               })
+            new X.PagedList.Mvc.Core.Common.PagedListRenderOptions()
+            {
+                ContainerDivClasses = new[] { "container-pagination" },
+                LiElementClasses = new[] { "page-item" },
+                PageClasses = new[] { "attributes-pag" },
+                MaximumPageNumbersToDisplay = 4,
+                ActiveLiElementClass = "page-active",
+                DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+                DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Never
+            })
+
             }
             else
             {

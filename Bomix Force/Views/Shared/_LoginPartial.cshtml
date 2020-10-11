@@ -12,9 +12,16 @@
 
         </li>
         <div class="dropdown open">
-            <button  class="btn btn-white dropdown-toggle"
-            type="button" id="dropdownMenu5" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false"><img src="~/Assets/profile-circle-person.png" /></button>
+            <button class="btn btn-white dropdown-toggle"
+                    type="button" id="dropdownMenu5" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                @if (User.IsInRole("Company")){
+                    <img src="~/Assets/profile-circle-enterprise.png" />
+                }
+                else{
+                    <img src="~/Assets/profile-circle-person.png" />
+                }
+            </button>
             <div class="dropdown-menu">
                 <form class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Login", "Home", new { area = "" })">
                     <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"> Logout</i></button>
