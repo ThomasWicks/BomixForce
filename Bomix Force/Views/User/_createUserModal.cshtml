@@ -32,8 +32,8 @@
                         </div>
                         <div class="col-6">
                             <label asp-for="@Model.PhoneNumber"></label>
-                            <input id="createPhone" onchange="changeCreateTelephone(this.value)" class="form-control" />
-                            <span id="createTelephoneSpan" class="text-danger"></span>
+                            <input id="createPhone" onchange="changeCreatePhoneNumber(this.value)" class="form-control" />
+                            <span id="createPhoneNumberSpan" class="text-danger"></span>
                         </div>
 
                     </div>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="validate()" class="btn btn-primary float-right">Cadastrar</button>
+                    <button type="button" onclick="validateCreate()" class="btn btn-primary float-right">Cadastrar</button>
                 </div>
             </div>
         </form>
@@ -85,7 +85,7 @@
 <script>
     var createUsername = ''
     var createName = ''
-    var createTelephone = ''
+    var createPhoneNumber = ''
     var createCargo = ''
     var createSetor = ''
     var createEmail = ''
@@ -104,17 +104,17 @@
     function changeCreateEmail(value) {
         createEmail = value;
     }
-    function changeCreateTelephone(value) {
-        createTelephone = value;
+    function changeCreatePhoneNumber(value) {
+        createPhoneNumber = value;
     }
-    function validate() {
+    function validateCreate() {
         var validateUsername = this.validateUsername(createUsername)
         var validateName = this.validateName(createName)
-        var validateTelephone = this.validateTelephone(createTelephone)
+        var validatePhoneNumber = this.validatePhoneNumber(createPhoneNumber)
         var validateEmail = this.validateEmail(createEmail)
         var validateSetor = this.validateSetor(createSetor)
         var validateCargo = this.validateCargo(createCargo)
-        var validation = validateUsername && validateName && validateTelephone && validateEmail && validateSetor && validateCargo
+        var validation = validateUsername && validateName && validatePhoneNumber && validateEmail && validateSetor && validateCargo
         if (validation) {
             token = $('form').serializeArray()[0].value;
 
@@ -125,7 +125,7 @@
                     __RequestVerificationToken: token,
                     Username: createUsername,
                     Name: createName,
-                    Telephone: createTelephone,
+                    PhoneNumber: createPhoneNumber,
                     Setor: createSetor,
                     Cargo: createCargo,
                     Email: createEmail,
@@ -159,20 +159,20 @@
             return true
         }
     }
-    function validateTelephone(createTelephone) {
-        var formattel = /^\d+$/.test(createTelephone)
-        if (!createTelephone) {
-            document.getElementById('createTelephoneSpan').innerHTML = 'Campo Obrigatório';
-            document.getElementById('createTelephoneSpan').style.display = '';
+    function validatePhoneNumber(createPhoneNumber) {
+        var formattel = /^\d+$/.test(createPhoneNumber)
+        if (!createPhoneNumber) {
+            document.getElementById('createPhoneNumberSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createPhoneNumberSpan').style.display = '';
             return false
         }
-        else if (createTelephone.length<10 || !formattel) {
-            document.getElementById('createTelephoneSpan').innerHTML = 'Digite um número de telefone válido com DDD';
-            document.getElementById('createTelephoneSpan').style.display = '';
+        else if (createPhoneNumber.length<10 || !formattel) {
+            document.getElementById('createPhoneNumberSpan').innerHTML = 'Digite um número de telefone válido com DDD';
+            document.getElementById('createPhoneNumberSpan').style.display = '';
             return false
         }
         else {
-            document.getElementById('createTelephoneSpan').style.display = 'none';
+            document.getElementById('createPhoneNumberSpan').style.display = 'none';
             return true
         }
     }
@@ -196,7 +196,7 @@
     }
     function validateSetor(createSetor) {
         if (!createSetor) {
-            document.getElementById('createSetorSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createSetorSpan').innerHTML = 'Selecione um Setor';
             document.getElementById('createSetorSpan').style.display = '';
             return false
         }
@@ -207,7 +207,7 @@
     }
     function validateCargo(createCargo) {
         if (!createCargo) {
-            document.getElementById('createCargoSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createCargoSpan').innerHTML = 'Selecione um Cargo';
             document.getElementById('createCargoSpan').style.display = '';
             return false
         }

@@ -40,7 +40,7 @@ namespace Bomix_Force.ViewModels
         public string Name { get; set; }
         [Required]
         [Display(Name = "Telefone")]
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         [Display(Name = "Cargo")]
         [Required]
         public string Cargo { get; set; }
@@ -65,7 +65,7 @@ namespace Bomix_Force.ViewModels
         [Required]
         [Display(Name = "Telefone")]
         [DataType(DataType.PhoneNumber)]
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         [Required]
         public string Cargo { get; set; }
         [Required]

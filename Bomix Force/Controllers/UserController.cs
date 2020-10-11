@@ -150,14 +150,17 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string Username, string Name, string Setor, string Cargo, string Email)
+        public async Task<ActionResult> Create(string Username, string Name, string Setor, string Cargo, string Email, string PhoneNumber)
         {
-            UserViewModel userView = new UserViewModel();
-            userView.UserName = Username;
-            userView.Name = Name;
-            userView.Setor = Setor;
-            userView.Cargo = Cargo;
-            userView.Email = Email;
+            UserViewModel userView = new UserViewModel()
+            {
+                UserName = Username,
+                Name = Name,
+                Setor = Setor,
+                Cargo = Cargo,
+                Email = Email,
+                PhoneNumber = PhoneNumber,
+            };
             try
             {
                 //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -221,16 +224,14 @@ namespace Bomix_Force.Controllers
             UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(person);
             return PartialView("_userModelPartial", userViewEdit);
 
-            return RedirectToAction(nameof(Index));
         }
         // POST: UserController/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(UserViewEdit userviewEdit, string selectCargo, string selectSetor)
+        public async Task<ActionResult> Edit(string UserID, string Name,string Id, string Setor, string Cargo, string Email, string PhoneNumber, int CompanyId)
         {
             try
             {
-                userviewEdit.Cargo = selectCargo;
-                userviewEdit.Setor = selectSetor;
+                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), UserID = UserID, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, PhoneNumber = PhoneNumber, CompanyId = CompanyId };
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
