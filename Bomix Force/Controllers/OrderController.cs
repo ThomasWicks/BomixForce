@@ -83,14 +83,15 @@ namespace Bomix_Force.Controllers
             orderView.Item = item;
             return PartialView("_orderDetailsPartial", orderView);
         }
+        [HttpPost]
         // Get: OrderController/Duplicate/5
-        public async Task<ActionResult> Duplicate(OrderViewModel order)
+        public async Task<ActionResult> Duplicate(string Pedido)
         {
          
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 //Person person = _genericPersonService.Get(u => u.Id.ToString() == user).First();
                 //Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
-                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {order.Pedido}");
+                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {Pedido}");
                 return RedirectToAction(nameof(Index));
             
         
@@ -158,6 +159,17 @@ namespace Bomix_Force.Controllers
                 foreach(var order in orderView)
                 {
                     order.Item=_pedidoItemRepository.GetParameters(user, order.id.ToString()).ToList();
+                    order.Pedido = !String.IsNullOrEmpty(order.Pedido) ? order.Pedido : "-";
+                    order.Status = !String.IsNullOrEmpty(order.Status) ? order.Status : "-";
+                    order.Cliente = !String.IsNullOrEmpty(order.Cliente) ? order.Cliente : "-";
+                    foreach (var item in order.Item)
+                    {
+                        item.Arte = !String.IsNullOrEmpty(item.Arte) ? item.Arte : "-";
+                        item.Produto = !String.IsNullOrEmpty(item.Produto) ? item.Produto : "-";
+                        item.Personalizacao = !String.IsNullOrEmpty(item.Personalizacao) ? item.Personalizacao : "-";
+                        item.Quantidade = !String.IsNullOrEmpty(item.Quantidade.ToString()) ? item.Quantidade : 0;
+                    }
+
                 }
                 return PartialView("_orderScrollPartial", orderView);
             }

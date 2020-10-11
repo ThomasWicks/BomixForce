@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201008121039_Nonconformity.cs" />
+    <Compile Remove="Migrations\20201008121039_Nonconformity.Designer.cs" />
     <Compile Remove="Views\Home\Login.cs" />
   </ItemGroup>
 

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Bomix_Force.Data.Entities
 {
-    public class N_conformity
+    public class Nonconformity
     {
         [Key]
         public int Id { get; set; }
-        public string Lot { get; set; }
+        public string Lote { get; set; }
         public string Description { get; set; }
-        [ForeignKey("Order")]
+        public string Answer { get; set; }
+        //[ForeignKey("Order")]
         //public int? OrderId { get; set; }
-        [NotMapped]
-        public virtual Order Order { get; set; }
+        //public virtual Order Order { get; set; }
     }
 }

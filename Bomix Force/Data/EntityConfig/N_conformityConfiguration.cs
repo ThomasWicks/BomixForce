@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bomix_Force.Data.EntityConfig
 {
-    public class N_conformityConfiguration : IEntityTypeConfiguration<N_conformity>
+    public class N_conformityConfiguration : IEntityTypeConfiguration<Nonconformity>
     {
-        public void Configure(EntityTypeBuilder<N_conformity> builder)
+        public void Configure(EntityTypeBuilder<Nonconformity> builder)
         {
             builder.ToTable("N_CONFORMITY");
             builder.HasKey(e => new { e.Id });
 
-            builder.Property(u => u.Lot)
+            builder.Property(u => u.Lote)
               .HasColumnName("LOT")
               .IsRequired();
 
@@ -19,9 +19,9 @@ namespace Bomix_Force.Data.EntityConfig
              .HasColumnName("DESCRIPTION")
              .IsRequired();
 
-            builder.HasOne(u => u.Order)
-                .WithMany(u => u.N_Conformities)
-                .IsRequired();
+            //builder.HasOne(u => u.)
+            //    .WithMany(u => u.N_Conformities)
+            //    .IsRequired();
                 
         }
     }
