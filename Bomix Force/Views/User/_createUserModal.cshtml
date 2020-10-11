@@ -15,32 +15,33 @@
                     <div class="row">
                         <div class="col-6">
                             <label asp-for="@Model.UserName"></label>
-                            <input asp-for="@Model.UserName" class="form-control" />
-                            <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                            <input id="createUsername" onchange="changeCreateUsername(this.value)" asp-for="@Model.UserName" class="form-control" />
+                            <span id="createUsernameSpan" class="text-danger"></span>
                         </div>
                         <div class="col-6">
                             <label asp-for="@Model.Email"></label>
-                            <input asp-for="@Model.Email" class="form-control" />
-                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                            <input onchange="changeCreateEmail(this.value)" id="createEmail" asp-for="@Model.Email" class="form-control" />
+                            <span id="createEmailSpan" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row py-2">
                         <div class="col-6">
                             <label asp-for="@Model.Name"></label>
-                            <input asp-for="@Model.Name" class="form-control" />
-                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                            <input onchange="changeCreateName(this.value)" id="createName" asp-for="@Model.Name" class="form-control" />
+                            <span id="createNameSpan" class="text-danger"></span>
                         </div>
                         <div class="col-6">
                             <label asp-for="@Model.PhoneNumber"></label>
-                            <input asp-for="@Model.PhoneNumber" class="form-control" />
-                            <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                            <input id="createPhone" onchange="changeCreateTelephone(this.value)" class="form-control" />
+                            <span id="createTelephoneSpan" class="text-danger"></span>
                         </div>
 
                     </div>
                     <div class="row py-2 mb-4">
                         <div class="col-6">
                             <label asp-for="@Model.Cargo"></label>
-                            <select asp-for="@Model.Cargo" class="form-control ">
+                            <select id="selectCreateCargo" onchange="changeCreateCargo(this.value)" asp-for="@Model.Cargo" class="form-control ">
+                                <option value="">Selecione o Cargo</option>
                                 <option value="Propriétario">Propriétario</option>
                                 <option value="Diretor">Diretor</option>
                                 <option value="Gerente">Gerente</option>
@@ -51,11 +52,12 @@
                                 <option value="Genérico Industrial">Genérico Industrial</option>
                                 <option value="Genérico ADM">Genérico ADM</option>
                             </select>
-                            <span asp-validation-for="@Model.Cargo" class="text-danger"></span>
+                            <span id="createCargoSpan" class="text-danger"></span>
                         </div>
                         <div class="col-6">
                             <label asp-for="@Model.Setor"></label>
-                            <select asp-for="@Model.Setor" class="form-control">
+                            <select id="´selectCreateSetor" onchange="changeCreateSetor(this.value)" asp-for="@Model.Setor" class="form-control">
+                                <option value="">Selecione o Setor</option>
                                 <option value="Comercial">Comercial</option>
                                 <option value="PCP/S$OP">PCP/S$OP</option>
                                 <option value="Qualidade">Qualidade</option>
@@ -68,26 +70,151 @@
                                 <option value="Logística">Logística</option>
                                 <option value="Marketing">Marketing</option>
                             </select>
-                            <span asp-validation-for="@Model.Setor" class="text-danger"></span>
+                            <span id="createSetorSpan" class="text-danger"></span>
                         </div>
                     </div>
-                    @*<div class="row py-2 mb-4">
-                            <div class="col-6">
-                                <label asp-for="@Model.Password"></label>
-                                <input asp-for="@Model.Password" class="form-control" />
-                                <span asp-validation-for="@Model.Password" class="text-danger"></span>
-                            </div>
-                            <div class="col-6">
-                                <label asp-for="@Model.ConfirmPassword"></label>
-                                <input asp-for="@Model.ConfirmPassword" class="form-control" />
-                                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
-                            </div>
-                        </div>*@
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary float-right">Cadastrar</button>
+                    <button type="button" onclick="validate()" class="btn btn-primary float-right">Cadastrar</button>
                 </div>
             </div>
         </form>
 
     </div>
 </div>
+
+<script>
+    var createUsername = ''
+    var createName = ''
+    var createTelephone = ''
+    var createCargo = ''
+    var createSetor = ''
+    var createEmail = ''
+    function changeCreateUsername(value) {
+        createUsername = value;
+    }
+    function changeCreateName(value) {
+        createName = value;
+    }
+    function changeCreateSetor(value) {
+        createSetor = value;
+    }
+    function changeCreateCargo(value) {
+        createCargo = value;
+    }
+    function changeCreateEmail(value) {
+        createEmail = value;
+    }
+    function changeCreateTelephone(value) {
+        createTelephone = value;
+    }
+    function validate() {
+        var validateUsername = this.validateUsername(createUsername)
+        var validateName = this.validateName(createName)
+        var validateTelephone = this.validateTelephone(createTelephone)
+        var validateEmail = this.validateEmail(createEmail)
+        var validateSetor = this.validateSetor(createSetor)
+        var validateCargo = this.validateCargo(createCargo)
+        var validation = validateUsername && validateName && validateTelephone && validateEmail && validateSetor && validateCargo
+        if (validation) {
+            token = $('form').serializeArray()[0].value;
+
+            $('#CreateUserModal').modal('hide');
+            $.ajax({
+                url: 'Create',
+                data: {
+                    __RequestVerificationToken: token,
+                    Username: createUsername,
+                    Name: createName,
+                    Telephone: createTelephone,
+                    Setor: createSetor,
+                    Cargo: createCargo,
+                    Email: createEmail,
+                },
+                method: 'Post',
+                dataType: 'json',
+            })
+
+        }
+
+    }
+    function validateUsername(createUsername) {
+        if (!createUsername) {
+            document.getElementById('createUsernameSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createUsernameSpan').style.display = '';
+            return false
+        }
+        else {
+            document.getElementById('createUsernameSpan').style.display = 'none';
+            return true
+        }
+    }
+    function validateName(createName) {
+        if (!createName) {
+            document.getElementById('createNameSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createNameSpan').style.display = '';
+            return false
+        }
+        else {
+            document.getElementById('createNameSpan').style.display = 'none';
+            return true
+        }
+    }
+    function validateTelephone(createTelephone) {
+        var formattel = /^\d+$/.test(createTelephone)
+        if (!createTelephone) {
+            document.getElementById('createTelephoneSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createTelephoneSpan').style.display = '';
+            return false
+        }
+        else if (createTelephone.length<10 || !formattel) {
+            document.getElementById('createTelephoneSpan').innerHTML = 'Digite um número de telefone válido com DDD';
+            document.getElementById('createTelephoneSpan').style.display = '';
+            return false
+        }
+        else {
+            document.getElementById('createTelephoneSpan').style.display = 'none';
+            return true
+        }
+    }
+    function validateEmail(createEmail) {
+        var re = /\S+@@\S+\.\S+/;
+        var formatEmail = re.test(createEmail);
+        if (!createEmail) {
+            document.getElementById('createEmailSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createEmailSpan').style.display = '';
+            return false
+        }
+        else if (!formatEmail) {
+            document.getElementById('createEmailSpan').innerHTML = 'Insira um email válido';
+            document.getElementById('createEmailSpan').style.display = '';
+            return false
+        }
+        else {
+            document.getElementById('createEmailSpan').style.display = 'none';
+            return true
+        }
+    }
+    function validateSetor(createSetor) {
+        if (!createSetor) {
+            document.getElementById('createSetorSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createSetorSpan').style.display = '';
+            return false
+        }
+        else {
+            document.getElementById('createSetorSpan').style.display = 'none';
+            return true
+        }
+    }
+    function validateCargo(createCargo) {
+        if (!createCargo) {
+            document.getElementById('createCargoSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('createCargoSpan').style.display = '';
+            return false
+        }
+        else {
+            document.getElementById('createCargoSpan').style.display = 'none';
+            return true
+        }
+    }
+
+</script>
