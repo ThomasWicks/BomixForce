@@ -71,6 +71,7 @@ namespace Bomix_Force
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
             services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
             services.AddScoped<IGenericRepository<Nonconformity>, GenericRepository<Nonconformity>>();
+            services.AddScoped<INonconformityRepository, NonconformityRepository>();
             services.AddScoped<IGenericRepository<Bomix_PedidoVenda>, GenericRepository<Bomix_PedidoVenda>>();
             services.AddScoped<IGenericRepository<Bomix_PedidoVendaItem>, GenericRepository<Bomix_PedidoVendaItem>>();
             services.AddScoped<IPedidoVendaRepository, PedidoVendaRepository>();

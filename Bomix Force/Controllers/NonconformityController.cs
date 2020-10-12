@@ -21,8 +21,8 @@ namespace Bomix_Force.Controllers
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IMapper _mapper;
-        private readonly IGenericRepository<Nonconformity> _nonconformityRepository;
-        public NonconformityController(IGenericRepository<Nonconformity> nonconformityRepository,
+        private readonly INonconformityRepository _nonconformityRepository;
+        public NonconformityController(INonconformityRepository nonconformityRepository,
         IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
         {
             _mapper = mapper;
@@ -36,6 +36,7 @@ namespace Bomix_Force.Controllers
         // GET: Nonconformity
         public ActionResult Index()
         {
+            var x = _nonconformityRepository.GetSellerEmail("58681867000563");
             return View();
         }
 

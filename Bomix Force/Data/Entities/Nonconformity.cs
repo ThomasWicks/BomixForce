@@ -13,9 +13,12 @@ namespace Bomix_Force.Data.Entities
         public int Id { get; set; }
         public string Lote { get; set; }
         public string Description { get; set; }
+        public string Nf { get; set; }
+        public int ItemEnum { get; set; }
+        public int Quantity { get; set; }
         public string Answer { get; set; }
-        //[ForeignKey("Order")]
-        //public int? OrderId { get; set; }
-        //public virtual Order Order { get; set; }
+        [ForeignKey("Company")]
+        public int? CompanyId { get; set; }
+        public virtual Company Company { get; set; }
     }
 }
