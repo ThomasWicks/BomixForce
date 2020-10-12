@@ -32,7 +32,7 @@
                         </div>
                         <div class="col-6">
                             <label asp-for="@Model.PhoneNumber"></label>
-                            <input id="createPhone" onchange="changeCreatePhoneNumber(this.value)" class="form-control" />
+                            <input id="createPhone" class="form-control" />
                             <span id="createPhoneNumberSpan" class="text-danger"></span>
                         </div>
 
@@ -89,6 +89,12 @@
     var createCargo = ''
     var createSetor = ''
     var createEmail = ''
+
+    $(document).ready(function () {
+        var phoneInput = document.getElementById('createPhone')
+        phoneInput.onkeyup = function () { changeCreatePhoneNumber(phoneInput.value) }
+    })
+
     function changeCreateUsername(value) {
         createUsername = value;
     }
@@ -105,6 +111,11 @@
         createEmail = value;
     }
     function changeCreatePhoneNumber(value) {
+        if (value.length > 15) value = createPhoneNumber
+        value = value.replace(/\D/g, "");            
+        value = value.replace(/^(\d{2})(\d)/g, "($1) $2"); 
+        value = value.replace(/(\d)(\d{4})$/, "$1-$2");    
+        document.getElementById('createPhone').value = value
         createPhoneNumber = value;
     }
     function validateCreate() {
@@ -160,7 +171,8 @@
         }
     }
     function validatePhoneNumber(createPhoneNumber) {
-        var formattel = /^\d+$/.test(createPhoneNumber)
+        re = /(\(?\d{2}\)?\s)?(\d{4,5}\-\d{4})/
+        var formattel = re.test(createPhoneNumber)
         if (!createPhoneNumber) {
             document.getElementById('createPhoneNumberSpan').innerHTML = 'Campo Obrigatório';
             document.getElementById('createPhoneNumberSpan').style.display = '';

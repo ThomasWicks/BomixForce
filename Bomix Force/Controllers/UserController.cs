@@ -174,7 +174,7 @@ namespace Bomix_Force.Controllers
                     string randomPass = passwordGenerator.GeneratePassword();
                     //Person person_owner = _genericPersonService.Get(u => u.IdentityUserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.IdentityUserId == userId).First();
-                    var user = new IdentityUser { UserName = userView.UserName, Email = userView.Email };
+                    var user = new IdentityUser { UserName = userView.UserName, Email = userView.Email, PhoneNumber = PhoneNumber };
                     var result = await _userManager.CreateAsync(user, randomPass);
 
                     if (company.Id == 0 && User.IsInRole("Admin"))
