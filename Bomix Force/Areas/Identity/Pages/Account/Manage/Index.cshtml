@@ -2,17 +2,17 @@
 @model ChangePasswordModel
 @{
     ViewData["Title"] = "Conta do Usuário";
-    ViewData["ActivePage"] = ManageNavPages.ChangePassword;
+    //ViewData["ActivePage"] = ManageNavPages.ChangePassword;
 }
 
-<h5 class="title-user title-pass">@ViewData["Title"]</h5>
-<partial name="_StatusMessage" for="StatusMessage" />
+@*<h5 class="title-user title-pass">@ViewData["Title"]</h5>*@
+@*<partial name="_StatusMessage" for="StatusMessage" />*@
 <div class="change-pass-container">
     <div class="change-pass-box">
         <div class="change-pass-form">
             <h5>Mudar senha</h5>
             <form id="change-password-form" method="post">
-                <div asp-validation-summary="All" class="text-danger"></div>
+                @*<div asp-validation-summary="All" class="text-danger"></div>*@
                 <div class="login-inputs">
                     <label>Senha atual</label>
                     <input asp-for="Input.OldPassword" class="input" />

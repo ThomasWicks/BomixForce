@@ -39,14 +39,20 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             public string OldPassword { get; set; }
 
             [Required(ErrorMessage = "O campo é obrigatório")]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [LowerCase(ErrorMessage ="A senha deve conter ao menos uma letra minúscula")]
+            [UpperCase(ErrorMessage ="A senha deve conter ao menos uma letra maiúscula")]
+            [Number(ErrorMessage ="A senha deve conter ao menos um número")]
+            [SpecialChars(ErrorMessage ="A senha deve ter ao menos uma carácter especial (@, !, #, etc...")]
+            [StringLength(100, ErrorMessage = "A senha deve ter ao menos 6 caractéres", MinimumLength = 6)]
+      
             [DataType(DataType.Password)]
             [Display(Name = "New password")]
             public string NewPassword { get; set; }
             [Required(ErrorMessage = "O campo é obrigatório")]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+
+            [Compare("NewPassword", ErrorMessage = "as senhas não coincidem")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -88,11 +94,11 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             }
             else if (!changePasswordResult.Succeeded)
             {
-                
-                
+
+
                 foreach (var error in changePasswordResult.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError("changepasswordError", error.Description);
                 }
                 return Page();
             }
@@ -103,5 +109,36 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
 
             return RedirectToPage();
         }
+    }
+}
+
+public class SpecialChars : RegularExpressionAttribute
+{
+    public SpecialChars()
+        : base("^(?=.*[@#$%^&+=]).*$")
+    {
+    }
+}
+
+public class UpperCase : RegularExpressionAttribute
+{
+    public UpperCase()
+        : base("^(?=.*[A-Z]).*$")
+    {
+    }
+}
+
+public class LowerCase : RegularExpressionAttribute
+{
+    public LowerCase()
+        : base("^(?=.*[a-z]).*$")
+    {
+    }
+}
+public class Number: RegularExpressionAttribute
+{
+    public Number()
+        : base("^(?=.*[0-9]).*$")
+    {
     }
 }
