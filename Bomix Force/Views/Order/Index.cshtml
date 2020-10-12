@@ -8,27 +8,27 @@
 
         <div id="OrderDetailsHere"></div>
         <div class="clearfix mx-5">
-            <p>
-                <text onclick='javascript:history.go(-1)' onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='default'" class="pagina-anterior">Home / </text>
-                <text class="pagina-atual">Pedidos</text>
-            </p>
+            <div class="pagination-history">
+                <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+                <a class="pagina-atual">Pedidos</a>
+            </div>
             @using (Html.BeginForm())
             {
                 <form id="typeSearch" asp-controller="Order" asp-action="Index">
                     <div class="row mt-3">
                         @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
-                            <option value="nOrder">Número pedido</option>
-                            <option value="status">Status</option>
-                        </select>*@
-                        <div class="search">
+                        <option value="nOrder">Número pedido</option>
+                        <option value="status">Status</option>
+                    </select>*@
+                        <div class="search ml-2">
                             <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
                             @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
                         </div>
                     </div>
                 </form>
-                <a class="btn btn-primary float-right mr-1" style="float: right" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    Expandir pedidos
-                </a>
+                <!-- <a class="btn btn-primary float-right mr-1" style="float: right" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Expandir pedidos
+        </a> -->
 
             }
             <div class="table-responsive mt-5">
@@ -41,10 +41,19 @@
                                 Numero Pedido
                             </th>
                             <th class="text-center">
+                                Quantidade
+                            </th>
+                            <th class="text-center">
+                                Arte
+                            </th>
+                            <th class="text-center">
+                                Personalizado
+                            </th>
+                            <th class="text-center">
                                 Cliente
                             </th>
                             <th class="text-center">
-                                Emissão
+                                PCP
                                 @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
                                 @if (ViewBag.filter == "EmissaoAsc")
                                 {
@@ -90,7 +99,12 @@
 
                     </tbody>
                 </table>
-                <div id="loadingdiv">CARREGANDO...</div>
+                <div class="text-center" id="loadingdiv">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only text-center">Carregando...</span>
+                        <!-- <div class="sr-only" id="loadingdiv">CARREGANDO...</div> -->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -119,7 +133,7 @@
         }
             )
         function loadData(currentPage) {
-            if (currentPageNumber * 20 >@Model.Count) {
+            if (currentPageNumber * 20 >@Model.Count && currentPageNumber != 0) {
                 dataexist=false
             }
             $.ajax({

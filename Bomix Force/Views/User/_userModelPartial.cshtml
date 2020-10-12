@@ -1,7 +1,7 @@
 ﻿@model Bomix_Force.ViewModels.UserViewEdit
 
 
-<div class="modal fade" id="detailsOrder">
+<div class="modal fade" id="EditUserModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-dark">
@@ -12,24 +12,24 @@
                 <form action="Edit" method="post">
                     <div class="row">
                         <div class="col-6">
-                            <input type="hidden" asp-for="@Model.Id">
-                            <input type="hidden" asp-for="@Model.CompanyId">
-                            <input type="hidden" asp-for="@Model.UserID">
+                            <input id="editId" type="hidden" asp-for="@Model.Id">
+                            <input id="editCompanyId" type="hidden" asp-for="@Model.CompanyId">
+                            <input id="editUserID" type="hidden" asp-for="@Model.UserID">
                             <label asp-for="Name"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <input id="editName" onchange="changeEditName(this.value)" asp-for="Name" class="form-control" />
+                            <span id="editNameSpan" class="text-danger"></span>
                         </div>
                         <div class="col-6">
                             <label asp-for="Email"></label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input id="editEmail"  onchange="changeEditEmail(this.value)" asp-for="Email" class="form-control" />
+                            <span id="editEmailSpan" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row py-2">
                         <div class="col-6">
                             <label asp-for="Cargo"></label>
 
-                            <select asp-for="Cargo" id="selectCargo" class="form-control" name="selectCargo">
+                            <select  onchange="changeEditCargo(this.value)" asp-for="Cargo" id="editselectCargo" class="form-control" name="selectCargo">
                                 <option value="Propriétario">Propriétario</option>
                                 <option value="Diretor">Diretor</option>
                                 <option value="Gerente">Gerente</option>
@@ -40,11 +40,11 @@
                                 <option value="Genérico Industrial">Genérico Industrial</option>
                                 <option value="Genérico ADM">Genérico ADM</option>
                             </select>
-                            <span asp-validation-for="Cargo" class="text-danger"></span>
+                            <span id="editCargoSpan" class="text-danger"></span>
                         </div>
                         <div class="col-6">
                             <label asp-for="Setor"></label>
-                            <select asp-for="Setor" id="selectSetor" class="form-control" name="selectSetor">
+                            <select  onchange="changeEditSetor(this.value)" asp-for="Setor" id="editselectSetor" class="form-control" name="selectSetor">
                                 <option value="Comercial">Comercial</option>
                                 <option value="PCP/S$OP">PCP/S$OP</option>
                                 <option value="Qualidade">Qualidade</option>
@@ -57,16 +57,16 @@
                                 <option value="Logística">Logística</option>
                                 <option value="Marketing">Marketing</option>
                             </select>
-                            <span asp-validation-for="Setor" class="text-danger"></span>
+                            <span id="editSetorSpan" asp-validation-for="Setor" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 mb-4">
                         <label asp-for="PhoneNumber"></label>
-                        <input asp-for="PhoneNumber" class="form-control" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        <input id="editPhoneNumber"  onchange="changeEditPhoneNumber(this.value)" asp-for="PhoneNumber" class="form-control" />
+                        <span id ="editPhoneNumberSpan"class="text-danger"></span>
                     </div>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary float-right">Editar</button>
+                    <button type="button" onclick="editvalidate()" class="btn btn-primary float-right">Editar</button>
                 </form>
             </div>
         </div>
@@ -75,3 +75,134 @@
 
 
 </div>
+
+<script>
+    var editName =''
+    var editPhoneNumber =''
+    var editCargo= ''
+    var editSetor =''
+    var editEmail =''
+
+    $(document).ready(function () {
+        editName = document.getElementById('editName').value
+        editPhoneNumber = document.getElementById('editPhoneNumber').value
+        editCargo = document.getElementById('editselectCargo').value
+        editSetor = document.getElementById('editselectSetor').value
+        editEmail = document.getElementById('editEmail').value
+    })
+        function changeEditName(value) {
+            editName = value;
+        }
+        function changeEditSetor(value) {
+            editSetor = value;
+        }
+        function changeEditCargo(value) {
+            editCargo = value;
+        }
+        function changeEditEmail(value) {
+            editEmail = value;
+        }
+        function changeEditPhoneNumber(value) {
+            editPhoneNumber = value;
+        }
+        function editvalidate() {
+            var validateName = this.validateName(editName)
+            var validatePhoneNumber = this.validatePhoneNumber(editPhoneNumber)
+            var validateEmail = this.validateEmail(editEmail)
+            var validateSetor = this.validateSetor(editSetor)
+            var validateCargo = this.validateCargo(editCargo)
+            var validation = validateName && validatePhoneNumber && validateEmail && validateSetor && validateCargo
+            if (validation) {
+                token = $('form').serializeArray()[0].value;
+
+                $('#EditUserModal').modal('hide');
+                $.ajax({
+                    url: 'Edit',
+                    data: {
+                        __RequestVerificationToken: token,
+                        UserID: document.getElementById('editUserID').value,
+                        CompanyiD: document.getElementById('editCompanyId').value,
+                        Id: document.getElementById('editId').value,
+                        Name: editName,
+                        PhoneNumber: editPhoneNumber,
+                        Setor: editSetor,
+                        Cargo: editCargo,
+                        Email: editEmail,
+                    },
+                    method: 'Post',
+                    dataType: 'json',
+                })
+
+            }
+
+        }
+        function validateName(editName) {
+            if (!editName) {
+                document.getElementById('editNameSpan').innerHTML = 'Campo Obrigatório';
+                document.getElementById('editNameSpan').style.display = '';
+                return false
+            }
+            else {
+                document.getElementById('editNameSpan').style.display = 'none';
+                return true
+            }
+        }
+        function validatePhoneNumber(editPhoneNumber) {
+            var formattel = /^\d+$/.test(editPhoneNumber)
+            if (!editPhoneNumber) {
+                document.getElementById('editPhoneNumberSpan').innerHTML = 'Campo Obrigatório';
+                document.getElementById('editPhoneNumberSpan').style.display = '';
+                return false
+            }
+            else if (editPhoneNumber.length < 10 || !formattel) {
+                document.getElementById('editPhoneNumberSpan').innerHTML = 'Digite um número de telefone válido com DDD';
+                document.getElementById('editPhoneNumberSpan').style.display = '';
+                return false
+            }
+            else {
+                document.getElementById('editPhoneNumberSpan').style.display = 'none';
+                return true
+            }
+        }
+        function validateEmail(editEmail) {
+            var re = /\S+@@\S+\.\S+/;
+            var formatEmail = re.test(editEmail);
+            if (!editEmail) {
+                document.getElementById('editEmailSpan').innerHTML = 'Campo Obrigatório';
+                document.getElementById('editEmailSpan').style.display = '';
+                return false
+            }
+            else if (!formatEmail) {
+                document.getElementById('editEmailSpan').innerHTML = 'Insira um email válido';
+                document.getElementById('editEmailSpan').style.display = '';
+                return false
+            }
+            else {
+                document.getElementById('editEmailSpan').style.display = 'none';
+                return true
+            }
+        }
+        function validateSetor(editSetor) {
+            if (!editSetor) {
+                document.getElementById('editSetorSpan').innerHTML = 'Selecione um Setor';
+                document.getElementById('editSetorSpan').style.display = '';
+                return false
+            }
+            else {
+                document.getElementById('editSetorSpan').style.display = 'none';
+                return true
+            }
+        }
+        function validateCargo(editCargo) {
+            if (!editCargo) {
+                document.getElementById('editCargoSpan').innerHTML = 'Selecione um Cargo';
+                document.getElementById('editCargoSpan').style.display = '';
+                return false
+            }
+            else {
+                document.getElementById('editCargoSpan').style.display = 'none';
+                return true
+            }
+        }
+   
+</script>

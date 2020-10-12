@@ -100,7 +100,7 @@ namespace Bomix_Force.Controllers
                 //todo user can't see user page
                 return View();
             }
-         
+
             var userList = userView.ToPagedList(page, 9);
             return View(userList);
         }
@@ -111,7 +111,7 @@ namespace Bomix_Force.Controllers
             ViewBag.indexEmployeeID = id;
             string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             Company company = _genericCompanyService.Get(c => c.Id == id).First();
-            IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId ==id);
+            IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == id);
             List<UserViewModel> userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
             ViewBag.indexEmployees = true;
             foreach (var item in userView)
@@ -150,8 +150,17 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserViewModel userVIew)
+        public async Task<ActionResult> Create(string Username, string Name, string Setor, string Cargo, string Email, string PhoneNumber)
         {
+            UserViewModel userView = new UserViewModel()
+            {
+                UserName = Username,
+                Name = Name,
+                Setor = Setor,
+                Cargo = Cargo,
+                Email = Email,
+                PhoneNumber = PhoneNumber,
+            };
             try
             {
                 //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -165,7 +174,7 @@ namespace Bomix_Force.Controllers
                     string randomPass = passwordGenerator.GeneratePassword();
                     //Person person_owner = _genericPersonService.Get(u => u.IdentityUserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.IdentityUserId == userId).First();
-                    var user = new IdentityUser { UserName = userVIew.UserName, Email = userVIew.Email };
+                    var user = new IdentityUser { UserName = userView.UserName, Email = userView.Email };
                     var result = await _userManager.CreateAsync(user, randomPass);
 
                     if (company.Id == 0 && User.IsInRole("Admin"))
@@ -176,7 +185,7 @@ namespace Bomix_Force.Controllers
 
                     if (result.Succeeded)
                     {
-                        Person person = new Person { Name = userVIew.Name, Cargo = userVIew.Cargo, Setor = userVIew.Setor, CompanyId = company.Id, IdentityUserId = user.Id, Email = userVIew.Email };
+                        Person person = new Person { Name = userView.Name, Cargo = userView.Cargo, Setor = userView.Setor, CompanyId = company.Id, IdentityUserId = user.Id, Email = userView.Email };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Novo usuário criado.");
@@ -210,21 +219,19 @@ namespace Bomix_Force.Controllers
         [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
-     
-                Person person = _genericPersonService.Get(u => u.Id == id).First();
-                UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(person);
-                return PartialView("_userModelPartial", userViewEdit);
-       
-            return RedirectToAction(nameof(Index));
+
+            Person person = _genericPersonService.Get(u => u.Id == id).First();
+            UserViewEdit userViewEdit = _mapper.Map<UserViewEdit>(person);
+            return PartialView("_userModelPartial", userViewEdit);
+
         }
         // POST: UserController/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(UserViewEdit userviewEdit, string selectCargo, string selectSetor)
+        public async Task<ActionResult> Edit(string UserID, string Name,string Id, string Setor, string Cargo, string Email, string PhoneNumber, int CompanyId)
         {
             try
             {
-                userviewEdit.Cargo = selectCargo;
-                userviewEdit.Setor = selectSetor;
+                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), UserID = UserID, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, PhoneNumber = PhoneNumber, CompanyId = CompanyId };
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
