@@ -41,7 +41,8 @@ namespace Bomix_Force
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ModelContext>();
+                .AddEntityFrameworkStores<ModelContext>()
+                .AddErrorDescriber<PortugueseIdentityErrorDescriber>();
 
             services.AddAuthorization(options =>
             {
@@ -52,7 +53,6 @@ namespace Bomix_Force
                 options.AddPolicy("RequirUserRole",
                     policy => policy.RequireRole("User"));
             });
-
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));

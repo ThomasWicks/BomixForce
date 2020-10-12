@@ -14,6 +14,7 @@ ViewData["Title"] = "Log in";
                 <form id="account" method="post">
                     <div class="login-center-button">
                         <div class="login-inputs">
+                            @Html.ValidationMessage("loginError", "", new { @class = "text-danger" })
                             <label class="login-label" for="exampleInputEmail1">Usuário</label>
                             <input asp-for="Input.UserName" placeholder="Usuario" class="input" />
                             <span asp-validation-for="Input.UserName" class="text-danger"></span>
