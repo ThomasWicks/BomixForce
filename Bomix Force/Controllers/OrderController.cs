@@ -68,7 +68,9 @@ namespace Bomix_Force.Controllers
             catch (Exception ex)
             {
                 //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
-                return View();
+                List<OrderViewModel> orderView = new List<OrderViewModel>();
+                ModelState.AddModelError("orderIndexError", "Não foi possivel adquirir a lista de pedidos devido ao seguinte erro: " + ex.Message);
+                return View(orderView);
             }
         }
 
