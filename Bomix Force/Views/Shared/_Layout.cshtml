@@ -100,7 +100,7 @@
         }
 
         [class="margin-add-user"] {
-            margin-left: 29% !important; 
+            margin-left: 29% !important;
         }
     }
 
@@ -345,9 +345,9 @@
         border: 0px;
     }
 
-    .input-search:focus {
-        outline: none;
-    }
+        .input-search:focus {
+            outline: none;
+        }
 
     .card-white {
         position: relative;
@@ -450,28 +450,29 @@
         background-color: #002a51;
     }
 
-    .options-account {
-        position: absolute;
-        height: 56px;
-        left: 0px;
-        right: 0px;
-        top: 0px;
-        background: #c4c4c4;
+    .options-account-container {
+        display: flex;
+        float: right;
+        margin-top: 15%;
     }
 
-    .option-account-selected {
-        width: 177px;
-        height: 28px;
-        border-radius: 4px;
-        background-color: #002a51;
-    }
-
-    .option-account-unselected {
-        width: 177px;
-        height: 28px;
+    ul.options {
+        list-style-type: none;
+        width: 90px;
+        padding: 0;
         border-radius: 4px;
         background-color: #c4c4c4;
+        color: white;
     }
+
+    li.options-label {
+        cursor: pointer;
+        padding: 2px;
+    }
+
+        li.options-label:active {
+            background-color: #002a51;
+        }
 
     .bg-account-data {
         width: 632px;
@@ -524,12 +525,12 @@
         display: inline-block;
     }
 
-    .pagination-history a {
-        color: black;
-        float: left;
-        padding: 8px 0px;
-        text-decoration: none;
-    }
+        .pagination-history a {
+            color: black;
+            float: left;
+            padding: 8px 0px;
+            text-decoration: none;
+        }
 
     .ic-size {
         width: 40px;
