@@ -65,9 +65,8 @@ namespace Bomix_Force.Controllers
                 {
 
                     var userViewCompany = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                    var userViewTel = userView.Where(s => s.PhoneNumber.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
-                    userView = userViewCompany.Union(userViewTel).Union(userViewEmail).ToList();
+                    userView = userViewCompany.Union(userViewEmail).ToList();
 
                 }
 
@@ -150,7 +149,7 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string Username, string Name, string Setor, string Cargo, string Email, string PhoneNumber)
+        public async Task<ActionResult> Create(string Username, string Name, string Setor, string Cargo, string Email)
         {
             UserViewModel userView = new UserViewModel()
             {
@@ -159,7 +158,6 @@ namespace Bomix_Force.Controllers
                 Setor = Setor,
                 Cargo = Cargo,
                 Email = Email,
-                PhoneNumber = PhoneNumber,
             };
             try
             {
@@ -174,7 +172,7 @@ namespace Bomix_Force.Controllers
                     string randomPass = passwordGenerator.GeneratePassword();
                     //Person person_owner = _genericPersonService.Get(u => u.IdentityUserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.IdentityUserId == userId).First();
-                    var user = new IdentityUser { UserName = userView.UserName, Email = userView.Email, PhoneNumber = PhoneNumber };
+                    var user = new IdentityUser { UserName = userView.UserName, Email = userView.Email };
                     var result = await _userManager.CreateAsync(user, randomPass);
 
                     if (company.Id == 0 && User.IsInRole("Admin"))
@@ -227,11 +225,11 @@ namespace Bomix_Force.Controllers
         }
         // POST: UserController/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(string UserID, string Name,string Id, string Setor, string Cargo, string Email, string PhoneNumber, int CompanyId)
+        public async Task<ActionResult> Edit(string UserID, string Name,string Id, string Setor, string Cargo, string Email, int CompanyId)
         {
             try
             {
-                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), UserID = UserID, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, PhoneNumber = PhoneNumber, CompanyId = CompanyId };
+                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), UserID = UserID, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, CompanyId = CompanyId };
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);

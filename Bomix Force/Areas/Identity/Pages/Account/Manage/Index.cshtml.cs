@@ -6,53 +6,54 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using Microsoft.Extensions.Logging;
 namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
 {
-    public partial class IndexModel : PageModel
+    public class ChangePasswordModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ILogger<ChangePasswordModel> _logger;
 
-        public IndexModel(
+        public ChangePasswordModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger;
         }
-
-        public string Username { get; set; }
-
-        [TempData]
-        public string StatusMessage { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public class InputModel
         {
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            [Required(ErrorMessage = "O campo é obrigatório")]
+            [DataType(DataType.Password)]
+            [Display(Name = "Current password")]
+            public string OldPassword { get; set; }
 
-            [EmailAddress]
-            public string Email { get; set; }
-        }
+            [Required(ErrorMessage = "O campo é obrigatório")]
+            [LowerCase(ErrorMessage ="A senha deve conter ao menos uma letra minúscula")]
+            [UpperCase(ErrorMessage ="A senha deve conter ao menos uma letra maiúscula")]
+            [Number(ErrorMessage ="A senha deve conter ao menos um número")]
+            [SpecialChars(ErrorMessage ="A senha deve ter ao menos uma carácter especial (@, !, #, etc...")]
+            [StringLength(100, ErrorMessage = "A senha deve ter ao menos 6 caractéres", MinimumLength = 6)]
+      
+            [DataType(DataType.Password)]
+            [Display(Name = "New password")]
+            public string NewPassword { get; set; }
+            [Required(ErrorMessage = "O campo é obrigatório")]
+            [DataType(DataType.Password)]
+            [Display(Name = "Confirm new password")]
 
-        private async Task LoadAsync(IdentityUser user)
-        {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            var email = await _userManager.GetEmailAsync(user);
-
-            Username = userName;
-
-            Input = new InputModel
-            {
-                PhoneNumber = phoneNumber,
-                Email = email
-            };
+            [Compare("NewPassword", ErrorMessage = "as senhas não coincidem")]
+            public string ConfirmPassword { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -63,49 +64,81 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            await LoadAsync(user);
+            var hasPassword = await _userManager.HasPasswordAsync(user);
+            if (!hasPassword)
+            {
+                return RedirectToPage("./SetPassword");
+            }
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            if (!ModelState.IsValid)
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
+            if (changePasswordResult.Succeeded)
             {
-                await LoadAsync(user);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmEmailResult = await _userManager.ConfirmEmailAsync(user, code);
+            }
+            else if (!changePasswordResult.Succeeded)
+            {
+
+
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    ModelState.AddModelError("changepasswordError", error.Description);
+                }
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
-                }
-            }
-
-            var email = await _userManager.GetEmailAsync(user);
-            if (Input.Email != email)
-            {
-                var setEmailResult = await _userManager.SetEmailAsync(user, Input.Email);
-                if (!setEmailResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
-                }
-            }
-
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            _logger.LogInformation("User changed their password successfully.");
+            StatusMessage = "Your password has been changed.";
+
             return RedirectToPage();
         }
+    }
+}
+
+public class SpecialChars : RegularExpressionAttribute
+{
+    public SpecialChars()
+        : base("^(?=.*[@#$%^&+=]).*$")
+    {
+    }
+}
+
+public class UpperCase : RegularExpressionAttribute
+{
+    public UpperCase()
+        : base("^(?=.*[A-Z]).*$")
+    {
+    }
+}
+
+public class LowerCase : RegularExpressionAttribute
+{
+    public LowerCase()
+        : base("^(?=.*[a-z]).*$")
+    {
+    }
+}
+public class Number: RegularExpressionAttribute
+{
+    public Number()
+        : base("^(?=.*[0-9]).*$")
+    {
     }
 }

@@ -30,11 +30,6 @@
                             <input onchange="changeCreateName(this.value)" id="createName" asp-for="@Model.Name" class="form-control" />
                             <span id="createNameSpan" class="text-danger"></span>
                         </div>
-                        <div class="col-6">
-                            <label asp-for="@Model.PhoneNumber"></label>
-                            <input id="createPhone" class="form-control" />
-                            <span id="createPhoneNumberSpan" class="text-danger"></span>
-                        </div>
 
                     </div>
                     <div class="row py-2 mb-4">
@@ -85,15 +80,11 @@
 <script>
     var createUsername = ''
     var createName = ''
-    var createPhoneNumber = ''
     var createCargo = ''
     var createSetor = ''
     var createEmail = ''
 
-    $(document).ready(function () {
-        var phoneInput = document.getElementById('createPhone')
-        phoneInput.onkeyup = function () { changeCreatePhoneNumber(phoneInput.value) }
-    })
+  
 
     function changeCreateUsername(value) {
         createUsername = value;
@@ -110,22 +101,14 @@
     function changeCreateEmail(value) {
         createEmail = value;
     }
-    function changeCreatePhoneNumber(value) {
-        if (value.length > 15) value = createPhoneNumber
-        value = value.replace(/\D/g, "");            
-        value = value.replace(/^(\d{2})(\d)/g, "($1) $2"); 
-        value = value.replace(/(\d)(\d{4})$/, "$1-$2");    
-        document.getElementById('createPhone').value = value
-        createPhoneNumber = value;
-    }
+
     function validateCreate() {
         var validateUsername = this.validateUsername(createUsername)
         var validateName = this.validateName(createName)
-        var validatePhoneNumber = this.validatePhoneNumber(createPhoneNumber)
         var validateEmail = this.validateEmail(createEmail)
         var validateSetor = this.validateSetor(createSetor)
         var validateCargo = this.validateCargo(createCargo)
-        var validation = validateUsername && validateName && validatePhoneNumber && validateEmail && validateSetor && validateCargo
+        var validation = validateUsername && validateName && validateEmail && validateSetor && validateCargo
         if (validation) {
             token = $('form').serializeArray()[0].value;
 
@@ -136,7 +119,6 @@
                     __RequestVerificationToken: token,
                     Username: createUsername,
                     Name: createName,
-                    PhoneNumber: createPhoneNumber,
                     Setor: createSetor,
                     Cargo: createCargo,
                     Email: createEmail,
@@ -170,24 +152,7 @@
             return true
         }
     }
-    function validatePhoneNumber(createPhoneNumber) {
-        re = /(\(?\d{2}\)?\s)?(\d{4,5}\-\d{4})/
-        var formattel = re.test(createPhoneNumber)
-        if (!createPhoneNumber) {
-            document.getElementById('createPhoneNumberSpan').innerHTML = 'Campo Obrigatório';
-            document.getElementById('createPhoneNumberSpan').style.display = '';
-            return false
-        }
-        else if (createPhoneNumber.length<10 || !formattel) {
-            document.getElementById('createPhoneNumberSpan').innerHTML = 'Digite um número de telefone válido com DDD';
-            document.getElementById('createPhoneNumberSpan').style.display = '';
-            return false
-        }
-        else {
-            document.getElementById('createPhoneNumberSpan').style.display = 'none';
-            return true
-        }
-    }
+ 
     function validateEmail(createEmail) {
         var re = /\S+@@\S+\.\S+/;
         var formatEmail = re.test(createEmail);
