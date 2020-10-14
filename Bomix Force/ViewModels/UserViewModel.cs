@@ -36,6 +36,7 @@ namespace Bomix_Force.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "As senhas não correspondem.")]
         public string ConfirmPassword { get; set; }
+        [Display(Name = "Nome")]
         [Required]
         public string Name { get; set; }
         [Display(Name = "Cargo")]
@@ -57,6 +58,7 @@ namespace Bomix_Force.ViewModels
         [Required]
         public string UserID { get; set; }
 
+        [Display(Name = "Nome")]
         [Required]
         public string Name { get; set; }
         [Required]
