@@ -105,16 +105,16 @@
                     <div class="row float-right">
                         <div class="col-xs-12">
                             @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, id = ViewBag.indexEmployeeID }),
-new X.PagedList.Mvc.Core.Common.PagedListRenderOptions()
-{
- ContainerDivClasses = new[] { "container-pagination" },
- LiElementClasses = new[] { "page-item" },
- PageClasses = new[] { "attributes-pag" },
- MaximumPageNumbersToDisplay = 4,
- ActiveLiElementClass = "page-active",
- DisplayEllipsesWhenNotShowingAllPageNumbers = false,
- DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Never
-})
+                                new X.PagedList.Mvc.Core.Common.PagedListRenderOptions()
+                                {
+                                 ContainerDivClasses = new[] { "container-pagination" },
+                                 LiElementClasses = new[] { "page-item" },
+                                 PageClasses = new[] { "attributes-pag" },
+                                 MaximumPageNumbersToDisplay = 4,
+                                 ActiveLiElementClass = "page-active",
+                                 DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+                                 DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Never
+                                })
                         </div>
                     </div>
                 </div>
