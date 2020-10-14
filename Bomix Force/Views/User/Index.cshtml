@@ -81,7 +81,6 @@
                                 <p class="info-card-white">Email: @Html.DisplayFor(modelItem => item.Email)</p>
                                 @if (!ViewBag.indexEmployees && (User.IsInRole("Admin") || User.IsInRole("Employee")))
                                 {
-                                    <p class="info-card-white">Telefone: @Html.DisplayFor(modelItem => item.PhoneNumber)</p>
                                     <p class="info-card-white">CNPJ: @Html.DisplayFor(modelItem => item.Cnpj)</p>
                                 }
                                 else

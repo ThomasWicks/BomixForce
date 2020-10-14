@@ -38,9 +38,6 @@ namespace Bomix_Force.ViewModels
         public string ConfirmPassword { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
-        [Display(Name = "Telefone")]
-        public string PhoneNumber { get; set; }
         [Display(Name = "Cargo")]
         [Required]
         public string Cargo { get; set; }
@@ -62,10 +59,6 @@ namespace Bomix_Force.ViewModels
 
         [Required]
         public string Name { get; set; }
-        [Required]
-        [Display(Name = "Telefone")]
-        [DataType(DataType.PhoneNumber)]
-        public string PhoneNumber { get; set; }
         [Required]
         public string Cargo { get; set; }
         [Required]

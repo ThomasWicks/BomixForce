@@ -92,7 +92,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        return LocalRedirect("/Identity/Account/Manage/ChangePassword");
+                        return LocalRedirect("/Identity/Account/Manage");
                     }
                 }
                 if (result.RequiresTwoFactor)
