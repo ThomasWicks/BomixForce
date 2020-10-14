@@ -1,27 +1,33 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Conta do Usuário";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h4>@ViewData["Title"]</h4>
+<h5 class="title-user title-pass">@ViewData["Title"]</h5>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" disabled />
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
-        </form>
+<div class="change-pass-container">
+    <div class="change-pass-box">
+        <div class="change-pass-form">
+            <h5>Perfil</h5>
+            <form id="change-password-form" method="post">
+                <div class="login-inputs">
+                    <label>Usuário</label>
+                    <input asp-for="Username" class="input" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                    <label>Telefone</label>
+                    <input asp-for="Input.PhoneNumber" class="input" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    <label>Email</label>
+                    <input asp-for="Input.Email" class="input" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="right-button">
+                    <button type="submit" style="margin-right:0; margin-bottom:0; width:30%;" class="bt-save">Salvar</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
