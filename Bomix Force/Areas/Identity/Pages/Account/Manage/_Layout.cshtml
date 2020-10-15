@@ -11,16 +11,20 @@
 
 
 
-<div>
-    <div class="row" style="margin-top:5%;">
+    @*<div class="row" style="margin-top:5%;">
         <div class="col-md-3">
             <partial name="_ManageNav" />
-        </div>
-        <div class="col-md-9">
-            @RenderBody()
-        </div>
-    </div>
+        </div>*@
+<div class="mx-5 pagination-history">
+    <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+    <a class="pagina-atual">Conta do usuário</a>
 </div>
+    <div class="text-center">
+
+
+        @RenderBody()
+    </div>
+    @*</div>*@
 
 @section Scripts {
     @RenderSection("Scripts", required: false)
