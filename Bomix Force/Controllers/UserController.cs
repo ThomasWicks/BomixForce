@@ -212,8 +212,30 @@ namespace Bomix_Force.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
+        [HttpGet]
+        [Route("User/getUserName")]
+        public string getUserName()
+        {
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (User.IsInRole("Employee"))
+            {
+                Employee employee = _genericEmployeeService.Get(e => e.IdentityUserId == userId).First();
+                return employee.Name;
+            }
+            else if (User.IsInRole("Company") || User.IsInRole("Admin"))
+            {
+                Company company = _genericCompanyService.Get(c => c.IdentityUserId == userId).First();
+                return company.Name;
+            }
+           
+            else
+            {
+                Person person = _genericPersonService.Get(p => p.IdentityUserId == userId).First();
+                return person.Name;
+            }
+        }
         // GET: UserController/Edit/5
+        
         [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
