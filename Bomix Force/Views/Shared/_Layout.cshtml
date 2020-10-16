@@ -11,23 +11,24 @@
 </head>
 
 <body class="background-screen">
-@if(User.Identity.Name != null){
-    <header class="background-screen">   
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow ">
-            <div class="container ">
-                <a asp-area="" asp-controller="Home" asp-action="Login"><img src="~/Assets/logo-bomix-header.png" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
+    @if (User.Identity.Name != null)
+    {
+        <header class="background-screen">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow ">
+                <div class="container ">
+                    <a asp-area="" asp-controller="Home" asp-action="Login"><img src="~/Assets/logo-bomix-header.png" /></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <partial name="_LoginPartial" />
+                    </div>
+                    <div>
+                    </div>
                 </div>
-                <div>
-                </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
         <!-- <aside class="navbar navbar-toggleable-sm navbar-light bg-white border-right position-fixed margin-topbar" style="border-heigth:600px;width: 110px;">
             <div>
                 <a href="@Url.Action("Index", "User")">
@@ -53,21 +54,24 @@
                 @RenderBody()
             </main>
         </div>
-}else{
-     @RenderBody()  
-}
+    }
+    else
+    {
+        @RenderBody()
+    }
 
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2020 - Bomix_Force - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="https://kit.fontawesome.com/96765fe8b0.js" crossorigin="anonymous"></script>
-        @RenderSection("Scripts", required: false)
-    </body>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - Bomix_Force - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/96765fe8b0.js" crossorigin="anonymous"></script>
+    @RenderSection("Scripts", required: false)
+   
+</body>
 </html>
 
 <style lang="scss">
