@@ -12,7 +12,8 @@ namespace Bomix_Force.ViewModels
         public string Lote { get; set; }
         public string Description { get; set; }
         public string Nf { get; set; }
-        public int ItemEnum { get; set; }
+        public string SelectedItem { get; set; }
+        public List<string> Itens { get; set; }
         public int Quantity { get; set; }
         public string Answer { get; set; }
     }

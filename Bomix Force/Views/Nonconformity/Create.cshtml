@@ -17,6 +17,25 @@
                     <input asp-for="Lote" class="form-control" />
                     <span asp-validation-for="Lote" class="text-danger"></span>
                 </div>
+                <div class="form-group">
+                    <label class="control-label">Nota Fiscal</label>
+                    <input asp-for="Nf" class="form-control" />
+                    <span asp-validation-for="Nf" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Quantidade</label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Item</label>
+                    <select asp-for="SelectedItem" class="form-control">
+                        @foreach (var item in Model.Itens)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                </div>
                 <dl>
                     <dt>
                         <label for="FileUpload_FormFile">File</label>

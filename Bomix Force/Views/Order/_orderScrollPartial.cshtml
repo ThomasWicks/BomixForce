@@ -25,15 +25,91 @@
         <th class="text-center ">
             @SubItem.Value.Arte
         </th>
-        <th class="text-center ">
-            @SubItem.Value.Arte
-        </th>
         <th class="text-center">
             @SubItem.Value.Personalizacao
         </th>
+        @if (!User.IsInRole("User") && !User.IsInRole("Company"))
+        {
+            <th class="text-center">
+                @item.Cliente
+            </th>
+        }
+            <th class="text-center">
+                @Html.DisplayFor(modelItem => @item.Emissao)
+            </th>
+            <th class="text-center">
+                @item.Cidade - @item.UF
+            </th>
+            @if (@item.Status == "ENCERRADO")
+            {
+                <th class="mt-2 badge bg-danger">
+
+                    Encerrado
+                </th>
+
+            }
+            else if (@item.Status == "ABERTO")
+            {
+                <th class="mt-2 badge bg-primary">
+                    Aberto
+                </th>
+            }
+            else if (@item.Status == "LIBERADO")
+            {
+                <th class="mt-2 badge bg-success">
+                    Liberado
+                </th>
+            }
+            else if (@item.Status == "ORCAMENTO")
+            {
+                <th class="mt-2 badge bg-warning">
+                    Orçamento
+                </th>
+            }
+            else
+            {
+                <th class="mt-2 badge bg-secondary">
+                    @item.Status
+                </th>
+            }
+            @if (User.IsInRole("User"))
+            {
+                <th>
+
+                    <div class="modal-footer">
+
+                        <button type="submit" onclick="duplicate(@item.Pedido)" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
+                    </div>
+
+                </th>
+            }
+
+        </tr>
+        }
+    }else{
+<tr>
+    <th class="text-center">
+        @item.Pedido
+
+    </th>
+    <th class="text-center">
+        -
+    </th>
+    <th class="text-center">
+        -
+    </th>
+    <th class="text-center ">
+        -
+    </th>
+    <th class="text-center">
+        -
+    </th>
+    @if (!User.IsInRole("User") && !User.IsInRole("Company"))
+    {
         <th class="text-center">
             @item.Cliente
         </th>
+    }
         <th class="text-center">
             @Html.DisplayFor(modelItem => @item.Emissao)
         </th>
@@ -56,7 +132,7 @@
         }
         else if (@item.Status == "LIBERADO")
         {
-            <th class="mt-2 badge bg-success">
+            <th class="mt-2 badge bg-success ">
                 Liberado
             </th>
         }
@@ -75,90 +151,14 @@
         @if (User.IsInRole("User"))
         {
             <th>
-
-                <div class="modal-footer">
+                <div>
 
                     <button type="submit" onclick="duplicate(@item.Pedido)" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
                 </div>
-
             </th>
         }
 
     </tr>
-        }
-    }else{
-<tr>
-    <th class="text-center">
-        @item.Pedido
-
-    </th>
-    <th class="text-center">
-        -
-    </th>
-    <th class="text-center">
-        -
-    </th>
-    <th class="text-center ">
-        -
-    </th>
-    <th class="text-center">
-        -
-    </th>
-    <th class="text-center">
-        -
-    </th>
-    <th class="text-center">
-        @item.Cliente
-    </th>
-    <th class="text-center">
-        @Html.DisplayFor(modelItem => @item.Emissao)
-    </th>
-    <th class="text-center">
-        @item.Cidade - @item.UF
-    </th>
-    @if (@item.Status == "ENCERRADO")
-    {
-        <th class="mt-2 badge bg-danger">
-
-            Encerrado
-        </th>
-
-    }
-    else if (@item.Status == "ABERTO")
-    {
-        <th class="mt-2 badge bg-primary">
-            Aberto
-        </th>
-    }
-    else if (@item.Status == "LIBERADO")
-    {
-        <th class="mt-2 badge bg-success ">
-            Liberado
-        </th>
-    }
-    else if (@item.Status == "ORCAMENTO")
-    {
-        <th class="mt-2 badge bg-warning">
-            Orçamento
-        </th>
-    }
-    else
-    {
-        <th class="mt-2 badge bg-secondary">
-            @item.Status
-        </th>
-    }
-    @if (User.IsInRole("User"))
-    {
-        <th>
-            <div>
-
-                <button type="submit" onclick="duplicate(@item.Pedido)" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
-            </div>
-        </th>
-    }
-
-</tr>
     }
 
     }
