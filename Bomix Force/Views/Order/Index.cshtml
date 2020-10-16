@@ -49,44 +49,44 @@
                             Arte
                         </th>
                         <th class="text-center">
-                            Status Arte
-                        </th>
-                        <th class="text-center">
                             Personalizado
                         </th>
-                        <th class="text-center">
-                            Cliente
-                        </th>
-                        <th class="text-center">
-                            PCP
-                            @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
-                            @if (ViewBag.filter == "EmissaoAsc")
-                            {
-                                <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
-                            }
-                            @if (ViewBag.filter != "EmissaoAsc")
-                            {
-                                <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
-                            }
-
-                            @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
-                            @*<span class="glyphicon glyphicon-menu-up"></span>*@ @*Botão virado pra cima*@
-                            @*<span class="glyphicon glyphicon-menu-down"></span>*@ @*Botão virado pra baixo*@
-                        </th>
-
-                        <th class="text-center">
-                            Cidade - UF
-                        </th>
-                        <th class="text-center">
-                            Status
-                        </th>
-                        @if (User.IsInRole("User"))
+                        @if (!User.IsInRole("User") && !User.IsInRole("Company"))
                         {
                             <th class="text-center">
-                                Detalhes
+                                Cliente
                             </th>
                         }
-                    </tr>
+                            <th class="text-center">
+                                PCP
+                                @*@Html.ActionLink("Emissão", "Index", new { filter = "Emissao" })*@
+                                @if (ViewBag.filter == "EmissaoAsc")
+                                {
+                                    <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
+                                }
+                                @if (ViewBag.filter != "EmissaoAsc")
+                                {
+                                    <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
+                                }
+
+                                @* colocar um if para verificar se é pra ser o iconede menu down ou menu up *@
+                                @*<span class="glyphicon glyphicon-menu-up"></span>*@ @*Botão virado pra cima*@
+                                @*<span class="glyphicon glyphicon-menu-down"></span>*@ @*Botão virado pra baixo*@
+                            </th>
+
+                            <th class="text-center">
+                                Cidade - UF
+                            </th>
+                            <th class="text-center">
+                                Status
+                            </th>
+                            @if (User.IsInRole("User"))
+                            {
+                                <th class="text-center">
+                                    Detalhes
+                                </th>
+                            }
+                        </tr>
                 </thead>
                 <tbody id="tableOrderbody">
 
