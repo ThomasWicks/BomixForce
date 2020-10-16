@@ -6,28 +6,30 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <div class="row">
-        <li class="nav-item form-inline ml-4">
-            <a class="nav-link text-dark" id="currentUserName" title="Manage"></a>
-            <img src="~/Assets/divider.png" class="margin-img" />
+            <li class="nav-item form-inline ml-4">
+                <a on class="nav-link text-dark" id="currentUserName" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+                <img src="~/Assets/divider.png" class="margin-img" />
 
-        </li>
-        <div class="dropdown open">
-            <button class="btn btn-white dropdown-toggle"
-                    type="button" id="dropdownMenu5" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                @if (User.IsInRole("Company")){
-                    <img src="~/Assets/profile-circle-enterprise.png" />
-                }
-                else{
-                    <img src="~/Assets/profile-circle-person.png" />
-                }
-            </button>
-            <div class="dropdown-menu">
-                <form class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Login", "Home", new { area = "" })">
-                    <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"> Logout</i></button>
-                </form>
+            </li>
+            <div class="dropdown open">
+                <button class="btn btn-white dropdown-toggle"
+                        type="button" id="dropdownMenu5" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    @if (User.IsInRole("Company"))
+                    {
+                        <img src="~/Assets/profile-circle-enterprise.png" />
+                    }
+                    else
+                    {
+                        <img src="~/Assets/profile-circle-person.png" />
+                    }
+                </button>
+                <div class="dropdown-menu">
+                    <form class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Login", "Home", new { area = "" })">
+                        <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"> Logout</i></button>
+                    </form>
+                </div>
             </div>
-        </div>
         </div>
     }
     else
@@ -41,18 +43,15 @@
         </li>
     }
 </ul>
-<script src="~/js/jquery-1.7.1.min.js"></script>
+    <script src="~/js/jquery-1.7.1.min.js"></script>
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: 'User/getUserName',
+            url: '../User/getUserName',
             method: 'Get',
             success: function (data) {
-                document.getElementById('currentUserName').innerHTML = data
+                document.getElementById('currentUserName').innerText = data
             }
         })
-
-
     })
-
 </script>
