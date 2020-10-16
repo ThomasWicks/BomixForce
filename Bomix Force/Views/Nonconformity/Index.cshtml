@@ -17,10 +17,10 @@
                         @Html.DisplayNameFor(model => model.Lote)
                     </th>
                     <th class="text-center text-white">
-                        @Html.DisplayNameFor(model => model.Description)
+                        @Html.DisplayNameFor(model => model.Nf)
                     </th>
                     <th class="text-center text-white">
-                        @Html.DisplayNameFor(model => model.Answer)
+                        @Html.DisplayNameFor(model => model.Description)
                     </th>
                     <th></th>
                 </tr>
@@ -34,11 +34,11 @@
                             <td class="text-center ">
                                 @Html.DisplayFor(modelItem => item.Lote)
                             </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Nf)
+                            </td>
                             <td class="text-center ">
                                 @Html.DisplayFor(modelItem => item.Description)
-                            </td>
-                            <td class="text-center">
-                                @Html.DisplayFor(modelItem => item.Answer)
                             </td>
                             <td>
                                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
