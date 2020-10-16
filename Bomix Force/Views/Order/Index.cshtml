@@ -96,16 +96,27 @@
                     }
                     else
                     {
-                        <tr>
-                            <td>
-                                <h6>Não há pedidos cadastrados.</h6>
-                            </td>
-                        </tr>
+                        @if (!User.IsInRole("Company"))
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <h6>Não foi possível encontrar Pedidos.</h6>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <h6>Não foi possível encontrar Pedidos.</h6>
+                                </td>
+                            </tr>
+                        }
                     }
 
                 </tbody>
             </table>
-            @Html.ValidationMessage("orderIndexError", "", new { @class = "text-danger" })
+            @*@Html.ValidationMessage("orderIndexError", "", new { @class = "text-danger" })*@
             <div class="text-center" id="loadingdiv">
                 <div class="spinner-border" role="status">
                     <span class="sr-only text-center">Carregando...</span>

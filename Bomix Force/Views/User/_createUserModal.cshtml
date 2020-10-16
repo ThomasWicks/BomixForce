@@ -35,22 +35,6 @@
 
                     <div class="row py-2 mb-4">
                         <div class="col-6">
-                            <label asp-for="@Model.Cargo"></label>
-                            <select id="selectCreateCargo" onchange="changeCreateCargo(this.value)" asp-for="@Model.Cargo" class="form-control ">
-                                <option value="">Selecione o Cargo</option>
-                                <option value="Propriétario">Propriétario</option>
-                                <option value="Diretor">Diretor</option>
-                                <option value="Gerente">Gerente</option>
-                                <option value="Coordenador">Coordenador</option>
-                                <option value="Supervisor">Supervisor</option>
-                                <option value="Analista">Analista</option>
-                                <option value="Assistente/Secretária">Assistente/Secretária</option>
-                                <option value="Genérico Industrial">Genérico Industrial</option>
-                                <option value="Genérico ADM">Genérico ADM</option>
-                            </select>
-                            <span id="createCargoSpan" class="text-danger"></span>
-                        </div>
-                        <div class="col-6">
                             <label asp-for="@Model.Setor"></label>
                             <select id="´selectCreateSetor" onchange="changeCreateSetor(this.value)" asp-for="@Model.Setor" class="form-control">
                                 <option value="">Selecione o Setor</option>
@@ -68,6 +52,23 @@
                             </select>
                             <span id="createSetorSpan" class="text-danger"></span>
                         </div>
+                        <div class="col-6">
+                            <label asp-for="@Model.Cargo"></label>
+                            <select id="selectCreateCargo" onchange="changeCreateCargo(this.value)" asp-for="@Model.Cargo" class="form-control ">
+                                <option value="">Selecione o Cargo</option>
+                                <option value="Propriétario">Propriétario</option>
+                                <option value="Diretor">Diretor</option>
+                                <option value="Gerente">Gerente</option>
+                                <option value="Coordenador">Coordenador</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="Analista">Analista</option>
+                                <option value="Assistente/Secretária">Assistente/Secretária</option>
+                                <option value="Genérico Industrial">Genérico Industrial</option>
+                                <option value="Genérico ADM">Genérico ADM</option>
+                            </select>
+                            <span id="createCargoSpan" class="text-danger"></span>
+                        </div>
+
                     </div>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     <button type="button" onclick="validateCreate()" class="btn btn-primary float-right">Cadastrar</button>
@@ -127,10 +128,9 @@
                 method: 'Post',
                 dataType: 'json',
             })
+        }
             location.reload();
             return false;
-
-        }
 
     }
     function validateUsername(createUsername) {
