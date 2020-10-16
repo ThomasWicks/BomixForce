@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-6">
                             <label asp-for="Email"></label>
-                            <input id="editEmail"  onchange="changeEditEmail(this.value)" asp-for="Email" class="form-control" />
+                            <input id="editEmail" onchange="changeEditEmail(this.value)" asp-for="Email" class="form-control" />
                             <span id="editEmailSpan" class="text-danger"></span>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                         <div class="col-6">
                             <label asp-for="Cargo"></label>
 
-                            <select  onchange="changeEditCargo(this.value)" asp-for="Cargo" id="editselectCargo" class="form-control" name="selectCargo">
+                            <select onchange="changeEditCargo(this.value)" asp-for="Cargo" id="editselectCargo" class="form-control" name="selectCargo">
                                 <option value="Propriétario">Propriétario</option>
                                 <option value="Diretor">Diretor</option>
                                 <option value="Gerente">Gerente</option>
@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-6">
                             <label asp-for="Setor"></label>
-                            <select  onchange="changeEditSetor(this.value)" asp-for="Setor" id="editselectSetor" class="form-control" name="selectSetor">
+                            <select onchange="changeEditSetor(this.value)" asp-for="Setor" id="editselectSetor" class="form-control" name="selectSetor">
                                 <option value="Comercial">Comercial</option>
                                 <option value="PCP/S$OP">PCP/S$OP</option>
                                 <option value="Qualidade">Qualidade</option>
@@ -60,11 +60,6 @@
                             <span id="editSetorSpan" asp-validation-for="Setor" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="py-2 mb-4">
-                        <label asp-for="PhoneNumber"></label>
-                        <input id="editPhoneNumber"  onchange="changeEditPhoneNumber(this.value)" asp-for="PhoneNumber" class="form-control" />
-                        <span id ="editPhoneNumberSpan"class="text-danger"></span>
-                    </div>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     <button type="button" onclick="editvalidate()" class="btn btn-primary float-right">Editar</button>
                 </form>
@@ -77,132 +72,110 @@
 </div>
 
 <script>
-    var editName =''
-    var editPhoneNumber =''
-    var editCargo= ''
-    var editSetor =''
-    var editEmail =''
+    var editName = ''
+    var editCargo = ''
+    var editSetor = ''
+    var editEmail = ''
 
     $(document).ready(function () {
         editName = document.getElementById('editName').value
-        editPhoneNumber = document.getElementById('editPhoneNumber').value
         editCargo = document.getElementById('editselectCargo').value
         editSetor = document.getElementById('editselectSetor').value
         editEmail = document.getElementById('editEmail').value
+
+
     })
-        function changeEditName(value) {
-            editName = value;
-        }
-        function changeEditSetor(value) {
-            editSetor = value;
-        }
-        function changeEditCargo(value) {
-            editCargo = value;
-        }
-        function changeEditEmail(value) {
-            editEmail = value;
-        }
-        function changeEditPhoneNumber(value) {
-            editPhoneNumber = value;
-        }
-        function editvalidate() {
-            var validateName = this.validateName(editName)
-            var validatePhoneNumber = this.validatePhoneNumber(editPhoneNumber)
-            var validateEmail = this.validateEmail(editEmail)
-            var validateSetor = this.validateSetor(editSetor)
-            var validateCargo = this.validateCargo(editCargo)
-            var validation = validateName && validatePhoneNumber && validateEmail && validateSetor && validateCargo
-            if (validation) {
-                token = $('form').serializeArray()[0].value;
+    function changeEditName(value) {
+        editName = value;
+    }
+    function changeEditSetor(value) {
+        editSetor = value;
+    }
+    function changeEditCargo(value) {
+        editCargo = value;
+    }
+    function changeEditEmail(value) {
+        editEmail = value;
+    }
+    function editvalidate() {
+        var validateName = this.validateName(editName)
+        var validateEmail = this.validateEmail(editEmail)
+        var validateSetor = this.validateSetor(editSetor)
+        var validateCargo = this.validateCargo(editCargo)
+        var validation = validateName && validateEmail && validateSetor && validateCargo
+        if (validation) {
+            token = $('form').serializeArray()[0].value;
 
-                $('#EditUserModal').modal('hide');
-                $.ajax({
-                    url: 'Edit',
-                    data: {
-                        __RequestVerificationToken: token,
-                        UserID: document.getElementById('editUserID').value,
-                        CompanyiD: document.getElementById('editCompanyId').value,
-                        Id: document.getElementById('editId').value,
-                        Name: editName,
-                        PhoneNumber: editPhoneNumber,
-                        Setor: editSetor,
-                        Cargo: editCargo,
-                        Email: editEmail,
-                    },
-                    method: 'Post',
-                    dataType: 'json',
-                })
-
-            }
+            $('#EditUserModal').modal('hide');
+            $.ajax({
+                url: 'Edit',
+                data: {
+                    __RequestVerificationToken: token,
+                    UserID: document.getElementById('editUserID').value,
+                    CompanyiD: document.getElementById('editCompanyId').value,
+                    Id: document.getElementById('editId').value,
+                    Name: editName,
+                    Setor: editSetor,
+                    Cargo: editCargo,
+                    Email: editEmail,
+                },
+                method: 'Post',
+                dataType: 'json',
+            })
 
         }
-        function validateName(editName) {
-            if (!editName) {
-                document.getElementById('editNameSpan').innerHTML = 'Campo Obrigatório';
-                document.getElementById('editNameSpan').style.display = '';
-                return false
-            }
-            else {
-                document.getElementById('editNameSpan').style.display = 'none';
-                return true
-            }
+
+    }
+    function validateName(editName) {
+        if (!editName) {
+            document.getElementById('editNameSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('editNameSpan').style.display = '';
+            return false
         }
-        function validatePhoneNumber(editPhoneNumber) {
-            var formattel = /^\d+$/.test(editPhoneNumber)
-            if (!editPhoneNumber) {
-                document.getElementById('editPhoneNumberSpan').innerHTML = 'Campo Obrigatório';
-                document.getElementById('editPhoneNumberSpan').style.display = '';
-                return false
-            }
-            else if (editPhoneNumber.length < 10 || !formattel) {
-                document.getElementById('editPhoneNumberSpan').innerHTML = 'Digite um número de telefone válido com DDD';
-                document.getElementById('editPhoneNumberSpan').style.display = '';
-                return false
-            }
-            else {
-                document.getElementById('editPhoneNumberSpan').style.display = 'none';
-                return true
-            }
+        else {
+            document.getElementById('editNameSpan').style.display = 'none';
+            return true
         }
-        function validateEmail(editEmail) {
-            var re = /\S+@@\S+\.\S+/;
-            var formatEmail = re.test(editEmail);
-            if (!editEmail) {
-                document.getElementById('editEmailSpan').innerHTML = 'Campo Obrigatório';
-                document.getElementById('editEmailSpan').style.display = '';
-                return false
-            }
-            else if (!formatEmail) {
-                document.getElementById('editEmailSpan').innerHTML = 'Insira um email válido';
-                document.getElementById('editEmailSpan').style.display = '';
-                return false
-            }
-            else {
-                document.getElementById('editEmailSpan').style.display = 'none';
-                return true
-            }
+    }
+    function validateEmail(editEmail) {
+        var re = /\S+@@\S+\.\S+/;
+        var formatEmail = re.test(editEmail);
+        if (!editEmail) {
+            document.getElementById('editEmailSpan').innerHTML = 'Campo Obrigatório';
+            document.getElementById('editEmailSpan').style.display = '';
+            return false
         }
-        function validateSetor(editSetor) {
-            if (!editSetor) {
-                document.getElementById('editSetorSpan').innerHTML = 'Selecione um Setor';
-                document.getElementById('editSetorSpan').style.display = '';
-                return false
-            }
-            else {
-                document.getElementById('editSetorSpan').style.display = 'none';
-                return true
-            }
+        else if (!formatEmail) {
+            document.getElementById('editEmailSpan').innerHTML = 'Insira um email válido';
+            document.getElementById('editEmailSpan').style.display = '';
+            return false
         }
-        function validateCargo(editCargo) {
-            if (!editCargo) {
-                document.getElementById('editCargoSpan').innerHTML = 'Selecione um Cargo';
-                document.getElementById('editCargoSpan').style.display = '';
-                return false
-            }
-            else {
-                document.getElementById('editCargoSpan').style.display = 'none';
-                return true
-            }
+        else {
+            document.getElementById('editEmailSpan').style.display = 'none';
+            return true
         }
-   
+    }
+    function validateSetor(editSetor) {
+        if (!editSetor) {
+            document.getElementById('editSetorSpan').innerHTML = 'Selecione um Setor';
+            document.getElementById('editSetorSpan').style.display = '';
+            return false
+        }
+        else {
+            document.getElementById('editSetorSpan').style.display = 'none';
+            return true
+        }
+    }
+    function validateCargo(editCargo) {
+        if (!editCargo) {
+            document.getElementById('editCargoSpan').innerHTML = 'Selecione um Cargo';
+            document.getElementById('editCargoSpan').style.display = '';
+            return false
+        }
+        else {
+            document.getElementById('editCargoSpan').style.display = 'none';
+            return true
+        }
+    }
+
 </script>

@@ -7,7 +7,7 @@
     {
         <div class="row">
         <li class="nav-item form-inline ml-4">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+            <a class="nav-link text-dark" id="currentUserName" title="Manage"></a>
             <img src="~/Assets/divider.png" class="margin-img" />
 
         </li>
@@ -41,3 +41,18 @@
         </li>
     }
 </ul>
+<script src="~/js/jquery-1.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: 'User/getUserName',
+            method: 'Get',
+            success: function (data) {
+                document.getElementById('currentUserName').innerHTML = data
+            }
+        })
+
+
+    })
+
+</script>

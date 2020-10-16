@@ -87,8 +87,6 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
             [Required]
             public string Name { get; set; }
             [Required]
-            [Display(Name = "Telefone")]
-            [DataType(DataType.PhoneNumber)]
             public int Tel { get; set; }
             [Required]
             public string Endereço { get; set; }
@@ -113,7 +111,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 var context = new ModelContext();
                 //TODO TEST IF COMPANY QUERY WORKS
                 Company company = _genericCompanyService.Get(c => c.Name == Input.CompanyName).First();
-                var user = new IdentityUser { UserName = Input.UserName, Email = Input.Email, PhoneNumber = Input.Tel.ToString() };
+                var user = new IdentityUser { UserName = Input.UserName, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
                 if (result.Succeeded)
@@ -121,7 +119,6 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                     Person person = new Person { Name = Input.Name, CompanyId = company.Id, IdentityUserId = user.Id };
                     _genericPersonService.Insert(person);
                     _genericPersonService.Save();
-                    _logger.LogInformation("Person = " + user.PhoneNumber);
                     _logger.LogInformation("Novo usuário criado.");
 
 

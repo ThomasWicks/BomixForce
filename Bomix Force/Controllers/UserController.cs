@@ -65,9 +65,8 @@ namespace Bomix_Force.Controllers
                 {
 
                     var userViewCompany = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                    var userViewTel = userView.Where(s => s.PhoneNumber.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
-                    userView = userViewCompany.Union(userViewTel).Union(userViewEmail).ToList();
+                    userView = userViewCompany.Union(userViewEmail).ToList();
 
                 }
 
@@ -150,7 +149,7 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string Username, string Name, string Setor, string Cargo, string Email, string PhoneNumber)
+        public async Task<ActionResult> Create(string Username, string Name, string Setor, string Cargo, string Email)
         {
             UserViewModel userView = new UserViewModel()
             {
@@ -159,7 +158,6 @@ namespace Bomix_Force.Controllers
                 Setor = Setor,
                 Cargo = Cargo,
                 Email = Email,
-                PhoneNumber = PhoneNumber,
             };
             try
             {
@@ -214,8 +212,30 @@ namespace Bomix_Force.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
+        [HttpGet]
+        [Route("User/getUserName")]
+        public string getUserName()
+        {
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (User.IsInRole("Employee"))
+            {
+                Employee employee = _genericEmployeeService.Get(e => e.IdentityUserId == userId).First();
+                return employee.Name;
+            }
+            else if (User.IsInRole("Company") || User.IsInRole("Admin"))
+            {
+                Company company = _genericCompanyService.Get(c => c.IdentityUserId == userId).First();
+                return company.Name;
+            }
+           
+            else
+            {
+                Person person = _genericPersonService.Get(p => p.IdentityUserId == userId).First();
+                return person.Name;
+            }
+        }
         // GET: UserController/Edit/5
+        
         [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
@@ -227,11 +247,11 @@ namespace Bomix_Force.Controllers
         }
         // POST: UserController/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(string UserID, string Name,string Id, string Setor, string Cargo, string Email, string PhoneNumber, int CompanyId)
+        public async Task<ActionResult> Edit(string UserID, string Name,string Id, string Setor, string Cargo, string Email, int CompanyId)
         {
             try
             {
-                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), UserID = UserID, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, PhoneNumber = PhoneNumber, CompanyId = CompanyId };
+                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), UserID = UserID, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, CompanyId = CompanyId };
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
