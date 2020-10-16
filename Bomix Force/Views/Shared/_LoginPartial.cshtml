@@ -26,7 +26,7 @@
                 </button>
                 <div class="dropdown-menu">
                     <form class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
-                        <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"> Mudar Senha  </i></button>
+                        <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-key"> Mudar Senha  </i></button>
                     </form>
                     <form class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Login", "Home", new { area = "" })">
                         <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"> Logout</i></button>
