@@ -24,7 +24,7 @@ using Microsoft.Data.SqlClient;
 namespace Bomix_Force.Controllers
 {
     [Authorize]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -220,29 +220,18 @@ namespace Bomix_Force.Controllers
             if (User.IsInRole("Employee"))
             {
                 Employee employee = _genericEmployeeService.Get(e => e.IdentityUserId == userId).First();
-                string json = "{" +
-                    $"\"person\":\"{employee.Name}\"" +
-                    "}";
-                return json;
+                return employee.Name;
             }
             else if (User.IsInRole("Company") || User.IsInRole("Admin"))
             {
                 Company company = _genericCompanyService.Get(c => c.IdentityUserId == userId).First();
-                string json = "{" +
-                  $"\"person\":\"{company.Name}\"" +
-                  "}";
-                return json;
+                return company.Name;
             }
            
             else
             {
                 Person person = _genericPersonService.Get(p => p.IdentityUserId == userId).First();
-                Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
-                string json = "{" +
-                 $"\"person\":\"{person.Name}\"," +
-                 $"\"company\":\"{company.Name}\"" +
-                 "}";
-                return json;
+                return person.Name;
             }
         }
         // GET: UserController/Edit/5

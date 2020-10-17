@@ -12,7 +12,7 @@ using Bomix_Force.AppServices;
 namespace Bomix_Force.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -24,16 +24,41 @@ namespace Bomix_Force.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            try
+            {
+                Notify("AAAAAAAAAAAAAAAAAAA");
+            }
+            catch (Exception)
+            {
+
+            }
+           
             return View();
         }
 
         public IActionResult Privacy()
         {
+            try
+            {
+                Notify("AAAAAAAAAAAAAAAAAAA");
+            }
+            catch (Exception)
+            {
+
+            }
             return View();
         }
 
         public IActionResult Login()
         {
+            try
+            {
+                Notify("AAAAAAAAAAAAAAAAAAA");
+            }
+            catch (Exception)
+            {
+
+            }
             return View();
         }
 
