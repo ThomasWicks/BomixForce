@@ -168,6 +168,28 @@ namespace Bomix_Force.Controllers
                     case ("EmissaoAsc"):
                         orderView = orderView.OrderBy(s => s.Emissao);
                         break;
+                    case ("nPedidoDesc"):
+                        orderView = orderView.OrderByDescending(o => o.Pedido);
+                        break;
+                    case ("nPedidoAsc"):
+                        orderView = orderView.OrderBy(o => o.Pedido);
+                        break;
+                    case ("ClienteDesc"):
+                        orderView = orderView.OrderByDescending(o => o.Cliente);
+                        break;
+                    case ("ClienteAsc"):
+                        orderView = orderView.OrderBy(o => o.Cliente);
+                        break;
+                    case ("StatusDesc"):
+                        orderView = orderView.Where(o => o.Status == "ENCERRADO").Concat(orderView.Where(o => o.Status == "ORCAMENTO"))
+                            .Concat(orderView.Where(o => o.Status == "LIBERADO")).Concat(orderView.Where(o => o.Status == "PARCIAL"))
+                            .Concat(orderView.Where(o => o.Status == "ABERTO"));
+                        break;
+                    case ("StatusAsc"):
+                        orderView = orderView.Where(o => o.Status == "ABERTO").Concat(orderView.Where(o => o.Status == "LIBERADO"))
+                          .Concat(orderView.Where(o => o.Status == "ORCAMENTO")).Concat(orderView.Where(o => o.Status == "PARCIAL"))
+                          .Concat(orderView.Where(o => o.Status == "ENCERRADO"));
+                        break;
                     default:
                         break;
 
