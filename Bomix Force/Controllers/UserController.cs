@@ -220,18 +220,29 @@ namespace Bomix_Force.Controllers
             if (User.IsInRole("Employee"))
             {
                 Employee employee = _genericEmployeeService.Get(e => e.IdentityUserId == userId).First();
-                return employee.Name;
+                string json = "{" +
+                    $"\"person\":\"{employee.Name}\"" +
+                    "}";
+                return json;
             }
             else if (User.IsInRole("Company") || User.IsInRole("Admin"))
             {
                 Company company = _genericCompanyService.Get(c => c.IdentityUserId == userId).First();
-                return company.Name;
+                string json = "{" +
+                  $"\"person\":\"{company.Name}\"" +
+                  "}";
+                return json;
             }
            
             else
             {
                 Person person = _genericPersonService.Get(p => p.IdentityUserId == userId).First();
-                return person.Name;
+                Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
+                string json = "{" +
+                 $"\"person\":\"{person.Name}\"," +
+                 $"\"company\":\"{company.Name}\"" +
+                 "}";
+                return json;
             }
         }
         // GET: UserController/Edit/5

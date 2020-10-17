@@ -7,7 +7,11 @@
     {
         <div class="row">
             <li class="nav-item form-inline ml-4">
-                <a on class="nav-link text-dark" id="currentUserName" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+                <div>
+                    <a on class="nav-link text-dark" id="currentUserName" asp-area="Identity" asp-page="/Account/Manage/Index" title="Trocar Senha">@User.Identity.Name</a>
+
+                    <a on class="nav-link text-dark" id="currentCompanyName" asp-area="Identity" asp-page="/Account/Manage/Index" title="Trocar Senha"></a>
+                </div>
                 <img src="~/Assets/divider.png" class="margin-img" />
 
             </li>
@@ -51,10 +55,16 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '../User/getUserName',
+            url: '../../User/getUserName',
             method: 'Get',
             success: function (data) {
-                document.getElementById('currentUserName').innerText = data
+                console.log(data)
+                data=JSON.parse(data)
+                console.log(data)
+                document.getElementById('currentUserName').innerText = data.person
+                if (data.company) {
+                    document.getElementById('currentCompanyName').innerText = data.company
+                }
             }
         })
     })
