@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bomix_Force.Controllers
 {
-    public class NonconformityController : Controller
+    public class NonconformityController : BaseController
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -81,14 +81,24 @@ namespace Bomix_Force.Controllers
         // GET: Nonconformity/Create
         public ActionResult Create()
         {
-            NonconformityViewModel nonconformityViewModel = new NonconformityViewModel();
-            nonconformityViewModel.Itens = new List<string>();
-            var values = Enum.GetValues(typeof(ItemEnum));
-            foreach (var item in values)
+            try
             {
-                nonconformityViewModel.Itens.Add(item.ToString());
+                
+                NonconformityViewModel nonconformityViewModel = new NonconformityViewModel();
+                nonconformityViewModel.Itens = new List<string>();
+                var values = Enum.GetValues(typeof(ItemEnum));
+                foreach (var item in values)
+                {
+                    nonconformityViewModel.Itens.Add(item.ToString());
+                }
+                Notify("AAAAAAAAAAAAAAAAAAA");
+                return View(nonconformityViewModel);
             }
-            return View(nonconformityViewModel);
+            catch (Exception)
+            {
+                return View();
+            }
+ 
         }
 
         // POST: Nonconformity/Create
@@ -98,6 +108,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
+                Notify("AAAAAAAAAAAAAAAAAAA");
                 Company company = new Company();
                 if (User.IsInRole("Company"))
                 {
@@ -137,6 +148,7 @@ namespace Bomix_Force.Controllers
                     index++;
                 }
                 _nonconformityRepository.Insert(nonconformity);
+                Notify("AAAAAAAAAAAAAAAAAAA");
                 return RedirectToAction(nameof(Index));
             }
             catch

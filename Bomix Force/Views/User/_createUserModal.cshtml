@@ -112,6 +112,7 @@
         var validateCargo = this.validateCargo(createCargo)
         var validation = validateUsername && validateName && validateEmail && validateSetor && validateCargo
         if (validation) {
+            console.log("aaaaaaaaaaaaaaaaaaaaaa"),
             token = $('form').serializeArray()[0].value;
 
             $('#CreateUserModal').modal('hide');
@@ -125,9 +126,17 @@
                     Cargo: createCargo,
                     Email: createEmail,
                 },
+                //error: function (data) {
+                //    console.log(JSON.stringify(data))
+                //    toastr.error("weqeqqqqqqqqqqqqqqqqqqqqqq");
+                //},
                 method: 'Post',
                 dataType: 'json',
             })
+            //    .done(function () {
+            //    console.log("aquiiiiiiiiiii")
+            //     toastr.success("weqeqqqqqqqqqqqqqqqqqqqqqq");
+            //})
         }
             //location.reload();
             //return false;
