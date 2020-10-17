@@ -2,10 +2,12 @@
 using Bomix_Force.Data.Entities;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +26,7 @@ namespace Bomix_Force.AppServices
             _env = env;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string message, string attachment = "false")
         {
             try
             {
@@ -36,10 +38,24 @@ namespace Bomix_Force.AppServices
 
                 mimeMessage.Subject = subject;
 
-                mimeMessage.Body = new TextPart("html")
+                string FilePath = ".\\Views\\Template Email\\RNC.html";
+                StreamReader str = new StreamReader(FilePath);
+                string MailText = str.ReadToEnd();
+                MailText = MailText.Replace("##Mensagem##", message);
+                str.Close();
+                if (attachment != "false")
                 {
-                    Text = message
-                };
+                    var bodyBuilder = addAttachment(MailText, attachment);
+                    mimeMessage.Body = bodyBuilder.ToMessageBody();
+                }
+                else
+                {
+                    mimeMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                    {
+                        Text = MailText
+                    };
+                }
+
 
                 using (var client = new SmtpClient())
                 {
@@ -71,6 +87,27 @@ namespace Bomix_Force.AppServices
                 // TODO: handle exception
                 throw new InvalidOperationException(ex.Message);
             }
+        }
+
+        private BodyBuilder addAttachment(string MailText, string attachment)
+        {
+            var bodyBuilder = new BodyBuilder { HtmlBody = MailText };
+
+            byte[] fileBytes;
+            using (var ms = new MemoryStream())
+            {
+                fileBytes = ms.ToArray();
+            }
+            var attach = new MimePart()
+            {
+                ContentObject = new ContentObject(File.OpenRead(attachment), ContentEncoding.Default),
+                ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                ContentTransferEncoding = ContentEncoding.Base64,
+                FileName = Path.GetFileName(attachment)
+            };
+            bodyBuilder.Attachments.Add(attach.FileName, fileBytes, ContentType.Parse(attach.ContentType.MimeType));
+
+            return bodyBuilder;
         }
 
     }
