@@ -48,14 +48,14 @@ namespace Bomix_Force.Controllers
         public static volatile List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
         public ActionResult Index(string searchString, string filter)
         {
- 
+
             try
             {
                 ViewBag.filter = filter;
                 ViewBag.searchString = searchString;
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
-                List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList() ;
+                List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
                 if (orders.Count == 0)
                 {
                     return View();
@@ -85,18 +85,33 @@ namespace Bomix_Force.Controllers
             orderView.Item = item;
             return PartialView("_orderDetailsPartial", orderView);
         }
+
+
+        [HttpGet]
+        [Route("Order/DuplicateData/{id}")]
+        //Get: OrderController/DuplicateData/5
+        public ActionResult DuplicateData(string id)
+        {
+            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            Bomix_PedidoVenda order = orders.Where(o => o.id == Int32.Parse(id)).First();
+            List<Bomix_PedidoVendaItem> item = _pedidoItemRepository.GetParameters(user, id.ToString()).ToList();
+            OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
+            orderView.Item = item;
+            return PartialView("_orderDetailsPartial", orderView);
+        }
+
         [HttpPost]
-        // Get: OrderController/Duplicate/5
+        // Post: OrderController/Duplicate/5
         public async Task<ActionResult> Duplicate(string Pedido)
         {
-         
-                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                //Person person = _genericPersonService.Get(u => u.Id.ToString() == user).First();
-                //Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
-                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {Pedido}");
-                return RedirectToAction(nameof(Index));
-            
-        
+
+            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //Person person = _genericPersonService.Get(u => u.Id.ToString() == user).First();
+            //Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
+            await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {Pedido}");
+            return RedirectToAction(nameof(Index));
+
+
         }
         // GET: OrderController/Create
         public ActionResult Create()
@@ -122,15 +137,15 @@ namespace Bomix_Force.Controllers
         //}
         [HttpPost]
         [Route("Order/InfiniteScroll")]
-        public ActionResult InfiniteScroll(int? pageNumber, int pageSize,string filter, string searchString)
+        public ActionResult InfiniteScroll(int? pageNumber, int pageSize, string filter, string searchString)
         {
             int page = (pageNumber ?? 1);
             try
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                ViewBag.filter= filter ;
-                ViewBag.searchString= searchString ;
+                ViewBag.filter = filter;
+                ViewBag.searchString = searchString;
 
                 IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 if (!String.IsNullOrEmpty(searchString))
@@ -158,9 +173,9 @@ namespace Bomix_Force.Controllers
 
                 }
                 orderView = orderView.Skip(page * pageSize).Take(pageSize).ToList();
-                foreach(var order in orderView)
+                foreach (var order in orderView)
                 {
-                    order.Item=_pedidoItemRepository.GetParameters(user, order.id.ToString()).ToList();
+                    order.Item = _pedidoItemRepository.GetParameters(user, order.id.ToString()).ToList();
                     order.Pedido = !String.IsNullOrEmpty(order.Pedido) ? order.Pedido : "-";
                     order.Status = !String.IsNullOrEmpty(order.Status) ? order.Status : "-";
                     order.Cliente = !String.IsNullOrEmpty(order.Cliente) ? order.Cliente : "-";

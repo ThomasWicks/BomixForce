@@ -49,7 +49,8 @@ $(function(){
 
 
     var OrderDetailsElement = $('#OrderDetailsHere');
-    $('button[data-toggle]').click(function (event) {
+    $('button[data-toggle="orderDetails"]').click(function (event) {
+        console.log("details")
         var url = $(this).data('url');
         var decodedUrl = decodeURIComponent(url)
         $.get(decodedUrl).done(function (data) {
