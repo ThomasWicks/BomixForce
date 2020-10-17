@@ -4,16 +4,64 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-dark">
-                <h4 class="modal-title float-left text-white">Detalhes</h4>
+                <h4 class="modal-title float-left text-white">Duplicar Pedido</h4>
                 <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <h2>@Model.Item[0].Arte</h2>
+                <h5 class="text-center"><strong>Numero do Pedido: @Model.Pedido</strong></h5>
+                <div class="table-responsive mt-2">
+                    <table id="#tableOrder" class="table table-striped">
+                        <thead class="thead-light">
+
+                            <tr>
+                                <th class="text-center">
+                                    Produto
+                                </th>
+                                <th class="text-center">
+                                    Arte
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var SubItem in Model.Item)
+                            {
+                                <tr>
+                                    @if (@SubItem.Produto != "")
+                                    {
+                                        <th class="text-center ">
+                                            @SubItem.Produto
+                                        </th>
+
+                                    }
+                                    else
+                                    {
+                                        <th class="text-center ">
+                                            -
+                                        </th>
+                                    }
+                                    @if (@SubItem.Arte != "")
+                                    {
+                                        <th class="text-center ">
+                                            @SubItem.Arte
+                                        </th>
+
+                                    }
+                                    else
+                                    {
+                                        <th class="text-center ">
+                                            -
+                                        </th>
+                                    }
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <button data-dismiss="modal" class="btn btn-danger">Cancelar</button>
+                <button type="button" onclick="duplicate(@Model.Pedido)" class="btn btn-primary btn-lg fas fa-copy float-right">  Duplicar</button>
             </div>
-            <div class="modal-footer">
-                <button type="button" onclick="duplicate(@Model.Pedido)" class="btn btn-primary btn-lg fas fa-copy float-right">Duplicar</button>
-                <button data-dismiss="modal" class="btn btn-danger btn-lg float-right">Cancelar</button>
-            </div>
+
         </div>
 
     </div>

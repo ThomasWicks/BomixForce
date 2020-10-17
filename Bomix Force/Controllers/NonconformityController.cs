@@ -62,7 +62,7 @@ namespace Bomix_Force.Controllers
             }else if (User.IsInRole("User"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Person person = _genericPersonService.Get(p => p.IdentityUser.ToString() == user).First();
+                Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
                 Company company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
 
                 nonconformities = _nonconformityRepository.Get(n => n.CompanyId == company.Id).ToList();
@@ -93,7 +93,6 @@ namespace Bomix_Force.Controllers
 
         // POST: Nonconformity/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(NonconformityViewModel nonconformityViewModel)
         {
             try
@@ -109,21 +108,21 @@ namespace Bomix_Force.Controllers
                 else if (User.IsInRole("User"))
                 {
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    Person person = _genericPersonService.Get(p => p.IdentityUser.ToString() == user).First();
+                    Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
                     company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
                     //string Email = _nonconformityRepository.GetSellerEmail(company.Cnpj);
 
                 }
                 string Message = string.Format(
-                    "Prezado(a)," +
-                    "o cliente {0} de cnpj: {1}, abriu um registro de não conformidade em seu pedido." +
-                    "Nota Fiscal:{2}" +
-                    "Lote:{3}" +
-                    "Quantidade:{4}" +
-                    "Item:{5}" +
-                    "Descrição do problema:{6}", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
+                    "Prezado(a), <br> " +
+                    "o cliente <b>{0}</b> de cnpj: {1}, abriu um registro de não conformidade em seu pedido:<br>" +
+                    "Nota Fiscal: {2}<br> " +
+                    "Lote: {3}<br>" +
+                    "Quantidade:{4}<br> " +
+                    "Item: {5}<br> " +
+                    "Descrição do problema: {6}\n ", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
                     nonconformityViewModel.SelectedItem, nonconformityViewModel.Description);
-                await _emailSender.SendEmailAsync("rubemdealmeida@hotmail.com", "Registro de não conformidade", Message);
+                await _emailSender.SendEmailAsync("thomas.wicks@hotmail.com", "Registro de não conformidade", Message);
                 Nonconformity nonconformity = _mapper.Map<Nonconformity>(nonconformityViewModel);
                 nonconformity.Company = company;
                 var values = Enum.GetValues(typeof(ItemEnum));
@@ -136,7 +135,8 @@ namespace Bomix_Force.Controllers
                     }
                     index++;
                 }
-                _nonconformityRepository.Insert(nonconformity);
+                 _nonconformityRepository.Insert(nonconformity);
+                _nonconformityRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch

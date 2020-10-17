@@ -147,14 +147,14 @@
                         <a class="text-info">@item.Status</a>
                     </th>
                 }
-                @if (User.IsInRole("User"))
-                {
+                @*@if (User.IsInRole("User"))
+                {*@
                     <th class="text-center">
                         <div class="d-inline-block">
                             <button data-toggle="orderDetails" onclick="openConfirmationModal(this)" data-url="@Url.Action($"DuplicateData/{@item.id}")" data-target="#duplicateModal" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
                         </div>
                     </th>
-                }
+                @*}*@
 
             </tr>
         }

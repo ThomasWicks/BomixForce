@@ -16,5 +16,6 @@ namespace Bomix_Force.ViewModels
         public List<string> Itens { get; set; }
         public int Quantity { get; set; }
         public string Answer { get; set; }
+        public string FilePath { get; set; }
     }
 }
