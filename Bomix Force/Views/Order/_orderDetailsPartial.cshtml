@@ -71,14 +71,16 @@
 <script>
     function duplicate(Pedido) {
         $('#duplicateModal').modal('hide');
+        document.getElementById('loadingSpinnerOverlay').style.display='block'
         $.ajax({
             url: 'Duplicate',
             data: {
                 Pedido: Pedido
             },
-            complete: function(e, xhr, settings){
+            complete: function (e, xhr, settings) {
+                document.getElementById('loadingSpinnerOverlay').style.display = 'none'
                 if(e.status === 200){
-                    toastr.success("Requisição de duplicar pedido enviada com sucesso", "Pedido");
+                    toastr.success("Requisição para repetir o pedido enviada com sucesso", "Pedido");
                 }else{
                     toastr.error("Ocorreu uma falha na duplicação do pedido", "Pedido");
                 }

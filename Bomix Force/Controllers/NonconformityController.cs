@@ -8,6 +8,7 @@ using Bomix_Force.AppServices.Interface;
 using Bomix_Force.Areas.Identity.Pages.Account;
 using Bomix_Force.Data.Entities;
 using Bomix_Force.Data.Enum;
+using Bomix_Force.Models;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -151,6 +152,7 @@ namespace Bomix_Force.Controllers
             }
             catch
             {
+                Notify("Não foi possivel criar o registro", "Não Conformidade", NotificationType.error);
                 return View();
             }
         }

@@ -2,7 +2,6 @@
 
 <div class="modal fade" id="CreateUserModal" role="dialog">
     <div class="modal-dialog modal-lg">
-
         <!-- Modal Cadastro-->
         <form method="post" asp-controller="User" asp-action="Create">
             <div class="modal-content">
@@ -86,7 +85,7 @@
     var createSetor = ''
     var createEmail = ''
 
-  
+
 
     function changeCreateUsername(value) {
         createUsername = value;
@@ -105,6 +104,7 @@
     }
 
     function validateCreate() {
+        
         var validateUsername = this.validateUsername(createUsername)
         var validateName = this.validateName(createName)
         var validateEmail = this.validateEmail(createEmail)
@@ -112,13 +112,12 @@
         var validateCargo = this.validateCargo(createCargo)
         var validation = validateUsername && validateName && validateEmail && validateSetor && validateCargo
         if (validation) {
-            console.log("aaaaaaaaaaaaaaaaaaaaaa"),
-            token = $('form').serializeArray()[0].value;
-
+                token = $('form').serializeArray()[0].value;
             $('#CreateUserModal').modal('hide');
+            document.getElementById('loadingSpinnerOverlay').style.display = 'block';
             $.ajax({
                 url: 'Create',
-                dataType : "html",
+                dataType: "html",
                 data: {
                     __RequestVerificationToken: token,
                     Username: createUsername,
@@ -127,19 +126,20 @@
                     Cargo: createCargo,
                     Email: createEmail,
                 },
-                complete: function(e, xhr, settings){
-                    if(e.status === 200){
+                complete: function (e, xhr, settings) {
+                    document.getElementById('loadingSpinnerOverlay').style.display = 'none';
+                    if (e.status === 200) {
                         toastr.success("Usuário Cadastrado com sucesso", "Usuário");
-                    }else{
-                      toastr.error("Ocorreu um erro no cadastro", "Usuário");
+                    } else {
+                        toastr.error("Ocorreu um erro no cadastro", "Usuário");
                     }
                 },
                 method: 'Post',
                 dataType: 'json',
             })
         }
-            //location.reload();
-            //return false;
+        //location.reload();
+        //return false;
 
     }
     function validateUsername(createUsername) {
@@ -164,7 +164,7 @@
             return true
         }
     }
- 
+
     function validateEmail(createEmail) {
         var re = /\S+@@\S+\.\S+/;
         var formatEmail = re.test(createEmail);

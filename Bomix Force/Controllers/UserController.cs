@@ -180,7 +180,6 @@ namespace Bomix_Force.Controllers
                     else
                         _ = await _userManager.AddToRoleAsync(user, "User");
 
-
                     if (result.Succeeded)
                     {
                         Person person = new Person { Name = userView.Name, Cargo = userView.Cargo, Setor = userView.Setor, CompanyId = company.Id, IdentityUserId = user.Id, Email = userView.Email };
@@ -188,7 +187,6 @@ namespace Bomix_Force.Controllers
                         _genericPersonService.Save();
                         _logger.LogInformation("Novo usuário criado.");
                         await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass);
-                        //await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Usuário criado", "O usuário " + person.Name + " foi criado com sucesso");
 
 
                         return RedirectToAction(nameof(Index));
@@ -209,7 +207,7 @@ namespace Bomix_Force.Controllers
             }
             catch (Exception e)
             {
-                return RedirectToAction(nameof(Index));
+                return StatusCode(500);
             }
         }
         [HttpGet]
@@ -220,18 +218,29 @@ namespace Bomix_Force.Controllers
             if (User.IsInRole("Employee"))
             {
                 Employee employee = _genericEmployeeService.Get(e => e.IdentityUserId == userId).First();
-                return employee.Name;
+                string json = "{" +
+                   $"\"person\":\"{employee.Name}\"" +
+                   "}";
+                return json;
             }
             else if (User.IsInRole("Company") || User.IsInRole("Admin"))
             {
                 Company company = _genericCompanyService.Get(c => c.IdentityUserId == userId).First();
-                return company.Name;
+                string json = "{" +
+                  $"\"person\":\"{company.Name}\"" +
+                  "}";
+                return json;
             }
            
             else
             {
                 Person person = _genericPersonService.Get(p => p.IdentityUserId == userId).First();
-                return person.Name;
+                Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
+                string json = "{" +
+                    $"\"person\":\"{person.Name}\"," +
+                    $"\"company\":\"{company.Name}\"" +
+                    "}";
+                return json;
             }
         }
         // GET: UserController/Edit/5
@@ -266,7 +275,7 @@ namespace Bomix_Force.Controllers
             }
             catch (Exception x)
             {
-                return RedirectToAction(nameof(Index));
+                return StatusCode(500);
             }
         }
 

@@ -4,10 +4,14 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+    <div style="display:none" id="loadingSpinnerOverlay">
+        <div class="spinner" id="spinner"></div>
+        <div class="overlay" id="overlay"></div>
+    </div>
 <div id="OrderDetailsHere"></div>
 <div class="clearfix mx-5">
     <div class="pagination-history">
+
         <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
         <a class="pagina-atual">Pedidos</a>
     </div>

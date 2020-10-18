@@ -58,9 +58,7 @@
             url: '../../User/getUserName',
             method: 'Get',
             success: function (data) {
-                console.log(data)
                 data=JSON.parse(data)
-                console.log(data)
                 document.getElementById('currentUserName').innerText = data.person
                 if (data.company) {
                     document.getElementById('currentCompanyName').innerText = data.company

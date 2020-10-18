@@ -1,0 +1,70 @@
+﻿<div id="loadingSpinnerOverlay">
+    <div class="spinner-border" role="status">
+
+        <div class="spinner" id="spinner"></div>
+    </div>
+</div>
+<style>
+
+    #loadingSpinnerOverlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: .5;
+        background-color: #000;
+        z-index: 1000;
+    }
+
+        #loadingSpinnerOverlay div {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5em;
+            height: 2em;
+            margin: -1em 0 0 -2.5em;
+            color: #fff;
+            font-weight: bold;
+        }
+
+    #spinner,
+    #spinner:before,
+    #spinner:after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background: none;
+        border-radius: 50%;
+        border: 5px solid cyan;
+    }
+
+    #spinner {
+        height: 386px;
+        width: 386px;
+        margin: -208px;
+        border: 15px solid blue;
+        z-index: 1;
+        border-top: 15px solid red;
+        -webkit-animation: spin 1s ease-in-out infinite;
+        -moz-animation: spin 1s ease-in-out infinite;
+        -ms-animation: spin 1s ease-in-out infinite;
+        -o-animation: spin 1s ease-in-out infinite;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+        #spinner:before {
+            content: "";
+            height: 372px;
+            width: 372px;
+            margin: -191px;
+        }
+
+        #spinner:after {
+            content: "";
+            width: 420px;
+            height: 420px;
+            margin: -215px;
+        }
+</style>

@@ -3,10 +3,13 @@
 @{
     ViewData["Title"] = "Index";
 }
+
 <div id="PlaceHolderHere"></div>
-
+<div style="display:none" id="loadingSpinnerOverlay">
+    <div class="spinner" id="spinner"></div>
+    <div class="overlay" id="overlay"></div>
+</div>
 <div class="container ">
-
 
     <div class="clearfix mx-5">
         @if (User.IsInRole("Employee"))
@@ -124,9 +127,9 @@
             }
             else
             {
-                    <div colspan="3" class="text-center">
-                        <h6>Não foi possível encontrar Pedidos.</h6>
-                    </div>
+                <div colspan="3" class="text-center">
+                    <h6>Não foi possível encontrar Pedidos.</h6>
+                </div>
             }
         </div>
     </div>
@@ -134,4 +137,3 @@
 
 
 </div>
-

@@ -154,10 +154,18 @@ namespace Bomix_Force.Controllers
                     var orderViewPedido = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewEmissao = orderView.Where(o => o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewStatus = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
-                    orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewCidade).Union(orderViewStatus).Union(orderViewUF).Union(orderViewCliente).ToList();
+                    //var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
+                    //var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
+                        var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
+
+                    if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                    {
+                    orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).Union(orderViewCliente).ToList();
+                    }
+                    else
+                    {
+                        orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).ToList();
+                    }
 
                 }
                 switch (filter)
