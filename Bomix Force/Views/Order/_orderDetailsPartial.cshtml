@@ -70,10 +70,18 @@
 </div>
 <script>
     function duplicate(Pedido) {
+        $('#duplicateModal').modal('hide');
         $.ajax({
             url: 'Duplicate',
             data: {
                 Pedido: Pedido
+            },
+            complete: function(e, xhr, settings){
+                if(e.status === 200){
+                    toastr.success("Requisição de duplicar pedido enviada com sucesso", "Pedido");
+                }else{
+                    toastr.error("Ocorreu uma falha na duplicação do pedido", "Pedido");
+                }
             },
             method: 'Post',
             dataType: 'json',

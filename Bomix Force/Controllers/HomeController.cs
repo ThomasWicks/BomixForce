@@ -24,41 +24,16 @@ namespace Bomix_Force.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            try
-            {
-                Notify("AAAAAAAAAAAAAAAAAAA");
-            }
-            catch (Exception)
-            {
-
-            }
-           
             return View();
         }
 
         public IActionResult Privacy()
         {
-            try
-            {
-                Notify("AAAAAAAAAAAAAAAAAAA");
-            }
-            catch (Exception)
-            {
-
-            }
             return View();
         }
 
         public IActionResult Login()
         {
-            try
-            {
-                Notify("AAAAAAAAAAAAAAAAAAA");
-            }
-            catch (Exception)
-            {
-
-            }
             return View();
         }
 

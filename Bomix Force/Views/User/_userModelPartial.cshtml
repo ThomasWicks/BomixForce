@@ -121,14 +121,14 @@
                 },
                 complete: function(e, xhr, settings){
                     if(e.status === 200){
-                        toastr.success("Usuario editado com sucesso", "Sucesso")
+                        toastr.success("Usuário editado com sucesso", "Usuário")
                         //tentar fazer recarregar a pagina e exibir o toastr
                         //location.reload().then(function () {
                         //    console.log("aquiiii")
                         //  toastr.success("Usuario editado com sucesso", "Sucesso")
                         //})
                     }else{
-                      toastr.error("Ocorreu um erro na edição", "Erro");
+                      toastr.error("Ocorreu um erro na edição do Usuário", "Usuário");
                     }
                 },
                 method: 'Post',

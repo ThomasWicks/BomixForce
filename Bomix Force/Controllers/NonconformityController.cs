@@ -91,7 +91,6 @@ namespace Bomix_Force.Controllers
                 {
                     nonconformityViewModel.Itens.Add(item.ToString());
                 }
-                Notify("AAAAAAAAAAAAAAAAAAA");
                 return View(nonconformityViewModel);
             }
             catch (Exception)
@@ -108,7 +107,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-                Notify("AAAAAAAAAAAAAAAAAAA");
+                Notify("Registro enviado com sucesso", "Não Conformidade");
                 Company company = new Company();
                 if (User.IsInRole("Company"))
                 {
@@ -148,7 +147,6 @@ namespace Bomix_Force.Controllers
                     index++;
                 }
                 _nonconformityRepository.Insert(nonconformity);
-                Notify("AAAAAAAAAAAAAAAAAAA");
                 return RedirectToAction(nameof(Index));
             }
             catch
