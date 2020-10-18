@@ -118,6 +118,7 @@
             $('#CreateUserModal').modal('hide');
             $.ajax({
                 url: 'Create',
+                dataType : "html",
                 data: {
                     __RequestVerificationToken: token,
                     Username: createUsername,
@@ -126,17 +127,16 @@
                     Cargo: createCargo,
                     Email: createEmail,
                 },
-                //error: function (data) {
-                //    console.log(JSON.stringify(data))
-                //    toastr.error("weqeqqqqqqqqqqqqqqqqqqqqqq");
-                //},
+                complete: function(e, xhr, settings){
+                    if(e.status === 200){
+                        toastr.success("Usuario Cadastrado com sucesso", "Sucesso");
+                    }else{
+                      toastr.error("Ocorreu um erro no cadastro", "Erro");
+                    }
+                },
                 method: 'Post',
                 dataType: 'json',
             })
-            //    .done(function () {
-            //    console.log("aquiiiiiiiiiii")
-            //     toastr.success("weqeqqqqqqqqqqqqqqqqqqqqqq");
-            //})
         }
             //location.reload();
             //return false;

@@ -119,12 +119,23 @@
                     Cargo: editCargo,
                     Email: editEmail,
                 },
+                complete: function(e, xhr, settings){
+                    if(e.status === 200){
+                        toastr.success("Usuario editado com sucesso", "Sucesso")
+                        //tentar fazer recarregar a pagina e exibir o toastr
+                        //location.reload().then(function () {
+                        //    console.log("aquiiii")
+                        //  toastr.success("Usuario editado com sucesso", "Sucesso")
+                        //})
+                    }else{
+                      toastr.error("Ocorreu um erro na edição", "Erro");
+                    }
+                },
                 method: 'Post',
                 dataType: 'json',
             })
         }
-            //location.reload();
-            //return false;
+
 
     }
     function validateName(editName) {
