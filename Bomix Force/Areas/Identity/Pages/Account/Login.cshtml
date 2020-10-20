@@ -21,8 +21,8 @@ ViewData["Title"] = "Log in";
                             <label class="login-label mt-1" for="exampleInputPassword1">Senha</label>
                             <input asp-for="Input.Password" placeholder="Senha" class="input" />
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
-                            <div>
-                                <a asp-area="Identity" asp-page="/Account/ForgotPassword" asp-route-returnUrl="@Url.Action("ForgotPassword", "Manage", new { area = "" })">Esqueci minha senha</a>
+                            <div class="btn btn-link">
+                                <a  asp-area="Identity" asp-page="/Account/ForgotPassword" asp-route-returnUrl="@Url.Action("ForgotPassword", "Manage", new { area = "" })">Esqueci minha senha</a>
                             </div>
                         </div>
                         <button type="submit" class="bt-save">Entrar</button>
