@@ -256,11 +256,11 @@ namespace Bomix_Force.Controllers
         }
         // POST: UserController/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(string UserID, string Name,string Id, string Setor, string Cargo, string Email, int CompanyId)
+        public async Task<ActionResult> Edit(string IdentityUserId, string Name,string Id, string Setor, string Cargo, string Email, int CompanyId)
         {
             try
             {
-                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), UserID = UserID, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, CompanyId = CompanyId };
+                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), IdentityUserId = IdentityUserId, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, CompanyId = CompanyId };
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);

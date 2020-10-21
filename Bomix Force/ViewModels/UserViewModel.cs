@@ -56,7 +56,7 @@ namespace Bomix_Force.ViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
         [Required]
-        public string UserID { get; set; }
+        public string IdentityUserId { get; set; }
 
         [Display(Name = "Nome")]
         [Required]

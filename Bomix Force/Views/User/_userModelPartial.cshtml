@@ -14,7 +14,7 @@
                         <div class="col-6">
                             <input id="editId" type="hidden" asp-for="@Model.Id">
                             <input id="editCompanyId" type="hidden" asp-for="@Model.CompanyId">
-                            <input id="editUserID" type="hidden" asp-for="@Model.UserID">
+                            <input id="editIdentityUserId" type="hidden" asp-for="@Model.IdentityUserId">
                             <label asp-for="Name"></label>
                             <input id="editName" onchange="changeEditName(this.value)" asp-for="Name" class="form-control" />
                             <span id="editNameSpan" class="text-danger"></span>
@@ -111,7 +111,7 @@
                 url: 'Edit',
                 data: {
                     __RequestVerificationToken: token,
-                    UserID: document.getElementById('editUserID').value,
+                    IdentityUserId: document.getElementById('editIdentityUserId').value,
                     CompanyiD: document.getElementById('editCompanyId').value,
                     Id: document.getElementById('editId').value,
                     Name: editName,

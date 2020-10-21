@@ -11,7 +11,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             @Html.HiddenFor(model => model.Id),
-            @Html.HiddenFor(model => model.UserID)
+            @Html.HiddenFor(model => model.IdentityUserId)
             @Html.HiddenFor(model => model.CompanyId)
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
