@@ -26,7 +26,7 @@ namespace Bomix_Force.AppServices
             _env = env;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message, string attachment = "false")
+        public async Task SendEmailAsync(string email, string subject, string message, List<IFormFile>? attachments)
         {
             try
             {
@@ -36,6 +36,7 @@ namespace Bomix_Force.AppServices
 
                 mimeMessage.To.Add(new MailboxAddress(email));
 
+
                 mimeMessage.Subject = subject;
 
                 string FilePath = ".\\Views\\Template Email\\RNC.html";
@@ -43,10 +44,11 @@ namespace Bomix_Force.AppServices
                 string MailText = str.ReadToEnd();
                 MailText = MailText.Replace("##Mensagem##", message);
                 str.Close();
-                if (attachment != "false")
+                if (attachments.Count() > 0)
                 {
-                    var bodyBuilder = addAttachment(MailText, attachment);
+                    var bodyBuilder = addAttachment(MailText, attachments);
                     mimeMessage.Body = bodyBuilder.ToMessageBody();
+
                 }
                 else
                 {
@@ -80,7 +82,6 @@ namespace Bomix_Force.AppServices
 
                     await client.DisconnectAsync(true);
                 }
-
             }
             catch (Exception ex)
             {
@@ -89,23 +90,29 @@ namespace Bomix_Force.AppServices
             }
         }
 
-        private BodyBuilder addAttachment(string MailText, string attachment)
+        private BodyBuilder addAttachment(string MailText, List<IFormFile> attachments)
         {
             var bodyBuilder = new BodyBuilder { HtmlBody = MailText };
+            foreach (var attachment in attachments)
+            {
 
-            byte[] fileBytes;
-            using (var ms = new MemoryStream())
-            {
-                fileBytes = ms.ToArray();
+                byte[] fileBytes;
+                using (var ms = new MemoryStream())
+                {
+                    attachment.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+
+                }
+                MemoryStream fileStream = new MemoryStream(fileBytes);
+                var attach = new MimePart()
+                {
+                    Content = new MimeContent(fileStream, ContentEncoding.Default),
+                    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                    ContentTransferEncoding = ContentEncoding.Base64,
+                    FileName = attachment.FileName
+                };
+                bodyBuilder.Attachments.Add(attach.FileName, fileBytes, ContentType.Parse(attach.ContentType.MimeType));
             }
-            var attach = new MimePart()
-            {
-                ContentObject = new ContentObject(File.OpenRead(attachment), ContentEncoding.Default),
-                ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
-                ContentTransferEncoding = ContentEncoding.Base64,
-                FileName = Path.GetFileName(attachment)
-            };
-            bodyBuilder.Attachments.Add(attach.FileName, fileBytes, ContentType.Parse(attach.ContentType.MimeType));
 
             return bodyBuilder;
         }

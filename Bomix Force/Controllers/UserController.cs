@@ -186,7 +186,7 @@ namespace Bomix_Force.Controllers
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Novo usuário criado.");
-                        await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass);
+                        await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass, null);
 
 
                         return RedirectToAction(nameof(Index));
@@ -268,7 +268,7 @@ namespace Bomix_Force.Controllers
                 if (User.IsInRole("Company"))
                 {
                     Company company = _genericCompanyService.Get(c => c.IdentityUserId == user).First();
-                    await _emailSender.SendEmailAsync("rubemdealmeida@hotmail.com", "Usuário Editado", "O Usuário " + newperson.Name + " foi editado pela companhia " + company.Name);
+                    await _emailSender.SendEmailAsync("rubemdealmeida@hotmail.com", "Usuário Editado", "O Usuário " + newperson.Name + " foi editado pela companhia " + company.Name, null);
                 }
 
                 return RedirectToAction(nameof(Index));

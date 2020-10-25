@@ -107,7 +107,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-                Notify("Registro enviado com sucesso", "Não Conformidade");
+               
                 Company company = new Company();
                 if (User.IsInRole("Company"))
                 {
@@ -133,7 +133,7 @@ namespace Bomix_Force.Controllers
                     "Item: {5}<br> " +
                     "Descrição do problema: {6}\n ", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
                     nonconformityViewModel.SelectedItem, nonconformityViewModel.Description);
-                await _emailSender.SendEmailAsync("thomas.wicks@hotmail.com", "Registro de não conformidade", Message);
+                await _emailSender.SendEmailAsync("thomas.wicks@hotmail.com", "Registro de não conformidade", Message, nonconformityViewModel.FilePath);
                 Nonconformity nonconformity = _mapper.Map<Nonconformity>(nonconformityViewModel);
                 nonconformity.Company = company;
                 var values = Enum.GetValues(typeof(ItemEnum));
@@ -148,6 +148,7 @@ namespace Bomix_Force.Controllers
                 }
                  _nonconformityRepository.Insert(nonconformity);
                 _nonconformityRepository.Save();
+                Notify("Registro enviado com sucesso", "Não Conformidade");
                 return RedirectToAction(nameof(Index));
             }
             catch
