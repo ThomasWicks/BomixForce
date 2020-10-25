@@ -1,0 +1,25 @@
+﻿@model Bomix_Force.ViewModels.NonconformityViewModel
+
+<div class="modal fade" id="AnswerModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal Cadastro-->
+        <form method="post" asp-controller="Nonconformity" asp-action="UploadAnswer">
+            @Html.HiddenFor(model => model.Id)
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <input asp-for="Answer" />
+                        <div style="margin-top:15px">
+                            <output name="result"></output>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

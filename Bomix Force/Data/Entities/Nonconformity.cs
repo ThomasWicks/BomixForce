@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,7 +17,7 @@ namespace Bomix_Force.Data.Entities
         public string Nf { get; set; }
         public int ItemEnum { get; set; }
         public int Quantity { get; set; }
-        public string Answer { get; set; }
+        public byte[] Answer { get; set; }
         [ForeignKey("Company")]
         public int? CompanyId { get; set; }
         public virtual Company Company { get; set; }

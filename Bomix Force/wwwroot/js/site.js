@@ -35,6 +35,16 @@ $(function(){
             PlaceHolderHereElement.find('.modal').modal('show');
         })
     })
+
+    $('#answerModal').click(function (event) {
+        var url = $(this).data('url');
+        var decodedUrl = decodeURIComponent(url)
+        $.get(decodedUrl).done(function (data) {
+            PlaceHolderHereElement.html(data);
+            PlaceHolderHereElement.find('.modal').modal('show');
+        })
+    })
+
     PlaceHolderHereElement.on('click', '[data-save="modalCreate"]', function (event) {
         event.preventDefault();
         var form = $(this).parent('.modal').find('form');

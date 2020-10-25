@@ -3,63 +3,75 @@
 @{
     ViewData["Title"] = "Index";
 }
-    <div class="container">
-        <div class="pagination-history">
-            <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-            <a class="pagina-atual">Não Conformidade</a>
-        </div>
-        <p>
-            <a class="float-right mb-2 mr-3" type="button" asp-action="Create"><img class="ic-size" src="~/Assets/ic_add_non_conf.png" /></a>
-            @*<a class="btn btn-primary float-right mb-2" asp-action="Create">Abrir registro</a>*@
-        </p>
-        <div class="table-responsive mt-5">
-            <table class="table table-striped">
-                <thead>
-                    <tr class="bg-dark">
-                        <th class="text-center text-white">
-                            Lote
-                        </th>
-                        <th class="text-center text-white">
-                            Descrição
-                        </th>
-                        <th class="text-center text-white">
-                            NF
-                        </th>
-                        @*<th></th>*@
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (@Model?.Count() > 0)
-                    {
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td class="text-center ">
-                                    @Html.DisplayFor(modelItem => item.Lote)
-                                </td>
-                                <td class="text-center ">
-                                    @Html.DisplayFor(modelItem => item.Description)
-                                </td>
-                                <td class="text-center">
-                                    @Html.DisplayFor(modelItem => item.Answer)
-                                </td>
-                                @*<td>
-                                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                                </td>*@
-                            </tr>
-                        }
-                    }
-                    else
+<div class="container">
+    <div class="pagination-history">
+        <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+        <a class="pagina-atual">Não Conformidade</a>
+    </div>
+    <p>
+        <a class="float-right mb-2 mr-3" type="button" asp-action="Create"><img class="ic-size" src="~/Assets/ic_add_non_conf.png" /></a>
+        @*<a class="btn btn-primary float-right mb-2" asp-action="Create">Abrir registro</a>*@
+    </p>
+    <div class="table-responsive mt-5">
+        <table class="table table-striped">
+            <thead>
+                <tr class="bg-dark">
+                    <th class="text-center text-white">
+                        Lote
+                    </th>
+                    <th class="text-center text-white">
+                        Descrição
+                    </th>
+                    <th class="text-center text-white">
+                        NF
+                    </th>
+
+                    <th class="text-center text-white">
+                        Resposta
+                    </th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model?.Count() > 0)
+                {
+                    @foreach (var item in Model)
                     {
                         <tr>
-                            <td colspan="3" class="text-center">
-                                <h6>Não foi possível achar as informações de não conformidade.</h6>
+                            <td class="text-center ">
+                                @Html.DisplayFor(modelItem => item.Lote)
                             </td>
+                            <td class="text-center ">
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Nf)
+                            </td>
+                            @if (User.IsInRole("Employee"))
+                            {
+                                <td>
+                                    <a class="col-xl-9 ml-4">
+                                        <span class="float-right" type="button" id="answerModal" data-target="#AnswerModal"><img class="ic-size" src="~/Assets/ic_add_user.png" /></span>
+                                    </a>
+                                </td>
+                            }
+                            else
+                            {
+                                <a asp-action="GetPdf" asp-controller="Nonconformity">Download</a>
+                            }
                         </tr>
                     }
-                </tbody>
-            </table>
-        </div>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <h6>Não foi possível achar as informações de não conformidade.</h6>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
+</div>
