@@ -44,7 +44,7 @@ namespace Bomix_Force.AppServices
                 //string MailText = str.ReadToEnd();
                 //MailText = MailText.Replace("##Mensagem##", message);
                 //str.Close();
-                if (attachments.Count() > 0)
+                if (attachments != null && attachments.Count() > 0)
                 {
                     var bodyBuilder = addAttachment(message, attachments);
                     mimeMessage.Body = bodyBuilder.ToMessageBody();
