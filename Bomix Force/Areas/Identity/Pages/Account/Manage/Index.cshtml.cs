@@ -42,17 +42,16 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             [LowerCase(ErrorMessage ="A senha deve conter ao menos uma letra minúscula")]
             [UpperCase(ErrorMessage ="A senha deve conter ao menos uma letra maiúscula")]
             [Number(ErrorMessage ="A senha deve conter ao menos um número")]
-            [SpecialChars(ErrorMessage ="A senha deve ter ao menos uma carácter especial (@, !, #, etc...")]
+            [SpecialChars(ErrorMessage ="A senha deve ter ao menos uma carácter especial (@, !, #, etc...)")]
             [StringLength(100, ErrorMessage = "A senha deve ter ao menos 6 caractéres", MinimumLength = 6)]
-      
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = "Nova Senha")]
             public string NewPassword { get; set; }
             [Required(ErrorMessage = "O campo é obrigatório")]
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
+            [Display(Name = "Confirme a senha")]
 
-            [Compare("NewPassword", ErrorMessage = "as senhas não coincidem")]
+            [Compare("NewPassword", ErrorMessage = "As senhas não coincidem")]
             public string ConfirmPassword { get; set; }
         }
 
