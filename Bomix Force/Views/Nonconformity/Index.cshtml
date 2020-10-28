@@ -48,17 +48,17 @@
                             <td class="text-center">
                                 @Html.DisplayFor(modelItem => item.Nf)
                             </td>
-                            @if (User.IsInRole("Employee"))
+                            @if (User.IsInRole("User"))
                             {
                                 <td>
                                     <a class="col-xl-9 ml-4">
-                                        <span class="float-right" type="button" id="answerModal" data-target="#AnswerModal"><img class="ic-size" src="~/Assets/ic_add_user.png" /></span>
+                                        <span class="float-right" type="button" id="answerModal" data-url="@Url.Action($"UploadAnswer/{item.Id}")" data-target="#AnswerModal"><img class="ic-size" src="~/Assets/ic_add_user.png" /></span>
                                     </a>
                                 </td>
                             }
                             else
                             {
-                                <a asp-action="GetPdf" asp-controller="Nonconformity">Download</a>
+                                //<a asp-action="GetPdf" asp-controller="Nonconformity">Download</a>
                             }
                         </tr>
                     }
@@ -75,3 +75,4 @@
         </table>
     </div>
 </div>
+

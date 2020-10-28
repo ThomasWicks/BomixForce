@@ -47,7 +47,7 @@ namespace Bomix_Force.Controllers
         {
             List<NonconformityViewModel> nonconformityView = new List<NonconformityViewModel>();
             List<Nonconformity> nonconformities = new List<Nonconformity>();
-            if (User.IsInRole("Admin")|| User.IsInRole("Employee"))
+            if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
                 nonconformities = _nonconformityRepository.GetAll().ToList();
                 nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
@@ -60,7 +60,8 @@ namespace Bomix_Force.Controllers
                 nonconformities = _nonconformityRepository.Get(n => n.CompanyId == company.Id).ToList();
                 nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
 
-            }else if (User.IsInRole("User"))
+            }
+            else if (User.IsInRole("User"))
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
@@ -84,7 +85,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-                
+
                 NonconformityViewModel nonconformityViewModel = new NonconformityViewModel();
                 nonconformityViewModel.Itens = new List<string>();
                 var values = Enum.GetValues(typeof(ItemEnum));
@@ -98,7 +99,7 @@ namespace Bomix_Force.Controllers
             {
                 return View();
             }
- 
+
         }
 
         // POST: Nonconformity/Create
@@ -107,7 +108,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-               
+
                 Company company = new Company();
                 if (User.IsInRole("Company"))
                 {
@@ -140,13 +141,13 @@ namespace Bomix_Force.Controllers
                 int index = 0;
                 foreach (var item in values)
                 {
-                    if(item.ToString() == nonconformityViewModel.SelectedItem)
+                    if (item.ToString() == nonconformityViewModel.SelectedItem)
                     {
                         nonconformity.ItemEnum = index;
                     }
                     index++;
                 }
-                 _nonconformityRepository.Insert(nonconformity);
+                _nonconformityRepository.Insert(nonconformity);
                 _nonconformityRepository.Save();
                 Notify("Registro enviado com sucesso", "Não Conformidade");
                 return RedirectToAction(nameof(Index));
@@ -197,6 +198,28 @@ namespace Bomix_Force.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        [Route("Nonconformity/UploadAnswer/{id}")]
+        public ActionResult UploadAnswer(int id)
+        {
+
+            Nonconformity nonconformity = _nonconformityRepository.Get(u => u.Id == id).First();
+            NonconformityViewModel nonconformityViewModel = _mapper.Map<NonconformityViewModel>(nonconformity);
+            return PartialView("_uploadAnswer", nonconformityViewModel);
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadAnswer(NonconformityViewModel nonconformityViewModel)
+        {
+            try {
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception x)
+            {
+                return StatusCode(500);
             }
         }
     }
