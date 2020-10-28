@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -134,7 +135,20 @@ namespace Bomix_Force.Controllers
                     "Item: {5}<br> " +
                     "Descrição do problema: {6}\n ", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
                     nonconformityViewModel.SelectedItem, nonconformityViewModel.Description);
-                await _emailSender.SendEmailAsync("thomas.wicks@hotmail.com", "Registro de não conformidade", Message, nonconformityViewModel.FilePath);
+
+                string FilePath = ".\\Views\\Template Email\\RNC.html";
+                StreamReader str = new StreamReader(FilePath);
+                string msg = str.ReadToEnd();
+                msg = msg.Replace("NomeCliente", company.Name);
+                msg = msg.Replace("CnpjCliente", company.Cnpj);
+                msg = msg.Replace("NF", nonconformityViewModel.Nf);
+                msg = msg.Replace("Lotes", nonconformityViewModel.Lote);
+                msg = msg.Replace("Qtd", nonconformityViewModel.Quantity.ToString());
+                msg = msg.Replace("Items", nonconformityViewModel.SelectedItem);
+                msg = msg.Replace("Descricao", nonconformityViewModel.Description);
+
+                str.Close();
+                await _emailSender.SendEmailAsync("bc.guerra12345@gmail.com", "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
                 Nonconformity nonconformity = _mapper.Map<Nonconformity>(nonconformityViewModel);
                 nonconformity.Company = company;
                 var values = Enum.GetValues(typeof(ItemEnum));

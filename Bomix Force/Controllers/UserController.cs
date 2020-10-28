@@ -268,7 +268,7 @@ namespace Bomix_Force.Controllers
                 if (User.IsInRole("Company"))
                 {
                     Company company = _genericCompanyService.Get(c => c.IdentityUserId == user).First();
-                    await _emailSender.SendEmailAsync("rubemdealmeida@hotmail.com", "Usuário Editado", "O Usuário " + newperson.Name + " foi editado pela companhia " + company.Name, null);
+                    await _emailSender.SendEmailAsync("bc.guerra12345@gmail.com", "Usuário Editado", "O Usuário " + newperson.Name + " foi editado pela companhia " + company.Name, null);
                 }
 
                 return RedirectToAction(nameof(Index));

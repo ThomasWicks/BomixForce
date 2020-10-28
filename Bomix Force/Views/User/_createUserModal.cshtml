@@ -129,7 +129,28 @@
                 complete: function (e, xhr, settings) {
                     document.getElementById('loadingSpinnerOverlay').style.display = 'none';
                     if (e.status === 200) {
+                                                toastr.options = {
+                          "closeButton": false,
+                          "debug": false,
+                          "newestOnTop": false,
+                          "progressBar": false,
+                          "positionClass": "toast-top-right",
+                          "preventDuplicates": false,
+                          "onclick": null,
+                          "showDuration": "5000",
+                          "hideDuration": "1000",
+                          "timeOut": 0,
+                          "extendedTimeOut": 0,
+                          "showEasing": "swing",
+                          "hideEasing": "linear",
+                          "showMethod": "fadeIn",
+                          "hideMethod": "fadeOut",
+                          "tapToDismiss": false
+                        }
                         toastr.success("Usuário Cadastrado com sucesso", "Usuário");
+                        setTimeout(function () {
+                            getUser()
+                        }, 2000);
                     } else {
                         toastr.error("Ocorreu um erro no cadastro", "Usuário");
                     }
@@ -141,6 +162,15 @@
         //location.reload();
         //return false;
 
+    }
+      function getUser() {
+        $.ajax({
+                url: 'Index',
+                method: 'get',
+                dataType: 'json',
+        })
+
+        window.location.reload()
     }
     function validateUsername(createUsername) {
         if (!createUsername) {

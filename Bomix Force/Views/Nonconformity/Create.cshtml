@@ -22,23 +22,23 @@
             <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Lote" class="control-label"></label>
-                    <input asp-for="Lote" class="form-control input" />
+                    <label asp-for="Lote" class="control-label font-project"></label>
+                    <input asp-for="Lote" class="form-control input font-project" />
                     <span asp-validation-for="Lote" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Nota Fiscal</label>
-                    <input asp-for="Nf" class="form-control input" />
+                    <label class="control-label font-project">Nota Fiscal</label>
+                    <input asp-for="Nf" class="form-control input font-project" />
                     <span asp-validation-for="Nf" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Quantidade</label>
-                    <input asp-for="Quantity" class="form-control input" />
+                    <label class="control-label font-project">Quantidade</label>
+                    <input asp-for="Quantity" class="form-control input font-project" />
                     <span asp-validation-for="Quantity" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Item</label>
-                    <select asp-for="SelectedItem" class="form-control input">
+                    <label class="control-label font-project">Item</label>
+                    <select asp-for="SelectedItem" class="form-control input font-project">
                         @foreach (var item in Model.Itens)
                         {
                             <option value="@item">@item</option>
@@ -59,20 +59,22 @@
                 <div style="margin-top:15px">
                     <output name="result"></output>
                 </div>
+                
                 <div class="form-group">
-                    <label class="control-label">Descrição</label>
-                    <textarea asp-for="Description" placeholder="Descreva o problema encontrado." class="form-control input" rows="4"></textarea>
+                    <label class="control-label font-project">Descrição</label>
+                    <textarea asp-for="Description" placeholder="Descreva o problema encontrado." class="form-control input font-project" rows="4"></textarea>
 
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
                 <div class="form-group float-right">
-                    <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary" />
+                    <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
                 </div>
-                <a asp-action="Index" class="btn btn-danger float-left">Voltar</a>
+                <a asp-action="Index" class="btn btn-danger float-left font-project " style="color: white; background-color: #D52229;">Voltar</a>
             </form>
         </div>
     </div>
+    <ol></ol>
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -86,5 +88,58 @@
         document.getElementById(id).style.display = visibilidade;
     }
 
+    const input = document.getElementById('FilePath');
+    const preview = document.getElementById('preview');
+
+    input.style.opacity = 0;
+    input.addEventListener('change', updateImageDisplay);
+    const list = document.createElement('ol');
+    list.style = 'list-style: none;';
+    function updateImageDisplay() {
+        while (preview.firstChild) {
+            preview.removeChild(preview.firstChild);
+        }
+
+        const curFiles = input.files;
+        if (curFiles.length === 0) {
+            const para = document.createElement('p');
+            para.textContent = 'Nenhum arquivo selecionado.';
+            preview.appendChild(para);
+        } else {
+            preview.appendChild(list);
+
+            for (const file of curFiles) {
+                const listItem = document.createElement('li');
+                const para = document.createElement('p');
+                if (validFileType(file)) {
+                    para.textContent = `Arquivo ${file.name}`;
+                    const image = document.createElement('img');
+                    image.src = URL.createObjectURL(file);
+                    image.width = 300;
+                    image.height = 150;
+                    listItem.appendChild(image);
+                    listItem.appendChild(para);
+                } else {
+                    para.textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
+                    listItem.appendChild(para);
+                }
+
+                list.appendChild(listItem);
+            }
+        }
+    }
+
+    const fileTypes = [
+        "image/apng",
+        "image/bmp",
+        "image/jpg",
+        "image/jpeg",
+        "image/pjpeg",
+        "image/png",
+    ];
+
+    function validFileType(file) {
+        return fileTypes.includes(file.type);
+    }
 
 </script>

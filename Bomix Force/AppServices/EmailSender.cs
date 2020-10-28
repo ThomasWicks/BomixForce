@@ -39,14 +39,14 @@ namespace Bomix_Force.AppServices
 
                 mimeMessage.Subject = subject;
 
-                string FilePath = ".\\Views\\Template Email\\RNC.html";
-                StreamReader str = new StreamReader(FilePath);
-                string MailText = str.ReadToEnd();
-                MailText = MailText.Replace("##Mensagem##", message);
-                str.Close();
-                if (attachments.Count() > 0)
+                //string FilePath = ".\\Views\\Template Email\\RNC.html";
+                //StreamReader str = new StreamReader(FilePath);
+                //string MailText = str.ReadToEnd();
+                //MailText = MailText.Replace("##Mensagem##", message);
+                //str.Close();
+                if (attachments != null && attachments.Count() > 0)
                 {
-                    var bodyBuilder = addAttachment(MailText, attachments);
+                    var bodyBuilder = addAttachment(message, attachments);
                     mimeMessage.Body = bodyBuilder.ToMessageBody();
 
                 }
@@ -54,7 +54,7 @@ namespace Bomix_Force.AppServices
                 {
                     mimeMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
-                        Text = MailText
+                        Text = message
                     };
                 }
 
