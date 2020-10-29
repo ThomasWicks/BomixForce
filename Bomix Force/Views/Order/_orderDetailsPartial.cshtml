@@ -23,13 +23,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var SubItem in Model.Item)
+                            @foreach (var item in Model.orderViewModelDetails)
                             {
                                 <tr>
-                                    @if (@SubItem.Produto != "")
+                                    @if (item.Produto != "")
                                     {
                                         <th class="text-center ">
-                                            @SubItem.Produto
+                                            @item.Produto
                                         </th>
 
                                     }
@@ -39,10 +39,10 @@
                                             -
                                         </th>
                                     }
-                                    @if (@SubItem.Quantidade != 0)
+                                    @if (item.Quantidade != 0)
                                     {
                                         <th class="text-center ">
-                                            @SubItem.Quantidade
+                                            @item.Quantidade
                                         </th>
 
                                     }
