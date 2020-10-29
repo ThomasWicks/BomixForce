@@ -18,8 +18,12 @@ namespace Bomix_Force.ViewModels
         public string Cliente { get; set; }
         public string Cidade { get; set; }
         public string UF { get; set; }
+        public string Produto { get; set; }
+        public int Quantidade { get; set; }
+        public string Arte { get; set; }
+        public string Personalizacao { get; set; }
 
-        public virtual List<Bomix_PedidoVendaItem> Item { get; set; }
+        //public virtual List<Bomix_PedidoVendaItem> Item { get; set; }
 
         //public int Id { get; set; }
         //public int Pedido { get; set; }

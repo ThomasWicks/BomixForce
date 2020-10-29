@@ -54,7 +54,7 @@ namespace Bomix_Force.Controllers
                 ViewBag.filter = filter;
                 ViewBag.searchString = searchString;
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                orders = _pedidoVendaRepository.GetParameters(user, "").ToList();
+                orders = _pedidoVendaRepository.GetParameters("PCP", DateTime.Now.AddYears(-2).Date.ToString(), DateTime.Now.Date.ToString(), user).ToList();
                 List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
                 if (orders.Count == 0)
                 {
@@ -75,16 +75,16 @@ namespace Bomix_Force.Controllers
         }
 
         // GET: OrderController/Details/5
-        [Route("Order/Details/{id}")]
-        public ActionResult Details(int id)
-        {
-            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            Bomix_PedidoVenda orders = _pedidoVendaRepository.GetParameters(user, id.ToString()).First();
-            List<Bomix_PedidoVendaItem> item = _pedidoItemRepository.GetParameters(user, id.ToString()).ToList();
-            OrderViewModel orderView = _mapper.Map<OrderViewModel>(orders);
-            orderView.Item = item;
-            return PartialView("_orderDetailsPartial", orderView);
-        }
+        //[Route("Order/Details/{id}")]
+        //public ActionResult Details(int id)
+        //{
+        //    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        //    Bomix_PedidoVenda orders = _pedidoVendaRepository.GetParameters(user, id.ToString()).First();
+        //    List<Bomix_PedidoVendaItem> item = _pedidoItemRepository.GetParameters(user, id.ToString()).ToList();
+        //    OrderViewModel orderView = _mapper.Map<OrderViewModel>(orders);
+        //    orderView.Item = item;
+        //    return PartialView("_orderDetailsPartial", orderView);
+        //}
 
 
         [HttpGet]
@@ -96,7 +96,6 @@ namespace Bomix_Force.Controllers
             Bomix_PedidoVenda order = orders.Where(o => o.id == Int32.Parse(id)).First();
             List<Bomix_PedidoVendaItem> item = _pedidoItemRepository.GetParameters(user, id.ToString()).ToList();
             OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
-            orderView.Item = item;
             return PartialView("_orderDetailsPartial", orderView);
         }
 
@@ -156,11 +155,11 @@ namespace Bomix_Force.Controllers
                     var orderViewStatus = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     //var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
                     //var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
-                        var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
-                    orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).Union(orderViewCliente).ToList();
+                        orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).Union(orderViewCliente).ToList();
                     }
                     else
                     {
@@ -205,17 +204,15 @@ namespace Bomix_Force.Controllers
                 orderView = orderView.Skip(page * pageSize).Take(pageSize).ToList();
                 foreach (var order in orderView)
                 {
-                    order.Item = _pedidoItemRepository.GetParameters(user, order.id.ToString()).ToList();
+
                     order.Pedido = !String.IsNullOrEmpty(order.Pedido) ? order.Pedido : "-";
                     order.Status = !String.IsNullOrEmpty(order.Status) ? order.Status : "-";
                     order.Cliente = !String.IsNullOrEmpty(order.Cliente) ? order.Cliente : "-";
-                    foreach (var item in order.Item)
-                    {
-                        item.Arte = !String.IsNullOrEmpty(item.Arte) ? item.Arte : "-";
-                        item.Produto = !String.IsNullOrEmpty(item.Produto) ? item.Produto : "-";
-                        item.Personalizacao = !String.IsNullOrEmpty(item.Personalizacao) ? item.Personalizacao : "-";
-                        item.Quantidade = !String.IsNullOrEmpty(item.Quantidade.ToString()) ? item.Quantidade : 0;
-                    }
+                    order.Arte = !String.IsNullOrEmpty(order.Arte) ? order.Arte : "-";
+                    order.Produto = !String.IsNullOrEmpty(order.Produto) ? order.Produto : "-";
+                    order.Personalizacao = !String.IsNullOrEmpty(order.Personalizacao) ? order.Personalizacao : "-";
+                    order.Quantidade = !String.IsNullOrEmpty(order.Quantidade.ToString()) ? order.Quantidade : 0;
+
 
                 }
                 return PartialView("_orderScrollPartial", orderView);

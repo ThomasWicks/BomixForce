@@ -18,12 +18,15 @@ namespace Bomix_Force.Repo.Interface
             _context = context;
         }
 
-        public List<Bomix_PedidoVenda> GetParameters(string ClientId, string OrderId)
+        public List<Bomix_PedidoVenda> GetParameters(string type, string InitialDate, string FinalDate, string UserId)
         {
-            var ClientParam = new SqlParameter("@ClientId", ClientId);
-            var OrderParam = new SqlParameter("@OrderId", OrderId);
+            var UserParam = new SqlParameter("@UserId", UserId);
+            var typeParam = new SqlParameter("@type", type);
+            var InitialDateParam = new SqlParameter("@InitialDate", InitialDate);
+            var FinalDateParam = new SqlParameter("@FinalDate", FinalDate);
 
-            var PedidoVenda = _context.Bomix_PedidoVenda.FromSqlRaw("Bomix_GetPedidoVenda @ClientId, @OrderId ", ClientParam, OrderParam).ToList();
+            var PedidoVenda = _context.Bomix_PedidoVenda.FromSqlRaw("Bomix_GetPedidoVenda @type, @InitialDate, @FinalDate,@UserId,''", 
+                typeParam,InitialDateParam, FinalDateParam, UserParam).ToList();
             return PedidoVenda;
         }
     }
