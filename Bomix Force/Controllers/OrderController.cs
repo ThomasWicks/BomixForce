@@ -88,14 +88,12 @@ namespace Bomix_Force.Controllers
 
 
         [HttpGet]
-        [Route("Order/DuplicateData/{id}")]
+        [Route("Order/DuplicateData/{Pedido}")]
         //Get: OrderController/DuplicateData/5
-        public ActionResult DuplicateData(string id)
+        public ActionResult DuplicateData(string Pedido)
         {
-            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            Bomix_PedidoVenda order = orders.Where(o => o.id == Int32.Parse(id)).First();
-            List<Bomix_PedidoVendaItem> item = _pedidoItemRepository.GetParameters(user, id.ToString()).ToList();
-            OrderViewModel orderView = _mapper.Map<OrderViewModel>(order);
+            List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
+            List<OrderViewModel> orderView = _mapper.Map<List<OrderViewModel>>(order);
             return PartialView("_orderDetailsPartial", orderView);
         }
 
@@ -153,17 +151,22 @@ namespace Bomix_Force.Controllers
                     var orderViewPedido = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewEmissao = orderView.Where(o => o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewStatus = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewArte = orderView.Where(o => o.Arte.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewProduto = orderView.Where(o => o.Produto.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     //var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
                     //var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
-                        orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).Union(orderViewCliente).ToList();
+                        orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).
+                            Union(orderViewPersonalizacao).Union(orderViewProduto).Union(orderViewArte).Union(orderViewCliente).ToList();
                     }
                     else
                     {
-                        orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).ToList();
+                        orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewPersonalizacao)
+                            .Union(orderViewProduto).Union(orderViewArte).Union(orderViewStatus).ToList();
                     }
 
                 }
@@ -186,6 +189,18 @@ namespace Bomix_Force.Controllers
                         break;
                     case ("ClienteAsc"):
                         orderView = orderView.OrderBy(o => o.Cliente);
+                        break;
+                    case ("ProdutoDesc"):
+                        orderView = orderView.OrderByDescending(o => o.Produto);
+                        break;
+                    case ("ProdutoAsc"):
+                        orderView = orderView.OrderBy(o => o.Produto);
+                        break;
+                    case ("ArteDesc"):
+                        orderView = orderView.OrderByDescending(o => o.Arte);
+                        break;
+                    case ("ArteAsc"):
+                        orderView = orderView.OrderBy(o => o.Arte);
                         break;
                     case ("StatusDesc"):
                         orderView = orderView.Where(o => o.Status == "ENCERRADO").Concat(orderView.Where(o => o.Status == "ORCAMENTO"))
