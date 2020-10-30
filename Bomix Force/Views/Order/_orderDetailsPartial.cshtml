@@ -1,4 +1,4 @@
-﻿@model Bomix_Force.ViewModels.OrderViewModel
+﻿@model List<Bomix_Force.ViewModels.OrderViewModel>
 
 <div class="modal fade" id="duplicateModal">
     <div class="modal-dialog modal-lg">
@@ -8,7 +8,7 @@
                 <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <h5 class="text-center"><strong>Numero do Pedido: @Model.Pedido</strong></h5>
+                <h5 class="text-center"><strong>Numero do Pedido: @Model[0].Pedido</strong></h5>
                 <div class="table-responsive mt-2 scroll">
                     <table id="#tableOrder" class="table table-striped">
                         <thead class="thead-light">
@@ -23,13 +23,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var SubItem in Model.Item)
+                            @foreach (var item in Model)
                             {
                                 <tr>
-                                    @if (@SubItem.Produto != "")
+                                    @if (item.Produto != "")
                                     {
                                         <th class="text-center ">
-                                            @SubItem.Produto
+                                            @item.Produto
                                         </th>
 
                                     }
@@ -39,10 +39,10 @@
                                             -
                                         </th>
                                     }
-                                    @if (@SubItem.Quantidade != 0)
+                                    @if (item.Quantidade != 0)
                                     {
                                         <th class="text-center ">
-                                            @SubItem.Quantidade
+                                            @item.Quantidade
                                         </th>
 
                                     }
@@ -59,7 +59,7 @@
                     </table>
                 </div>
                 <button data-dismiss="modal" class="btn btn-danger">Cancelar</button>
-                <button type="button" onclick="duplicate(@Model.Pedido)" class="btn btn-primary btn-lg fas fa-copy float-right">  Duplicar</button>
+                <button type="button" onclick="duplicate(@Model[0].Pedido)" class="btn btn-primary btn-lg fas fa-copy float-right">  Duplicar</button>
             </div>
 
         </div>
@@ -93,7 +93,7 @@
 </script>
 <style>
     .scroll {
-        overflow-y: scroll;
-        height: 400px;
+/*        overflow-y: scroll;*/
+        /*height: 400px;*/
     }
 </style>

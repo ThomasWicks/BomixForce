@@ -8,6 +8,6 @@ namespace Bomix_Force.Repo.Interface
 {
     public interface IPedidoVendaRepository: IGenericRepository<Bomix_PedidoVenda>
     {
-        List<Bomix_PedidoVenda> GetParameters(string ClientId, string OrderId);
+        List<Bomix_PedidoVenda> GetParameters(string type, string InitialDate, string FinalDate, string UserId);
     }
 }

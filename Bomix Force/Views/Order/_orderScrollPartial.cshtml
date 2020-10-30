@@ -5,159 +5,120 @@
 
 @if (Model?.Count() > 0)
 {
-    foreach (var item in Model)
+    @foreach (var item in Model)
     {
-        if (item.Item.Count > 0)
+    <tr>
+        <th class="text-center">
+            @item.Pedido
+
+        </th>
+        @if (@item.Produto != "")
         {
+            <th class="text-center ">
+                @item.Produto
+            </th>
 
-            @foreach (var SubItem in item.Item.Select((x, i) => new { Value = x, Index = i }))
-            {
-                <tr>
-                    <th class="text-center">
-                        @item.Pedido
-
-                    </th>
-                    <th class="text-center ">
-                        @SubItem.Value.Produto
-                    </th>
-                    <th class="text-center">
-                        @SubItem.Value.Quantidade
-                    </th>
-                    <th class="text-center ">
-                        @SubItem.Value.Arte
-                    </th>
-                    <th class="text-center">
-                        @SubItem.Value.Personalizacao
-                    </th>
-                    @if (!User.IsInRole("User") && !User.IsInRole("Company"))
-                    {
-                        <th class="text-center">
-                            @item.Cliente
-                        </th>
-                    }
-                    <th class="text-center">
-                        @Html.DisplayFor(modelItem => @item.Emissao)
-                    </th>
-                    <th class="text-center">
-                        @item.Cidade - @item.UF
-                    </th>
-                    @if (@item.Status == "ENCERRADO")
-                    {
-                        <th class="mt-2 badge border border-danger">
-                            <a class="text-danger">Encerrado</a>
-                        </th>
-
-                    }
-                    else if (@item.Status == "ABERTO")
-                    {
-                        <th class="mt-2 badge border border-primary">
-                            <a class="text-primary">Aberto</a>
-                        </th>
-                    }
-                    else if (@item.Status == "LIBERADO")
-                    {
-                        <th class="mt-2 badge border border-success ">
-                            <a class="text-success">Liberado</a>
-                        </th>
-                    }
-                    else if (@item.Status == "ORCAMENTO")
-                    {
-                        <th class="mt-2 badge border border-secondary">
-                            <a class="text-secondary">Orçamento</a>
-                        </th>
-                    }
-                    else
-                    {
-                        <th class="mt-2 badge border border-info">
-                            <a class="text-info">@item.Status</a>
-                        </th>
-                    }
-                    @if (User.IsInRole("User"))
-                        {
-                    <th>
-                        <div>
-
-                            <button data-toggle="orderDetails" onclick="openConfirmationModal(this)" data-url="@Url.Action($"DuplicateData/{@item.id}")" data-target="#duplicateModal" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
-                        </div>
-                    </th>
-                      }
-
-                </tr>
-            }
         }
         else
         {
-            <tr>
-                <th class="text-center">
-                    @item.Pedido
-
-                </th>
-                <th class="text-center">
-                    -
-                </th>
-                <th class="text-center">
-                    -
-                </th>
-                <th class="text-center ">
-                    -
-                </th>
-                <th class="text-center">
-                    -
-                </th>
-                @if (!User.IsInRole("User") && !User.IsInRole("Company"))
-                {
-                    <th class="text-center">
-                        @item.Cliente
-                    </th>
-                }
-                <th class="text-center">
-                    @Html.DisplayFor(modelItem => @item.Emissao)
-                </th>
-                <th class="text-center">
-                    @item.Cidade - @item.UF
-                </th>
-                @if (@item.Status == "ENCERRADO")
-                {
-                    <th class="mt-2 badge border border-danger">
-                        <a class="text-danger">Encerrado</a>
-                    </th>
-
-                }
-                else if (@item.Status == "ABERTO")
-                {
-                    <th class="mt-2 badge border border-primary">
-                        <a class="text-primary">Aberto</a>
-                    </th>
-                }
-                else if (@item.Status == "LIBERADO")
-                {
-                    <th class="mt-2 badge border border-success ">
-                        <a class="text-success">Liberado</a>
-                    </th>
-                }
-                else if (@item.Status == "ORCAMENTO")
-                {
-                    <th class="mt-2 badge border border-secondary">
-                        <a class="text-secondary">Orçamento</a>
-                    </th>
-                }
-                else
-                {
-                    <th class="mt-2 badge border border-info">
-                        <a class="text-info">@item.Status</a>
-                    </th>
-                }
-                @if (User.IsInRole("User"))
-                {
-                    <th class="text-center">
-                        <div class="d-inline-block">
-                            <button data-toggle="orderDetails" onclick="openConfirmationModal(this)" data-url="@Url.Action($"DuplicateData/{@item.id}")" data-target="#duplicateModal" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
-                        </div>
-                    </th>
-                }
-
-            </tr>
+            <th class="text-center ">
+                -
+            </th>
         }
+        @if (@item.Quantidade != 0)
+        {
+            <th class="text-center">
+                @item.Quantidade
+            </th>
+
+        }
+        else
+        {
+            <th class="text-center">
+                -
+            </th>
+        }
+        @if (@item.Arte != "")
+        {
+            <th class="text-center ">
+                @item.Arte
+            </th>
+
+        }
+        else
+        {
+            <th class="text-center ">
+                -
+            </th>
+        }
+        @if (@item.Personalizacao != "")
+        {
+            <th class="text-center">
+                @item.Personalizacao
+            </th>
+
+        }
+        else
+        {
+            <th class="text-center">
+                -
+            </th>
+
+        }
+        @if (!User.IsInRole("User") && !User.IsInRole("Company"))
+        {
+            <th class="text-center">
+                @item.Cliente
+            </th>
+        }
+        <th class="text-center">
+            @Html.DisplayFor(modelItem => @item.Emissao)
+        </th>
+        <th class="text-center">
+            @item.Cidade - @item.UF
+        </th>
+        @if (@item.Status == "ENCERRADO")
+        {
+            <th class="mt-2 badge border border-danger">
+                <a class="text-danger">Encerrado</a>
+            </th>
+
+        }
+        else if (@item.Status == "ABERTO")
+        {
+            <th class="mt-2 badge border border-primary">
+                <a class="text-primary">Aberto</a>
+            </th>
+        }
+        else if (@item.Status == "LIBERADO")
+        {
+            <th class="mt-2 badge border border-success ">
+                <a class="text-success">Liberado</a>
+            </th>
+        }
+        else if (@item.Status == "ORCAMENTO")
+        {
+            <th class="mt-2 badge border border-secondary">
+                <a class="text-secondary">Orçamento</a>
+            </th>
+        }
+        else
+        {
+            <th class="mt-2 badge border border-info">
+                <a class="text-info">@item.Status</a>
+            </th>
+        }
+        @if (User.IsInRole("User"))
+        {
+            <th>
+                <div>
+
+                    <button data-toggle="orderDetails" onclick="openConfirmationModal(this)" data-url="@Url.Action($"DuplicateData/{@item.Pedido}")" data-target="#duplicateModal" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
+                </div>
+            </th>
+        }
+
+    </tr>
 
     }
 }
