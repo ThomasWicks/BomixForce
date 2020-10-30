@@ -55,11 +55,22 @@
                     </div>
                     <br />
                 </div>
-                <input id="uploadFile" asp-for="FilePath" multiple />
+                <div class="text-center">
+                    <label class="control-label font-project">Para que possamos te atender melhor insira fotos da não conformidade e da etiqueta do produto.</label>
+                </div>
+                <div class="image-upload text-center">
+                    <label for="FilePath">
+                        <img style="width: 60px; height: 60px; cursor: pointer;" src="~/Assets/ic_upload.png" />
+                    </label>
+                    <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png" />
+                    <div id="preview">
+                        <p>Nenhum arquivo selecionado.</p>
+                    </div>
+                </div>
                 <div style="margin-top:15px">
                     <output name="result"></output>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="control-label font-project">Descrição</label>
                     <textarea asp-for="Description" placeholder="Descreva o problema encontrado." class="form-control input font-project" rows="4"></textarea>
