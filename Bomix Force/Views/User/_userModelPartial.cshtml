@@ -119,26 +119,27 @@
                     Cargo: editCargo,
                     Email: editEmail,
                 },
-                complete: function(e, xhr, settings){
+                complete: function (e, xhr, settings) {
+                    document.getElementById('loadingSpinnerOverlay').style.display = 'none';
+                    console.log(e);
                     if (e.status === 200) {
-                        document.getElementById('loadingSpinnerOverlay').style.display = 'none';
                         toastr.options = {
-                          "closeButton": false,
-                          "debug": false,
-                          "newestOnTop": false,
-                          "progressBar": false,
-                          "positionClass": "toast-top-right",
-                          "preventDuplicates": false,
-                          "onclick": null,
-                          "showDuration": "5000",
-                          "hideDuration": "1000",
-                          "timeOut": 0,
-                          "extendedTimeOut": 0,
-                          "showEasing": "swing",
-                          "hideEasing": "linear",
-                          "showMethod": "fadeIn",
-                          "hideMethod": "fadeOut",
-                          "tapToDismiss": false
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "5000",
+                            "hideDuration": "1000",
+                            "timeOut": 0,
+                            "extendedTimeOut": 0,
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut",
+                            "tapToDismiss": false
                         }
                         toastr.success("Usuário editado com sucesso", "Usuário")
                         setTimeout(function () {
@@ -146,14 +147,14 @@
                         }, 2000);
                         //var intervalo = window.setTimeout(getUser(), 5000);
                         //clearInterval(intervalo);
-                        
+
                         //tentar fazer recarregar a pagina e exibir o toastr
                         //location.reload().then(function () {
                         //    console.log("aquiiii")
                         //  toastr.success("Usuario editado com sucesso", "Sucesso")
                         //})
-                    }else{
-                      toastr.error("Ocorreu um erro na edição do Usuário", "Usuário");
+                    } else {
+                        toastr.error("Ocorreu um erro na edição do Usuário", "Usuário");
                     }
                 },
                 method: 'Post',
@@ -165,9 +166,9 @@
     }
     function getUser() {
         $.ajax({
-                url: 'Index',
-                method: 'get',
-                dataType: 'json',
+            url: 'Index',
+            method: 'get',
+            dataType: 'json',
         })
 
         window.location.reload()

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +7,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Bomix_Force.Util;
-using Bomix_Force.AppServices;
+using Bomix_Force.Controllers;
 using Bomix_Force.AppServices.Interface;
+using Bomix_Force.Models;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Bomix_Force.Areas.Identity.Pages.Account
 {
@@ -32,7 +33,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "O campo é obrigatório")]
             [EmailAddress]
             public string Email { get; set; }
         }
@@ -45,7 +46,10 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    //return RedirectToPage("./ForgotPasswordConfirmation");
+                    //var teste = new BaseController();
+                    Notify("E-mail não encontrado no sistema.", "Erro ao buscar o e-mail", NotificationType.warning);
+                    return Page();
                 }
 
                 //var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
@@ -61,12 +65,41 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                     protocol: Request.Scheme);
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", null);
+                    "Redefinição de senha",
+                    $"Para redefinir a senha <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clique aqui</a>.", null);
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
             return Page();
+        }
+
+        public void Notify(string message, string title = "Sweet Alert Toastr Demo",
+                                   NotificationType notificationType = NotificationType.success)
+        {
+            var msg = new
+            {
+                message = message,
+                title = title,
+                icon = notificationType.ToString(),
+                type = notificationType.ToString(),
+                provider = GetProvider()
+            };
+
+            TempData["Message"] = JsonConvert.SerializeObject(msg);
+        }
+
+        private string GetProvider()
+        {
+            var builder = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                            .AddEnvironmentVariables();
+
+            IConfigurationRoot configuration = builder.Build();
+
+            var value = configuration["NotificationProvider"];
+
+            return value;
         }
     }
 }
