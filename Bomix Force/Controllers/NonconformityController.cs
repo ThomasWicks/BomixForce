@@ -148,7 +148,7 @@ namespace Bomix_Force.Controllers
                 msg = msg.Replace("Descricao", nonconformityViewModel.Description);
 
                 str.Close();
-                await _emailSender.SendEmailAsync("bc.guerra12345@gmail.com", "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
+                await _emailSender.SendEmailAsync("thomas.wicks@hotmail.com", "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
                 Nonconformity nonconformity = _mapper.Map<Nonconformity>(nonconformityViewModel);
                 nonconformity.Company = company;
                 var values = Enum.GetValues(typeof(ItemEnum));
