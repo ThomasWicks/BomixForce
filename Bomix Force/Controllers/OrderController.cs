@@ -101,12 +101,18 @@ namespace Bomix_Force.Controllers
         // Post: OrderController/Duplicate/5
         public async Task<ActionResult> Duplicate(string Pedido)
         {
-
-            string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            //Person person = _genericPersonService.Get(u => u.Id.ToString() == user).First();
-            //Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
-            await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {Pedido}", null);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                //Person person = _genericPersonService.Get(u => u.Id.ToString() == user).First();
+                //Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
+                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {Pedido}", null);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
 
         }

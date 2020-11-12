@@ -68,7 +68,7 @@ namespace Bomix_Force.AppServices
                     {
                         // The third parameter is useSSL (true if the client should make an SSL-wrapped
                         // connection to the server; otherwise, false).
-                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, true);
+                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, false);
                     }
                     else
                     {
