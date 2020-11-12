@@ -108,7 +108,7 @@ namespace Bomix_Force.Controllers
             }
             else
             {
-                return LocalRedirect("/Identity/Account/Manage");
+                return LocalRedirect("./Identity/Account/Manage");
             }
         }
         public ActionResult indexEmployees(int id, string searchString, int? pageNumber)
@@ -219,7 +219,6 @@ namespace Bomix_Force.Controllers
             }
         }
         [HttpGet]
-        [Route("User/getUserName")]
         public string getUserName()
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
