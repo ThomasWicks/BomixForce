@@ -26,6 +26,7 @@ namespace Bomix_Force.Controllers
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IGenericRepository<Employee> _genericEmployeeService;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly IPedidoVendaRepository _pedidoVendaRepository;
@@ -33,7 +34,7 @@ namespace Bomix_Force.Controllers
         private readonly IMapper _mapper;
         public OrderController(IGenericRepository<Person> genericPersonService, IGenericRepository<Company> genericCompanyService, IMapper mapper
             , RoleManager<IdentityRole> roleManager,
-            IGenericRepository<Employee> genericEmployeeService, IEmailSender emailSender, IPedidoVendaRepository pedidoVendaRepository, IPedidoItemRepository pedidoItemRepository)
+            IGenericRepository<Employee> genericEmployeeService, IEmailSender emailSender, IPedidoVendaRepository pedidoVendaRepository, IPedidoItemRepository pedidoItemRepository, UserManager<IdentityUser> userManager)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
@@ -43,6 +44,7 @@ namespace Bomix_Force.Controllers
             _genericEmployeeService = genericEmployeeService;
             _pedidoVendaRepository = pedidoVendaRepository;
             _pedidoItemRepository = pedidoItemRepository;
+            _userManager = userManager;
         }
         // GET: OrderController
         public static volatile List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
@@ -51,18 +53,26 @@ namespace Bomix_Force.Controllers
 
             try
             {
-                ViewBag.filter = filter;
-                ViewBag.searchString = searchString;
-                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                orders = _pedidoVendaRepository.GetParameters("PCP", DateTime.Now.AddYears(-2).Date.ToString(), DateTime.Now.Date.ToString(), user).ToList();
-                List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
-                if (orders.Count == 0)
+                var identityUser = _userManager.GetUserAsync(User);
+                if (identityUser.Result.EmailConfirmed == true)
                 {
-                    return View();
+                    ViewBag.filter = filter;
+                    ViewBag.searchString = searchString;
+                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    orders = _pedidoVendaRepository.GetParameters("PCP", DateTime.Now.AddYears(-2).Date.ToString(), DateTime.Now.Date.ToString(), user).ToList();
+                    List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
+                    if (orders.Count == 0)
+                    {
+                        return View();
+                    }
+                    else
+                    {
+                        return View(orderView);
+                    }
                 }
                 else
                 {
-                    return View(orderView);
+                    return LocalRedirect("/Identity/Account/Manage");
                 }
             }
             catch (Exception ex)

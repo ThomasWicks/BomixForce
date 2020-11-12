@@ -13,6 +13,12 @@ using Bomix_Force.Models;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.AspNetCore.Components;
+using Bomix_Force.Repo.Interface;
+using Bomix_Force.Data.Entities;
+using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace Bomix_Force.Areas.Identity.Pages.Account
 {
@@ -21,11 +27,17 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
-
-        public ForgotPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        private readonly IGenericRepository<Company> _genericCompanyService;
+        private readonly IGenericRepository<Person> _genericPersonService;
+        private readonly IGenericRepository<Employee> _genericEmployeeService;
+        public ForgotPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender, IGenericRepository<Person> genericPersonService,
+            IGenericRepository<Employee> genericEmployeeService, IGenericRepository<Company> genericCompanyService)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _genericCompanyService = genericCompanyService;
+            _genericPersonService = genericPersonService;
+            _genericEmployeeService = genericEmployeeService;
         }
 
         [BindProperty]
@@ -34,43 +46,68 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required(ErrorMessage = "O campo é obrigatório")]
-            [EmailAddress]
-            public string Email { get; set; }
+            public string UserName { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (ModelState.IsValid)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    //return RedirectToPage("./ForgotPasswordConfirmation");
-                    //var teste = new BaseController();
-                    Notify("E-mail não encontrado no sistema.", "Erro ao buscar o e-mail", NotificationType.warning);
-                    return Page();
+                    var user = await _userManager.FindByNameAsync(Input.UserName);
+                    string Email = string.Empty;
+                    if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                    {
+                        // Don't reveal that the user does not exist or is not confirmed
+                        //return RedirectToPage("./ForgotPasswordConfirmation");
+                        //var teste = new BaseController();
+                        Notify("Usuário não encontrado no sistema.", "Erro ao buscar o usuário", NotificationType.warning);
+                        return Page();
+                    }
+
+                    List<Company> company = _genericCompanyService.Get(g => g.IdentityUserId == user.Id).ToList();
+                    if (company.Count() == 0)
+                    {
+                        List<Person> person = _genericPersonService.Get(g => g.IdentityUserId == user.Id).ToList();
+                        if (person.Count() == 0)
+                        {
+                            List<Employee> employee = _genericEmployeeService.Get(g => g.IdentityUserId == user.Id).ToList();
+                            Email = employee.First().Email;
+                        }
+                        else
+                        {
+                            Email = person.First().Email;
+                        }
+                    }
+                    else
+                    {
+                        Email = company.First().Email;
+                    }
+                    // For more information on how to enable account confirmation and password reset please 
+                    // visit https://go.microsoft.com/fwlink/?LinkID=532713
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Page(
+                        "/Account/ResetPassword",
+                        pageHandler: null,
+                        values: new { area = "Identity", code },
+                        protocol: Request.Scheme);
+                    await _emailSender.SendEmailAsync(
+                        Email,
+                        "Redefinição de senha",
+                        $"Para redefinir a senha <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clique aqui</a>.", null);
+                    return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
-                //var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
-
-                // For more information on how to enable account confirmation and password reset please 
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
-                    "/Account/ResetPassword",
-                    pageHandler: null,
-                    values: new { area = "Identity", code },
-                    protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Redefinição de senha",
-                    $"Para redefinir a senha <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clique aqui</a>.", null);
-                return RedirectToPage("./ForgotPasswordConfirmation");
+                return Page();
+            }
+            catch (Exception e)
+            {
+                Notify("Usuário não encontrado no sistema.", "Erro ao buscar o usuário", NotificationType.warning);
+                return Page();
             }
 
-            return Page();
         }
 
         public void Notify(string message, string title = "Sweet Alert Toastr Demo",

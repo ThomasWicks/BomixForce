@@ -48,31 +48,40 @@ namespace Bomix_Force.Controllers
         {
             List<NonconformityViewModel> nonconformityView = new List<NonconformityViewModel>();
             List<Nonconformity> nonconformities = new List<Nonconformity>();
-            if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+            var identityUser = _userManager.GetUserAsync(User);
+            if (identityUser.Result.EmailConfirmed == true)
             {
-                nonconformities = _nonconformityRepository.GetAll().ToList();
-                nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
+                if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                {
+                    nonconformities = _nonconformityRepository.GetAll().ToList();
+                    nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
+                }
+                else if (User.IsInRole("Company"))
+                {
+                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    Company company = _genericCompanyService.Get(u => u.IdentityUserId == user).First();
+
+                    nonconformities = _nonconformityRepository.Get(n => n.CompanyId == company.Id).ToList();
+                    nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
+
+                }
+                else if (User.IsInRole("User"))
+                {
+                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                    Company company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
+
+                    nonconformities = _nonconformityRepository.Get(n => n.CompanyId == company.Id).ToList();
+                    nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
+                }
+
+                return View(nonconformityView);
             }
-            else if (User.IsInRole("Company"))
+            else
             {
-                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Company company = _genericCompanyService.Get(u => u.IdentityUserId == user).First();
-
-                nonconformities = _nonconformityRepository.Get(n => n.CompanyId == company.Id).ToList();
-                nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
-
+                return LocalRedirect("/Identity/Account/Manage");
             }
-            else if (User.IsInRole("User"))
-            {
-                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
-                Company company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
-
-                nonconformities = _nonconformityRepository.Get(n => n.CompanyId == company.Id).ToList();
-                nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
-            }
-
-            return View(nonconformityView);
+           
         }
 
         // GET: Nonconformity/Details/5
