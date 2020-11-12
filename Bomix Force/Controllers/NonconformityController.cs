@@ -95,7 +95,7 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-
+                Notify("É necessario a criação de um registro de não conformidade para cada tipo de Item ", "Aviso", NotificationType.warning);
                 NonconformityViewModel nonconformityViewModel = new NonconformityViewModel();
                 nonconformityViewModel.Itens = new List<string>();
                 var values = Enum.GetValues(typeof(ItemEnum));
