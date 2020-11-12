@@ -52,64 +52,56 @@ namespace Bomix_Force.Controllers
         // GET: UserController
         public ActionResult Index(string searchString, int? pageNumber)
         {
-            var identityUser = _userManager.GetUserAsync(User);
-            if (identityUser.Result.EmailConfirmed == true)
+            ViewBag.searchString = searchString;
+            ViewBag.indexEmployees = false;
+            int page = (pageNumber ?? 1);
+            List<UserViewModel> userView = new List<UserViewModel>();
+            if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
-                ViewBag.searchString = searchString;
-                ViewBag.indexEmployees = false;
-                int page = (pageNumber ?? 1);
-                List<UserViewModel> userView = new List<UserViewModel>();
-                if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+
+                List<Company> Company = _genericCompanyService.GetAll().ToList();
+                userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
+                if (!String.IsNullOrEmpty(searchString))
                 {
 
-                    List<Company> Company = _genericCompanyService.GetAll().ToList();
-                    userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
-                    if (!String.IsNullOrEmpty(searchString))
-                    {
-
-                        var userViewCompany = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                        var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
-                        userView = userViewCompany.Union(userViewEmail).ToList();
-
-                    }
+                    var userViewCompany = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
+                    userView = userViewCompany.Union(userViewEmail).ToList();
 
                 }
-                else if (User.IsInRole("Company"))
-                {
-                    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    Company company = _genericCompanyService.Get(u => u.IdentityUserId == user).First();
 
-                    IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == company.Id);
-                    userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
-
-                    foreach (var item in userView)
-                    {
-                        item.Company = company;
-                    }
-                    if (!String.IsNullOrEmpty(searchString))
-                    {
-
-                        var userViewName = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                        var userViewCargo = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
-                        var userViewSetor = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
-                        var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
-                        userView = userViewName.Union(userViewCargo).Union(userViewSetor).Union(userViewEmail).Union(userViewName).ToList();
-
-                    }
-                }
-                else if (User.IsInRole("User"))
-                {
-                    //todo user can't see user page
-                    return View();
-                }
-
-                var userList = userView.ToPagedList(page, 9);
-                return View(userList);
             }
-            else
+            else if (User.IsInRole("Company"))
             {
-                return LocalRedirect("./Identity/Account/Manage");
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                Company company = _genericCompanyService.Get(u => u.IdentityUserId == user).First();
+
+                IEnumerable<Person> people = _genericPersonService.Get(g => g.CompanyId == company.Id);
+                userView = _mapper.Map<IEnumerable<UserViewModel>>(people).ToList();
+
+                foreach (var item in userView)
+                {
+                    item.Company = company;
+                }
+                if (!String.IsNullOrEmpty(searchString))
+                {
+
+                    var userViewName = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewCargo = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewSetor = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
+                    userView = userViewName.Union(userViewCargo).Union(userViewSetor).Union(userViewEmail).Union(userViewName).ToList();
+
+                }
             }
+            else if (User.IsInRole("User"))
+            {
+                //todo user can't see user page
+                return View();
+            }
+
+            var userList = userView.ToPagedList(page, 9);
+            return View(userList);
         }
         public ActionResult indexEmployees(int id, string searchString, int? pageNumber)
         {
@@ -219,16 +211,16 @@ namespace Bomix_Force.Controllers
             }
         }
         [HttpGet]
-        public string getUserName()
+        public JsonResult getUserName()
         {
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (User.IsInRole("Employee"))
             {
                 Employee employee = _genericEmployeeService.Get(e => e.IdentityUserId == userId).First();
                 string json = "{" +
                    $"\"person\":\"{employee.Name}\"" +
                    "}";
-                return json;
+                return Json(json);
             }
             else if (User.IsInRole("Company") || User.IsInRole("Admin"))
             {
@@ -236,9 +228,9 @@ namespace Bomix_Force.Controllers
                 string json = "{" +
                   $"\"person\":\"{company.Name}\"" +
                   "}";
-                return json;
+                return Json(json);
             }
-
+           
             else
             {
                 Person person = _genericPersonService.Get(p => p.IdentityUserId == userId).First();
@@ -247,11 +239,11 @@ namespace Bomix_Force.Controllers
                     $"\"person\":\"{person.Name}\"," +
                     $"\"company\":\"{company.Name}\"" +
                     "}";
-                return json;
+                return Json(json);
             }
         }
         // GET: UserController/Edit/5
-
+        
         [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
@@ -263,11 +255,11 @@ namespace Bomix_Force.Controllers
         }
         // POST: UserController/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(string IdentityUserId, string Name, string Id, string Setor, string Cargo, string Email, int CompanyId)
+        public async Task<ActionResult> Edit(string IdentityUserId, string Name,string Id, string Setor, string Cargo, string Email, int CompanyId)
         {
             try
             {
-                UserViewEdit userviewEdit = new UserViewEdit { Id = Convert.ToInt32(Id), IdentityUserId = IdentityUserId, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, CompanyId = CompanyId };
+                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), IdentityUserId = IdentityUserId, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, CompanyId = CompanyId };
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
