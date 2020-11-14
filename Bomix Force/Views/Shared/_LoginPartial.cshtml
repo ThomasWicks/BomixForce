@@ -54,11 +54,8 @@
     <script src="~/js/jquery-1.7.1.min.js"></script>
     <script>
     $(document).ready(function () {
-         var url = window.location.href.split('/');
-        var baseUrl = url[0] + '//' + url[2];
-        console.log(baseUrl)
         $.ajax({
-            url: baseUrl+'/User/getUserName',
+            url: "/User/getUserName",
             method: 'Get',
             success: function (data) {
                 data=JSON.parse(data)

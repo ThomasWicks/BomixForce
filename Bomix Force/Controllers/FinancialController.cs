@@ -49,7 +49,7 @@ namespace Bomix_Force.Controllers
             }
             else
             {
-                return LocalRedirect("/Identity/Account/Manage");
+                return LocalRedirect("./Identity/Account/Manage");
             }
         }
 
