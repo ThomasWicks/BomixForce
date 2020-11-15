@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿    @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
@@ -55,7 +55,7 @@
     <script>
     $(document).ready(function () {
         $.ajax({
-            url: "/User/getUserName",
+            url: "/BomixForce/User/getUserName",
             method: 'Get',
             success: function (data) {
                 data=JSON.parse(data)
