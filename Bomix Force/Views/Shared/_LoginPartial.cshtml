@@ -55,7 +55,7 @@
     <script>
     $(document).ready(function () {
         $.ajax({
-            url: "/BomixForce/User/getUserName",
+            url: '@Url.Action("getUsername", "User")',
             method: 'Get',
             success: function (data) {
                 data=JSON.parse(data)

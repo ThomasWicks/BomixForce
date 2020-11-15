@@ -144,8 +144,8 @@ namespace Bomix_Force.Controllers
                     "Item: {5}<br> " +
                     "Descrição do problema: {6}\n ", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
                     nonconformityViewModel.SelectedItem, nonconformityViewModel.Description);
-
-                string FilePath = ".\\Views\\Template Email\\RNC.html";
+                
+                string FilePath = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\TemplateEmail\RNC.html"}";
                 StreamReader str = new StreamReader(FilePath);
                 string msg = str.ReadToEnd();
                 msg = msg.Replace("NomeCliente", company.Name);
@@ -175,7 +175,7 @@ namespace Bomix_Force.Controllers
                 Notify("Registro enviado com sucesso", "Não Conformidade");
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception e)
             {
                 Notify("Não foi possivel criar o registro", "Não Conformidade", NotificationType.error);
                 return View();
