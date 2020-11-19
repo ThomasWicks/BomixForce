@@ -113,10 +113,27 @@ namespace Bomix_Force.Controllers
         {
             try
             {
+                Company company = new Company();
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                //Person person = _genericPersonService.Get(u => u.Id.ToString() == user).First();
-                //Company company = _genericCompanyService.Get(c => c.Id == person.CompanyId).First();
-                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", $"Foi requisitada a duplicação do pedido de número {Pedido}", null);
+                List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
+                Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
+                string FilePath = ".\\Views\\Template Email\\Order.html";
+                StreamReader str = new StreamReader(FilePath);
+                string mensage = str.ReadToEnd();
+                mensage = mensage.Replace("NomeCliente", company.Name);
+                mensage = mensage.Replace("CnpjCliente", company.Cnpj);
+                mensage = mensage.Replace("Pedido", order[0].Pedido);
+                foreach (var item in order)
+                {
+                string Orderpath = ".\\Views\\Template Email\\OrderTable.html";
+                StreamReader oederstr = new StreamReader(Orderpath);
+                    string msg = oederstr.ReadToEnd();
+                    msg = msg.Replace("Produto", item.Produto);
+                    msg = msg.Replace("Qtd", item.Quantidade.ToString());
+                    mensage = mensage.Replace("<!--replace-->", msg);
+                };
+                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", mensage, null);
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception ex)

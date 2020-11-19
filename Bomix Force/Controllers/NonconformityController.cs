@@ -135,15 +135,15 @@ namespace Bomix_Force.Controllers
                     //string Email = _nonconformityRepository.GetSellerEmail(company.Cnpj);
 
                 }
-                string Message = string.Format(
-                    "Prezado(a), <br> " +
-                    "o cliente <b>{0}</b> de cnpj: {1}, abriu um registro de não conformidade em seu pedido:<br>" +
-                    "Nota Fiscal: {2}<br> " +
-                    "Lote: {3}<br>" +
-                    "Quantidade:{4}<br> " +
-                    "Item: {5}<br> " +
-                    "Descrição do problema: {6}\n ", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
-                    nonconformityViewModel.SelectedItem, nonconformityViewModel.Description);
+                //string Message = string.Format(
+                //    "Prezado(a), <br> " +
+                //    "o cliente <b>{0}</b> de cnpj: {1}, abriu um registro de não conformidade em seu pedido:<br>" +
+                //    "Nota Fiscal: {2}<br> " +
+                //    "Lote: {3}<br>" +
+                //    "Quantidade:{4}<br> " +
+                //    "Item: {5}<br> " +
+                //    "Descrição do problema: {6}\n ", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
+                //    nonconformityViewModel.SelectedItem, nonconformityViewModel.Description);
 
                 string FilePath = ".\\Views\\Template Email\\RNC.html";
                 StreamReader str = new StreamReader(FilePath);

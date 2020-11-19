@@ -71,14 +71,15 @@
 <script>
     function duplicate(Pedido) {
         //var pedidos = Pedido.toString();
-        Pedido = "0".concat(Pedido)
+        Pedidos = "0".concat(Pedido)
         console.log(Pedido)
+        console.log(Pedidos)
         $('#duplicateModal').modal('hide');
         document.getElementById('loadingSpinnerOverlay').style.display = 'block'
         $.ajax({
             url: 'Duplicate',
             data: {
-                Pedido: Pedido
+                Pedido: Pedidos
             },
             complete: function (e, xhr, settings) {
                 document.getElementById('loadingSpinnerOverlay').style.display = 'none'
