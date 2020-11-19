@@ -103,8 +103,8 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            _logger.LogInformation("Usuário alterou a senha.");
+            StatusMessage = "Sua senha foi alterada com sucesso.";
 
             return RedirectToPage();
         }
@@ -114,7 +114,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
 public class SpecialChars : RegularExpressionAttribute
 {
     public SpecialChars()
-        : base("^(?=.*[@#$%^&+=]).*$")
+        : base("^(?=.*[!@#$%^&+=]).*$")
     {
     }
 }
