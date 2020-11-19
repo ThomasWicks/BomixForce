@@ -38,10 +38,12 @@
   <ItemGroup>
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Views\Assets\" />
+    <Folder Include="Views\TemplateEmail\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\Assets\LoginBomix.png" />
+    <None Include="wwwroot\TemplateEmail\RNC.html" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json-schema.org/draft-04/schema" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

@@ -175,7 +175,7 @@ namespace Bomix_Force.Controllers
                 Notify("Registro enviado com sucesso", "Não Conformidade");
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception e)
             {
                 Notify("Não foi possivel criar o registro", "Não Conformidade", NotificationType.error);
                 return View();
