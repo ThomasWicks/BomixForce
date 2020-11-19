@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Template Email\**" />
+    <Content Remove="Views\Template Email\**" />
+    <EmbeddedResource Remove="Views\Template Email\**" />
+    <None Remove="Views\Template Email\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20201008121039_Nonconformity.cs" />
     <Compile Remove="Migrations\20201008121039_Nonconformity.Designer.cs" />
     <Compile Remove="Views\Home\Login.cs" />
@@ -17,6 +24,12 @@
 
   <ItemGroup>
     <Content Remove="Views\User\Deletee.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Template Email\Order.html" />
+    <Content Include="Views\Template Email\OrderTable.html" />
+    <Content Include="Views\Template Email\RNC.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,12 +51,11 @@
   <ItemGroup>
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Views\Assets\" />
-    <Folder Include="Views\TemplateEmail\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\Assets\LoginBomix.png" />
-    <None Include="wwwroot\TemplateEmail\RNC.html" />
+    <None Include="Views\Template Email\RNC.html" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json-schema.org/draft-04/schema" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
