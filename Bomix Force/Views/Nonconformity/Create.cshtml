@@ -52,9 +52,9 @@
                     </div>
                     <br />
                 </div>
-                <div class="text-center row">
-                    <label> Para que possamos te atender melhor insira fotos da não conformidade e da etiqueta do produto.</label>
-                    <a><img class="row tag" src="~/Assets/tag.svg" href="#" onmouseover="mostrarElemento('prodImagem', 'inline');" onmouseout="mostrarElemento('prodImagem', 'none');"></a>
+                <div class="text-center">
+                    <label> Para que possamos te atender melhor insira fotos da não conformidade e da etiqueta <sup><img class="tag" src="~/Assets/tag.svg" href="#" onmouseover="mostrarElemento('prodImagem', 'inline');" onmouseout="mostrarElemento('prodImagem', 'none');"></sup> do produto.</label>
+                    @*<a><img class="tag" src="~/Assets/tag.svg" href="#" onmouseover="mostrarElemento('prodImagem', 'inline');" onmouseout="mostrarElemento('prodImagem', 'none');"></a>*@
                 </div>
                 <div class="image-upload text-center">
                     <label for="FilePath">
@@ -156,9 +156,8 @@
 
 <style>
     .tag{
-        height: 15px;
-        width: 15px;
-        float: right;
+        height: 12px;
+        width: 12px;
     }
 
 </style>
