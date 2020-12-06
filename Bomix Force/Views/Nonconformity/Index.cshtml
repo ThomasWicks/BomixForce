@@ -10,7 +10,6 @@
     </div>
     <p>
         <a class="float-right mb-2 mr-3" type="button" asp-action="Create"><img class="ic-size" src="~/Assets/ic_add_non_conf.png" /></a>
-        @*<a class="btn btn-primary float-right mb-2" asp-action="Create">Abrir registro</a>*@
     </p>
     <div class="table-responsive mt-5">
         <table class="table table-striped">
@@ -28,11 +27,6 @@
                     <th class="text-center text-white">
                         Status
                     </th>
-                    <th class="text-center text-white">
-                        Resposta
-                    </th>
-
-
                 </tr>
             </thead>
             <tbody>
@@ -50,20 +44,9 @@
                             <td class="text-center">
                                 @Html.DisplayFor(modelItem => item.Nf)
                             </td>
-                            @if (User.IsInRole("User"))
-                            {
-                                <td>
-                                    <a class="col-xl-9 ml-4">
-                                        <span  type="button" id="answerModal" data-url="@Url.Action($"UploadAnswer/{item.Id}")" data-target="#AnswerModal" class="ic-size" src="~/Assets/ic_add_user.png"> </span>
-                                    </a>
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <a asp-action="GetPdf" asp-controller="Nonconformity">Download</a>
-                                </td>
-                            }
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
 
                         </tr>
                     }

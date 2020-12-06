@@ -10,156 +10,157 @@
 </div>
 <div id="OrderDetailsHere"></div>
 <div class="clearfix mx-5">
-    <div class="pagination-history">
+    <div class="container">
+        <div class="pagination-history">
 
-        <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-        <a class="pagina-atual">Pedidos</a>
-    </div>
-    @using (Html.BeginForm())
-    {
-        <form id="typeSearch" asp-controller="Order" asp-action="Index">
-            <div class="row mt-3">
-                @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
-                        <option value="nOrder">Número pedido</option>
-                        <option value="status">Status</option>
-                    </select>*@
-                <div class="search ml-2">
-                    <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
-                    @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+            <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+            <a class="pagina-atual">Pedidos</a>
+        </div>
+        @using (Html.BeginForm())
+        {
+            <form id="typeSearch" asp-controller="Order" asp-action="Index">
+                <div class="row mt-3">
+                    @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
+                            <option value="nOrder">Número pedido</option>
+                            <option value="status">Status</option>
+                        </select>*@
+                    <div class="search ml-2">
+                        <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
+                        @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                    </div>
                 </div>
-            </div>
-        </form>
-        <!-- <a class="btn btn-primary float-right mr-1" style="float: right" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            Expandir pedidos
-        </a> -->
+            </form>
+            <!-- <a class="btn btn-primary float-right mr-1" style="float: right" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Expandir pedidos
+            </a> -->
 
-    }
-    <div class="table-responsive mt-5">
-        <table id="#tableOrder" class="table table-striped">
-            <thead class="thead-dark">
-
-                <tr>
-
-                    <th class="text-center">
-                        Número Pedido
-                        @if (ViewBag.filter == "nPedidoAsc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "nPedidoDesc" })"><i class="fas fa-caret-up"></i></a>
-                        }
-                        @if (ViewBag.filter != "nPedidoAsc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "nPedidoAsc" })"><i class="fas fa-caret-down"></i></a>
-                        }
-                    </th>
-                    <th class="text-center">
-                        Produto
-                        @if (ViewBag.filter == "ProdutoDesc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "ProdutoAsc" })"><i class="fas fa-caret-up"></i></a>
-                        }
-                        @if (ViewBag.filter != "ProdutoDesc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "ProdutoDesc" })"><i class="fas fa-caret-down"></i></a>
-                        }
-                    </th>
-                    <th class="text-center">
-                        Quantidade
-                    </th>
-                    <th class="text-center">
-                        Arte
-                        @if (ViewBag.filter == "ArteDesc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "ArteAsc" })"><i class="fas fa-caret-up"></i></a>
-                        }
-                        @if (ViewBag.filter != "ArteDesc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "ArteDesc" })"><i class="fas fa-caret-down"></i></a>
-                        }
-                    </th>
-                    <th class="text-center">
-                        Personalizado
-                    </th>
-                    @if (!User.IsInRole("User") && !User.IsInRole("Company"))
-                    {
+        }
+        <hr />
+        <div class="table-responsive mt-5">
+            <table id="#tableOrder" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
                         <th class="text-center">
-                            Cliente
-                            @if (ViewBag.filter == "ClienteAsc")
+                            Número Pedido
+                            @if (ViewBag.filter == "nPedidoAsc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "ClienteDesc" })"><i class="fas fa-caret-up"></i></a>
+                                <a href="@Url.Action("Index", "Order", new { filter = "nPedidoDesc" })"><i class="fas fa-caret-up"></i></a>
                             }
-                            @if (ViewBag.filter != "ClienteAsc")
+                            @if (ViewBag.filter != "nPedidoAsc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "ClienteAsc" })"><i class="fas fa-caret-down"></i></a>
+                                <a href="@Url.Action("Index", "Order", new { filter = "nPedidoAsc" })"><i class="fas fa-caret-down"></i></a>
                             }
                         </th>
-                    }
-                    <th class="text-center">
-                        PCP
-                        @if (ViewBag.filter == "EmissaoAsc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
-                        }
-                        @if (ViewBag.filter != "EmissaoAsc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
-                        }
-                    </th>
-
-                    <th class="text-center">
-                        Cidade - UF
-                    </th>
-                    <th class="text-center">
-                        Status
-                        @if (ViewBag.filter == "StatusAsc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "StatusDesc" })"><i class="fas fa-caret-up"></i></a>
-                        }
-                        @if (ViewBag.filter != "StatusAsc")
-                        {
-                            <a href="@Url.Action("Index", "Order", new { filter = "StatusAsc" })"><i class="fas fa-caret-down"></i></a>
-                        }
-                    </th>
-                    @if (User.IsInRole("User"))
-                    {
                         <th class="text-center">
-                            Duplicar
+                            Produto
+                            @if (ViewBag.filter == "ProdutoDesc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new { filter = "ProdutoAsc" })"><i class="fas fa-caret-up"></i></a>
+                            }
+                            @if (ViewBag.filter != "ProdutoDesc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new { filter = "ProdutoDesc" })"><i class="fas fa-caret-down"></i></a>
+                            }
                         </th>
-                    }
-                </tr>
-            </thead>
-            <tbody id="tableOrderbody">
+                        <th class="text-center">
+                            Quantidade
+                        </th>
+                        <th class="text-center">
+                            Arte
+                            @if (ViewBag.filter == "ArteDesc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new { filter = "ArteAsc" })"><i class="fas fa-caret-up"></i></a>
+                            }
+                            @if (ViewBag.filter != "ArteDesc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new { filter = "ArteDesc" })"><i class="fas fa-caret-down"></i></a>
+                            }
+                        </th>
+                        <th class="text-center">
+                            Personalizado
+                        </th>
+                        @if (!User.IsInRole("User") && !User.IsInRole("Company"))
+                        {
+                            <th class="text-center">
+                                Cliente
+                                @if (ViewBag.filter == "ClienteAsc")
+                                {
+                                    <a href="@Url.Action("Index", "Order", new { filter = "ClienteDesc" })"><i class="fas fa-caret-up"></i></a>
+                                }
+                                @if (ViewBag.filter != "ClienteAsc")
+                                {
+                                    <a href="@Url.Action("Index", "Order", new { filter = "ClienteAsc" })"><i class="fas fa-caret-down"></i></a>
+                                }
+                            </th>
+                        }
+                        <th class="text-center">
+                            PCP
+                            @if (ViewBag.filter == "EmissaoAsc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
+                            }
+                            @if (ViewBag.filter != "EmissaoAsc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
+                            }
+                        </th>
 
-                @if (Model?.Count() > 0)
-                {
+                        <th class="text-center">
+                            Cidade-UF
+                        </th>
+                        <th class="text-center">
+                            Status
+                            @if (ViewBag.filter == "StatusAsc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new { filter = "StatusDesc" })"><i class="fas fa-caret-up"></i></a>
+                            }
+                            @if (ViewBag.filter != "StatusAsc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new { filter = "StatusAsc" })"><i class="fas fa-caret-down"></i></a>
+                            }
+                        </th>
+                        @if (User.IsInRole("User"))
+                        {
+                            <th class="text-center">
+                                Duplicar
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody id="tableOrderbody">
 
-                }
-                else
-                {
-                    @if (!User.IsInRole("Company"))
+                    @if (Model?.Count() > 0)
                     {
-                        <tr>
-                            <td colspan="9" class="text-center">
-                                <h6>Não foi possível encontrar Pedidos.</h6>
-                            </td>
-                        </tr>
+
                     }
                     else
                     {
-                        <tr>
-                            <td colspan="9" class="text-center">
-                                <h6>Não foi possível encontrar Pedidos.</h6>
-                            </td>
-                        </tr>
+                        @if (!User.IsInRole("Company"))
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <h6>Não foi possível encontrar Pedidos.</h6>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <h6>Não foi possível encontrar Pedidos.</h6>
+                                </td>
+                            </tr>
+                        }
                     }
-                }
 
-            </tbody>
-        </table>
-        @*@Html.ValidationMessage("orderIndexError", "", new { @class = "text-danger" })*@
-        <div class="text-center" id="loadingdiv">
-            <div class="spinner-border" role="status">
-                <span class="sr-only text-center">Carregando...</span>
-                <!-- <div class="sr-only" id="loadingdiv">CARREGANDO...</div> -->
+                </tbody>
+            </table>
+            @*@Html.ValidationMessage("orderIndexError", "", new { @class = "text-danger" })*@
+            <div class="text-center" id="loadingdiv">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only text-center">Carregando...</span>
+                    <!-- <div class="sr-only" id="loadingdiv">CARREGANDO...</div> -->
+                </div>
             </div>
         </div>
     </div>
