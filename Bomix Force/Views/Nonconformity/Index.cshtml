@@ -27,6 +27,18 @@
                     <th class="text-center text-white">
                         Status
                     </th>
+                    @if (User.IsInRole("Employee"))
+                    {
+                        <th class="text-center text-white">
+                            Upload
+                        </th>
+                    }
+                    @if (User.IsInRole("User"))
+                    {
+                        <th class="text-center text-white">
+                            Download
+                        </th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -47,6 +59,26 @@
                             <td class="text-center">
                                 @Html.DisplayFor(modelItem => item.Status)
                             </td>
+                            @if (User.IsInRole("Employee"))
+                            {
+                                <td class="text-left">
+                                    <form asp-action="Upload" enctype="multipart/form-data">
+                                        <input type="hidden" name="Id" id="Id" value="@item.Id" />
+                                        <input type="file" id="FilePath" name="FilePath">
+                                        <button type="submit" class="btn btn-primary">Upload</button>
+                                    </form>
+                                </td>
+                            }
+                            @if (User.IsInRole("User"))
+                            {
+                                <td class="text-center">
+                                    <form asp-action="Download">
+                                        <input type="hidden" id="Id" name="Id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-primary">Download</button>
+                                    </form>
+                                </td>
+                            }
+
 
                         </tr>
                     }
@@ -63,4 +95,9 @@
         </table>
     </div>
 </div>
+
+<script>
+
+
+</script>
 
