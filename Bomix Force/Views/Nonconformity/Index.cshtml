@@ -36,7 +36,7 @@
                     @if (User.IsInRole("User"))
                     {
                         <th class="text-center text-white">
-                            Download
+                            Ações
                         </th>
                     }
                 </tr>
@@ -62,10 +62,18 @@
                             @if (User.IsInRole("Employee"))
                             {
                                 <td class="text-left">
-                                    <form asp-action="Upload" enctype="multipart/form-data">
+                                    <form class="text-center" asp-action="Upload" enctype="multipart/form-data">
                                         <input type="hidden" name="Id" id="Id" value="@item.Id" />
-                                        <input type="file" id="FilePath" name="FilePath">
-                                        <button type="submit" class="btn btn-primary">Upload</button>
+                                        <div class="image-upload text-center">
+                                            <label for="FilePath">
+                                                <img style="width: 30px; height: 30px; cursor: pointer;" src="~/Assets/ic_upload.png" />
+                                            </label>
+                                            <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png" />
+                                            <div id="preview">
+                                                <p>Nenhum arquivo selecionado.</p>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" >Upload</button>
                                     </form>
                                 </td>
                             }
@@ -74,7 +82,7 @@
                                 <td class="text-center">
                                     <form asp-action="Download">
                                         <input type="hidden" id="Id" name="Id" value="@item.Id" />
-                                        <button type="submit" class="btn btn-primary">Download</button>
+                                        <button type="submit" class="btn btn-link">Download</button>
                                     </form>
                                 </td>
                             }
@@ -97,7 +105,58 @@
 </div>
 
 <script>
+    const input = document.getElementById('FilePath');
+    const preview = document.getElementById('preview');
 
+    input.style.opacity = 0;
+    input.addEventListener('change', updateImageDisplay);
+    const list = document.createElement('ol');
+    list.style = 'list-style: none;';
+    function updateImageDisplay() {
+        while (preview.firstChild) {
+            preview.removeChild(preview.firstChild);
+        }
 
+        const curFiles = input.files;
+        if (curFiles.length === 0) {
+            const para = document.createElement('p');
+            para.textContent = 'Nenhum arquivo selecionado.';
+            preview.appendChild(para);
+        } else {
+            preview.appendChild(list);
+
+            for (const file of curFiles) {
+                const listItem = document.createElement('li');
+                const para = document.createElement('p');
+                if (validFileType(file)) {
+                    para.textContent = `Arquivo ${file.name}`;
+                    //const image = document.createElement('img');
+                    //image.src = URL.createObjectURL(file);
+                    //image.width = 300;
+                    //image.height = 150;
+                    //listItem.appendChild(image);
+                    listItem.appendChild(para);
+                } else {
+                    para.textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
+                    listItem.appendChild(para);
+                }
+
+                list.appendChild(listItem);
+            }
+        }
+    }
+
+    const fileTypes = [
+        "image/apng",
+        "image/bmp",
+        "image/jpg",
+        "image/jpeg",
+        "image/pjpeg",
+        "image/png",
+    ];
+
+    function validFileType(file) {
+        return fileTypes.includes(file.type);
+    }
 </script>
 
