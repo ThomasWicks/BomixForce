@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Bomix_Force.ViewModels.DocumentViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="pagination-history">
+
+        <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+        <a class="pagina-atual">Pedidos</a>
+    </div>
+    <hr />
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Reference)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Order)
+                </th>
+                <th class="text-center">
+                    Ações
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Reference)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Order)
+                    </td>
+                    <td class="text-center">
+                        Download
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
