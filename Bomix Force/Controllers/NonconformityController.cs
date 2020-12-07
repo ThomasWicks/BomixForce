@@ -265,7 +265,7 @@ namespace Bomix_Force.Controllers
             catch (Exception x)
             {
                 Notify("Um erro aconteceu ao enviar o arquivo, por favor tente novamente", "Erro", NotificationType.error);
-                return StatusCode(500);
+                return RedirectToAction(nameof(Index));
             }
         }
     }
