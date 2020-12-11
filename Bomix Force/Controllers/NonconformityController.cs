@@ -223,26 +223,49 @@ namespace Bomix_Force.Controllers
                 return View();
             }
         }
-
-        [Route("Nonconformity/UploadAnswer/{id}")]
-        public ActionResult UploadAnswer(int id)
-        {
-
-            Nonconformity nonconformity = _nonconformityRepository.Get(u => u.Id == id).First();
-            NonconformityViewModel nonconformityViewModel = _mapper.Map<NonconformityViewModel>(nonconformity);
-            return PartialView("_uploadAnswer", nonconformityViewModel);
-
-        }
-
+        
         [HttpPost]
-        public async Task<ActionResult> UploadAnswer(NonconformityViewModel nonconformityViewModel)
+        public async Task<ActionResult> Download(NonconformityViewModel file)
         {
             try {
+                var path = Path.Combine(
+                       Directory.GetCurrentDirectory(),
+                       "wwwroot/answers", file.Id.ToString()+".pdf");
+
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                
+                memory.Position = 0;
+                return File(memory, "application/pdf", Path.GetFileName(path));
+            }
+            catch (Exception x)
+            {
+                Notify("O arquivo não está disponivél", "Erro", NotificationType.error);
+                return StatusCode(500);
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> Upload(NonconformityViewModel file)
+        {
+            try
+            {
+                var path = Path.Combine(
+                Directory.GetCurrentDirectory(), "wwwroot/answers",
+                file.Id.ToString()+".pdf");
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                     await file.FilePath[0].CopyToAsync(stream);
+                }
+                Notify("O arquivo foi enviado com sucesso", "Sucesso", NotificationType.success);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception x)
             {
-                return StatusCode(500);
+                Notify("Um erro aconteceu ao enviar o arquivo, por favor tente novamente", "Erro", NotificationType.error);
+                return RedirectToAction(nameof(Index));
             }
         }
     }

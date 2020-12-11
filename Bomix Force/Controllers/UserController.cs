@@ -302,5 +302,10 @@ namespace Bomix_Force.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        public ActionResult Contato()
+        {
+            return View();
+        }
     }
 }
