@@ -1,36 +1,158 @@
-﻿@model IEnumerable<Bomix_Force.ViewModels.FinancialViewModel>
+﻿@using X.PagedList.Mvc.Core
+@model List<Bomix_Force.ViewModels.FinancialViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
+<div style="display:none" id="loadingSpinnerOverlay">
+    <div class="spinner" id="spinner"></div>
+    <div class="overlay" id="overlay"></div>
+</div>
+<div id="OrderDetailsHere"></div>
+<div class="clearfix mx-5">
+    <div class="container">
+        <div class="pagination-history">
 
-<h1>Index</h1>
+            <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+            <a class="pagina-atual">Pedidos</a>
+        </div>
+        @using (Html.BeginForm())
+        {
+            <form id="typeSearch" asp-controller="Order" asp-action="Index">
+                <div class="row mt-3">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DocumentType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DocumentType)
-            </td>
-            <td>
-                <button>Download</button>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                    <div class="search ml-2">
+                        <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
+                        @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                    </div>
+                </div>
+            </form>
+
+        }
+        <hr />
+        <div class="table-responsive mt-5">
+            <table id="#tableOrder" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="text-center">
+                            NF
+                        </th>
+                        <th class="text-center">
+                            Emissão
+                        </th>
+                        <th class="text-center">
+                            Ações
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tableOrderbody">
+
+                    @if (Model?.Count() > 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center ">
+                                    @Html.DisplayFor(modelItem => item.Nota)
+                                </td>
+                                <td class="text-center ">
+                                    @Html.DisplayFor(modelItem => item.Emissao)
+                                </td>
+                                <td class="text-center">
+                                    <form asp-action="Download">
+                                        <input type="hidden" id="Nota" name="Nota" value="@item.Nota" />
+                                        <button type="submit" class="btn btn-link">Download</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        @if (!User.IsInRole("Company"))
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <h6>Não foi possível encontrar NFs.</h6>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <h6>Não foi possível encontrar NFs.</h6>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+            <div class="text-center" id="loadingdiv">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only text-center">Carregando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#loadingdiv").hide();
+        var filter = '@(ViewBag.filter)'
+        var searchString = '@(ViewBag.searchString)'
+        var orders = '@(ViewBag.orders)'
+        var dataexist = true
+
+        var inProgress = false
+        currentPageNumber = 0;
+        loadData(currentPageNumber)
+        $(window).scroll(function () {
+
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 20 && !inProgress && dataexist) {
+                inProgress = true;
+                currentPageNumber += 1;
+                loadData(currentPageNumber);
+                $("#loadingdiv").show();
+            }
+        }
+            )
+        function loadData(currentPage) {
+            if (currentPageNumber * 20 >@Model.Count && currentPageNumber != 0) {
+                dataexist=false
+            }
+            $.ajax({
+                url: 'InfiniteScroll',
+                data: {
+                    pageNumber: currentPage, pageSize: 20, filter: filter, searchString: searchString
+                },
+                method: 'Post',
+                dataType: 'html',
+                success: function (data) {
+                    var ordertable = $('#tableOrderbody');
+                    ordertable.append(data)
+                    inProgress = false;
+                    $("#loadingdiv").hide();
+                }
+            })
+        }
+    })
+</script>
+
+
+
+<style lang="scss" scoped>
+    .badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        border-radius: 25px;
+    }
+
+    .blue {
+        color: #007bff;
+    }
+</style>

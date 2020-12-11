@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Bomix_Force.AppServices.Interface;
@@ -23,11 +24,14 @@ namespace Bomix_Force.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IMapper _mapper;
         private readonly INonconformityRepository _nonconformityRepository;
+        private readonly IBomixNotaFiscalVendaRepository _bomixNotaFiscalVendaRepository;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
 
+
         public FinancialController(INonconformityRepository nonconformityRepository, IGenericRepository<Company> genericCompanyService, IGenericRepository<Person> genericPersonService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger
+            , IBomixNotaFiscalVendaRepository bomixNotaFiscalVendaRepository)
         {
             _mapper = mapper;
             _signInManager = signInManager;
@@ -37,6 +41,7 @@ namespace Bomix_Force.Controllers
             _nonconformityRepository = nonconformityRepository;
             _genericCompanyService = genericCompanyService;
             _genericPersonService = genericPersonService;
+            _bomixNotaFiscalVendaRepository = bomixNotaFiscalVendaRepository;
 
         }
         public ActionResult Index()
@@ -44,7 +49,10 @@ namespace Bomix_Force.Controllers
             var identityUser = _userManager.GetUserAsync(User);
             if (identityUser.Result.EmailConfirmed == true)
             {
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
                 List<FinancialViewModel> financialViewModel = new List<FinancialViewModel>();
+                financialViewModel = _mapper.Map<IEnumerable<FinancialViewModel>>(_bomixNotaFiscalVendaRepository.GetParameters(DateTime.Now.AddMonths(-3).ToString(), DateTime.Now.ToString(), user)).ToList();
                 return View(financialViewModel);
             }
             else
