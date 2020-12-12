@@ -195,7 +195,7 @@ namespace Bomix_Force
                     pattern: "{controller=Home}/{action=Login}");
                 endpoints.MapRazorPages();
             });
-            CreateRolesandUsers(services).Wait();
+             CreateRolesandUsers(services).Wait();
         }
 
     }

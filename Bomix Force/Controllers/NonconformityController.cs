@@ -244,7 +244,7 @@ namespace Bomix_Force.Controllers
             catch (Exception x)
             {
                 Notify("O arquivo não está disponivél", "Erro", NotificationType.error);
-                return StatusCode(500);
+                return RedirectToAction(nameof(Index));
             }
         }
         [HttpPost]

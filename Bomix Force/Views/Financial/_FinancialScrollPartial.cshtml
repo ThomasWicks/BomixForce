@@ -1,0 +1,23 @@
+﻿@model List<Bomix_Force.ViewModels.FinancialViewModel>
+@{
+    ViewData["Title"] = "OrderScroll";
+}
+@if (Model?.Count() > 0)
+{
+    @foreach(var item in Model) { 
+    <tr>
+        <td class="text-center ">
+            @Html.DisplayFor(modelItem => item.Nota)
+        </td>
+        <td class="text-center ">
+            @Html.DisplayFor(modelItem => item.Emissao)
+        </td>
+        <td class="text-center">
+            <form asp-action="Download">
+                <input type="hidden" id="Nota" name="Nota" value="@item.Nota" />
+                <button type="submit" class="btn btn-link">Download</button>
+            </form>
+        </td>
+    </tr>
+    }
+}
