@@ -74,6 +74,16 @@ namespace Bomix_Force.Controllers
                     nonconformities = _nonconformityRepository.Get(n => n.CompanyId == company.Id).ToList();
                     nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
                 }
+                foreach (var nonConformity in nonconformityView)
+                {
+                    var path = Path.Combine(
+                   Directory.GetCurrentDirectory(),
+                   "wwwroot/answers", nonConformity.Id.ToString() + ".pdf");
+                    if (System.IO.File.Exists(path))
+                        nonConformity.Status = "Concluido";
+                    else
+                        nonConformity.Status = "Análise";
+                }
 
                 return View(nonconformityView);
             }
@@ -81,7 +91,7 @@ namespace Bomix_Force.Controllers
             {
                 return LocalRedirect("./Identity/Account/Manage");
             }
-           
+
         }
 
         // GET: Nonconformity/Details/5
@@ -175,7 +185,7 @@ namespace Bomix_Force.Controllers
                 Notify("Registro enviado com sucesso", "Não Conformidade");
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Notify("Não foi possivel criar o registro", "Não Conformidade", NotificationType.error);
                 return View();
@@ -223,21 +233,22 @@ namespace Bomix_Force.Controllers
                 return View();
             }
         }
-        
+
         [HttpPost]
         public async Task<ActionResult> Download(NonconformityViewModel file)
         {
-            try {
+            try
+            {
                 var path = Path.Combine(
                        Directory.GetCurrentDirectory(),
-                       "wwwroot/answers", file.Id.ToString()+".pdf");
+                       "wwwroot/answers", file.Id.ToString() + ".pdf");
 
                 var memory = new MemoryStream();
                 using (var stream = new FileStream(path, FileMode.Open))
                 {
                     await stream.CopyToAsync(memory);
                 }
-                
+
                 memory.Position = 0;
                 return File(memory, "application/pdf", Path.GetFileName(path));
             }
@@ -254,17 +265,29 @@ namespace Bomix_Force.Controllers
             {
                 var path = Path.Combine(
                 Directory.GetCurrentDirectory(), "wwwroot/answers",
-                file.Id.ToString()+".pdf");
-                using (var stream = new FileStream(path, FileMode.Create))
+                file.Id.ToString() + ".pdf");
+                if (System.IO.File.Exists(path))
                 {
-                     await file.FilePath[0].CopyToAsync(stream);
+                    System.IO.File.Delete(path);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.FilePath[0].CopyToAsync(stream);
+                    }
+                    Notify("O arquivo foi atualizado com sucesso", "Sucesso", NotificationType.success);
                 }
-                Notify("O arquivo foi enviado com sucesso", "Sucesso", NotificationType.success);
+                else
+                {
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.FilePath[0].CopyToAsync(stream);
+                    }
+                    Notify("O arquivo foi enviado com sucesso", "Sucesso", NotificationType.success);
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception x)
             {
-                Notify("Um erro aconteceu ao enviar o arquivo, por favor tente novamente", "Erro", NotificationType.error);
+                Notify("Um erro aconteceu ao enviar o arquivo, por favor verifique se um arquivo foi selecionado e  tente novamente", "Erro", NotificationType.error);
                 return RedirectToAction(nameof(Index));
             }
         }
