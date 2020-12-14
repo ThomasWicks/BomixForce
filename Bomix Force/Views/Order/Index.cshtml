@@ -173,7 +173,8 @@
         var searchString = '@(ViewBag.searchString)'
         var orders = '@(ViewBag.orders)'
         var dataexist = true
-
+        var modelLenght = '@(Model?.Count)'
+        modelLenght = modelLenght ? modelLenght : 0
         var inProgress = false
         currentPageNumber = 0;
         loadData(currentPageNumber)
@@ -188,7 +189,7 @@
         }
             )
         function loadData(currentPage) {
-            if (currentPageNumber * 20 >@Model.Count && currentPageNumber != 0) {
+            if (currentPageNumber * 20 >modelLenght && currentPageNumber != 0) {
                 dataexist=false
             }
             $.ajax({

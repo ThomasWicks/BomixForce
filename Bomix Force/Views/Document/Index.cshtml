@@ -8,7 +8,7 @@
     <div class="pagination-history">
 
         <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-        <a class="pagina-atual">Pedidos</a>
+        <a class="pagina-atual">Documentos</a>
     </div>
     <hr />
     <table class="table table-striped">
@@ -26,17 +26,28 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @if (@Model?.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.Reference)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.Order)
+                        </td>
+                        <td class="text-center">
+                            Download
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.Reference)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.Order)
-                    </td>
-                    <td class="text-center">
-                        Download
+                    <td colspan="3" class="text-center">
+                        <h6>Nenhum documento foi encontrado.</h6>
                     </td>
                 </tr>
             }

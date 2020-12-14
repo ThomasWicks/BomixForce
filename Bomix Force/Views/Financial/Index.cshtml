@@ -14,7 +14,7 @@
         <div class="pagination-history">
 
             <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-            <a class="pagina-atual">Pedidos</a>
+            <a class="pagina-atual">Financeiro</a>
         </div>
         @using (Html.BeginForm())
         {
@@ -107,8 +107,9 @@
         var filter = '@(ViewBag.filter)'
         var searchString = '@(ViewBag.searchString)'
         var orders = '@(ViewBag.orders)'
-        var dataexist = true
-
+        var modelLenght = '@(Model?.Count)'
+        modelLenght = modelLenght ? modelLenght:0
+        var dataexist = false
         var inProgress = false
         currentPageNumber = 0;
         loadData(currentPageNumber)
@@ -118,13 +119,16 @@
                 inProgress = true;
                 currentPageNumber += 1;
                 loadData(currentPageNumber);
+                console.log("teste")
                 $("#loadingdiv").show();
             }
         }
             )
         function loadData(currentPage) {
-            if (currentPageNumber * 20 >@Model.Count && currentPageNumber != 0) {
-                dataexist=false
+
+            if (currentPageNumber != 0 && currentPageNumber * 20 > modelLenght ) {
+                dataexist = false
+                $("#loadingdiv").hide();
             }
             $.ajax({
                 url: 'InfiniteScroll',
