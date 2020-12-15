@@ -75,7 +75,7 @@
                                             <input type="file" onchange="updatePreview(@item.Id)" id="FilePath/@item.Id" name="FilePath" multiple accept=".pdf" />
 
                                         </div>
-                                        <button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Upload</button>
+                                        <button id="uploadRNC" type="submit" class="btn btn-primary font-project" style="display:none; color: white; background-color: #002A51;">Upload</button>
                                     </form>
                                 </td>
                             }
@@ -86,7 +86,7 @@
                                         <input type="hidden" id="Id" name="Id" value="@item.Id" />
                                         @if (item.Status == "Concluido")
                                         {
-                                        <button type="submit" class="btn btn-link">Download</button>
+                                            <button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Download</button>
                                         }
                                     </form>
                                 </td>
@@ -115,24 +115,27 @@
             "application/pdf"
         ];
         const input = document.getElementById('FilePath/' + id);
+        const upload = $('#uploadRNC');
         const preview = document.getElementById('preview');
-        console.log(id)
         input.style.opacity = 0;
 
 
         const curFiles = input.files;
         if (curFiles.length === 0) {
-            textContent= 'Nenhum arquivo selecionado.';
+            textContent = 'Nenhum arquivo selecionado.';
             preview.appendChild(para);
             document.getElementById('LabelFilePath/' + id).innerText = textContent
+            upload.hide()
         } else {
 
             for (const file of curFiles) {
                 if (validFileType(file)) {
                     var textContent = `Arquivo ${file.name}`;
                     document.getElementById('LabelFilePath/' + id).innerText = textContent
+                    upload.show()
                 } else {
                     var textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
+                    upload.hide()
                     document.getElementById('LabelFilePath/' + id).innerText = textContent
                 }
             }

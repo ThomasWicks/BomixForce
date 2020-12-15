@@ -18,7 +18,6 @@ $(function(){
         var form = $(this).parent('.modal').find('form');
         var actionUrl = form.attr('action');
         var sendData = form.serialize();
-        console.log(sendData)
 
         $.post(actionUrl, sendData).done(function (data)
         {
@@ -60,7 +59,6 @@ $(function(){
 
     var OrderDetailsElement = $('#OrderDetailsHere');
     $('button[data-toggle="orderDetails"]').click(function (event) {
-        console.log("details")
         var url = $(this).data('url');
         var decodedUrl = decodeURIComponent(url)
         $.get(decodedUrl).done(function (data) {

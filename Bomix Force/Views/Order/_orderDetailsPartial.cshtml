@@ -72,8 +72,6 @@
     function duplicate(Pedido) {
         //var pedidos = Pedido.toString();
         Pedidos = "0".concat(Pedido)
-        console.log(Pedido)
-        console.log(Pedidos)
         $('#duplicateModal').modal('hide');
         document.getElementById('loadingSpinnerOverlay').style.display = 'block'
         $.ajax({
