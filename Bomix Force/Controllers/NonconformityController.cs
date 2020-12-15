@@ -134,7 +134,6 @@ namespace Bomix_Force.Controllers
                 {
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     company = _genericCompanyService.Get(u => u.IdentityUserId == user).First();
-                    //string Email = _nonconformityRepository.GetSellerEmail(company.Cnpj);
 
                 }
                 else if (User.IsInRole("User"))
@@ -142,18 +141,8 @@ namespace Bomix_Force.Controllers
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
                     company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
-                    //string Email = _nonconformityRepository.GetSellerEmail(company.Cnpj);
 
                 }
-                //string Message = string.Format(
-                //    "Prezado(a), <br> " +
-                //    "o cliente <b>{0}</b> de cnpj: {1}, abriu um registro de não conformidade em seu pedido:<br>" +
-                //    "Nota Fiscal: {2}<br> " +
-                //    "Lote: {3}<br>" +
-                //    "Quantidade:{4}<br> " +
-                //    "Item: {5}<br> " +
-                //    "Descrição do problema: {6}\n ", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
-                //    nonconformityViewModel.SelectedItem, nonconformityViewModel.Description);
 
                 string FilePath = ".\\Views\\Template Email\\RNC.html";
                 StreamReader str = new StreamReader(FilePath);
