@@ -26,7 +26,7 @@ namespace Bomix_Force.Data.Entities
         public string Telefone { get; set; }
         public string Email { get; set; }
         public string Contato { get; set; }
-        public string Vendedor_FK { get; set; }
+        //public string Vendedor_FK { get; set; }
         public string Vendedor { get; set; }
         public string Gerente { get; set; }
         public string Transportadora { get; set; }

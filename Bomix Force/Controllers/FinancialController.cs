@@ -11,6 +11,7 @@ using Bomix_Force.Data.Entities;
 using Bomix_Force.Models;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,11 +30,11 @@ namespace Bomix_Force.Controllers
         private readonly IBomixNotaFiscalVendaRepository _bomixNotaFiscalVendaRepository;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
-
+        private IWebHostEnvironment _environment;
 
         public FinancialController(INonconformityRepository nonconformityRepository, IGenericRepository<Company> genericCompanyService, IGenericRepository<Person> genericPersonService,
         IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger
-            , IBomixNotaFiscalVendaRepository bomixNotaFiscalVendaRepository)
+            , IBomixNotaFiscalVendaRepository bomixNotaFiscalVendaRepository, IWebHostEnvironment environment)
         {
             _mapper = mapper;
             _signInManager = signInManager;
@@ -44,6 +45,7 @@ namespace Bomix_Force.Controllers
             _genericCompanyService = genericCompanyService;
             _genericPersonService = genericPersonService;
             _bomixNotaFiscalVendaRepository = bomixNotaFiscalVendaRepository;
+            _environment = environment;
 
         }
         public static volatile List<FinancialViewModel> financialViewModel = new List<FinancialViewModel>();
@@ -122,9 +124,8 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-                var path = Path.Combine(
-                       Directory.GetCurrentDirectory(),
-                       "wwwroot/Documentos/DANFE/", file.Nota.ToString() + ".pdf");
+                string wwwPath = _environment.WebRootPath;
+                var path = wwwPath + "\\answers\\" + file.Nota.ToString() + ".pdf";
 
                 var memory = new MemoryStream();
                 using (var stream = new FileStream(path, FileMode.Open))
