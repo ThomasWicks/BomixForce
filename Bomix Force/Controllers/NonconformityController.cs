@@ -12,6 +12,7 @@ using Bomix_Force.Data.Enum;
 using Bomix_Force.Models;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +30,10 @@ namespace Bomix_Force.Controllers
         private readonly INonconformityRepository _nonconformityRepository;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
+        private IWebHostEnvironment _environment;
 
         public NonconformityController(INonconformityRepository nonconformityRepository, IGenericRepository<Company> genericCompanyService, IGenericRepository<Person> genericPersonService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger, IWebHostEnvironment environment)
         {
             _mapper = mapper;
             _signInManager = signInManager;
@@ -41,6 +43,7 @@ namespace Bomix_Force.Controllers
             _nonconformityRepository = nonconformityRepository;
             _genericCompanyService = genericCompanyService;
             _genericPersonService = genericPersonService;
+            _environment = environment;
 
         }
         // GET: Nonconformity
@@ -228,9 +231,8 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-                var path = Path.Combine(
-                       Directory.GetCurrentDirectory(),
-                       "wwwroot/answers", file.Id.ToString() + ".pdf");
+                string wwwPath = _environment.WebRootPath;
+                var path = wwwPath + "\\answers\\" + file.Id.ToString() + ".pdf";
 
                 var memory = new MemoryStream();
                 using (var stream = new FileStream(path, FileMode.Open))
@@ -252,9 +254,8 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-                var path = Path.Combine(
-                Directory.GetCurrentDirectory(), "wwwroot/answers",
-                file.Id.ToString() + ".pdf");
+                string wwwPath = _environment.WebRootPath;
+                var path = wwwPath + "\\answers\\" + file.Id.ToString() + ".pdf";
                 if (System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);
