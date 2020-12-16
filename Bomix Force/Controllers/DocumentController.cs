@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Bomix_Force.Controllers
 {
-    public class DocumentController : Controller
+    public class DocumentController : BaseController
     {
 
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -99,8 +99,8 @@ namespace Bomix_Force.Controllers
                 {
                     Message += "<br>" + "Tipo: " + document.Debit + "<br>";
                 }
-                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Registro de não conformidade", Message, document.FilePath);
-
+                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Documento", Message, document.FilePath);
+                Notify("Documento enviado com sucesso", "Documento");
                 return RedirectToAction(nameof(Index));
             }
             catch

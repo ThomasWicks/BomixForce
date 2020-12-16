@@ -1,4 +1,4 @@
-﻿@*@model Bomix_Force.ViewModels.DocumentViewModel
+﻿@model Bomix_Force.ViewModels.DocumentViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -11,40 +11,192 @@
 <div class="container createNonconf">
     <div class="pagination-history">
         <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-        <a class="pagina-atual">Pedidos</a>
+        <a asp-action="Index" class="pagina-anterior">Não Conformidade /</a>
+        <a class="pagina-atual">Registar não Conformidade</a>
     </div>
-    <h3 class="text-center title-font">Registro de não conformidade</h3>
+    @*<h3 class="text-center title-font">Documentos</h3>*@
 
     <hr />
-    <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th class="text-center">
-                    @Html.DisplayNameFor(model => model.Reference)
-                </th>
-                <th class="text-center">
-                    @Html.DisplayNameFor(model => model.Order)
-                </th>
-                <th class="text-center">
-                    Ações
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.Reference)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.Order)
-                    </td>
-                    <td class="text-center">
-                        Download
-                    </td>
-                </tr>
+    <div class="card text-center align-items-center">
+        <h3 class="card-header align-self-stretch">Documentos</h3>
+        <div class="align-items-center col-md-6">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-12">
+                    <label asp-for="@Model.Type">Tipo</label>
+                    <select id="´selectCreateSetor" onchange="showfields(this.value)" asp-for="@Model.Type" class="form-control">
+                        <option value="">Selecione o tipo de documento</option>
+                        <option value="Alvará de funcionamento">Alvará de funcionamento</option>
+                        <option value="AVCB – Auto de vistoria do Corpo de Bombeiros">AVCB – Auto de vistoria do Corpo de Bombeiros </option>
+                        <option value="Alvará sanitário">Alvará sanitário</option>
+                        <option value="Licença ambiental">Licença ambiental</option>
+                        <option value="Certificado ISSO 9001">Certificado ISSO 9001</option>
+                        <option value="Certificado FSSC 22000">Certificado FSSC 22000</option>
+                        <option value="Laudo de migração">Laudo de migração</option>
+                        <option value="Laudo microbiológico">Laudo microbiológico</option>
+                        <option value="Especificações técnicas">Especificações técnicas</option>
+                        <option value="Certidões negativas de débitos">Certidões negativas de débitos</option>
+                        <option value="Declaração ausência de alergênicos">Declaração ausência de alergênicos</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                    <span id="createSetorSpan" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="BucketLidType" style="display: none">
+                    <label class="control-label font-project">Tipo de tampa</label>
+                    <input asp-for="BucketLidType" class="form-control input font-project" />
+                    <span asp-validation-for="BucketLidType" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="BucketType" style="display: none">
+                    <label class="control-label font-project">Tipo de balde</label>
+                    <input asp-for="BucketType" class="form-control input font-project" />
+                    <span asp-validation-for="BucketType" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="Other" style="display: none">
+                    <label class="control-label font-project">Outros</label>
+                    <input asp-for="Other" class="form-control input font-project" />
+                    <span asp-validation-for="Other" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="Type" style="display: none">
+                    <label asp-for="@Model.Type"></label>
+                    <select id="´selectCreateSetor" asp-for="@Model.Type" class="form-control">
+                        <option value="">Selecione o tipo de certidão</option>
+                        <option value="Municipais">Municipais</option>
+                        <option value="Estaduais">Estaduais</option>
+                        <option value="Federais">Federais</option>
+                    </select>
+                    <span id="createSetorSpan" class="text-danger"></span>
+                </div>
+                <div>
+
+                    <div id="prodImagem" style="width: 50px; height: 50px; display: none; position: absolute; padding: 5px; margin-left:35%">
+                        <img src="~/Assets/Etiqueta.png" />
+                    </div>
+                    <br />
+                </div>
+                <div>
+                    <label>
+                        Aqui, você poderá inserir algum anexo, como questionários ou alguma declaração para assinatura.
+                    </label>
+                </div>
+                <div class="image-upload text-center">
+                    <label for="FilePath">
+                        <img style="width: 60px; height: 60px; cursor: pointer;" src="~/Assets/ic_upload.png" />
+                    </label>
+                    <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png" />
+                    <div id="preview">
+                        <p>Nenhum arquivo selecionado.</p>
+                    </div>
+                </div>
+                <div style="margin-top:15px">
+                    <output name="result"></output>
+                </div>
+                <br />
+                <br />
+
+                <div class="form-group float-right">
+                    <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
+                </div>
+                <a asp-action="Index" class="btn btn-danger float-left font-project " style="color: white; background-color: #D52229;">Voltar</a>
+            </form>
+        </div>
+    </div>
+    <ol></ol>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    function startOverlay() {
+        document.getElementById('loadingSpinnerOverlay').style.display = 'block';
+    }
+
+    function mostrarElemento(id, visibilidade) {
+        document.getElementById(id).style.display = visibilidade;
+    }
+
+    const input = document.getElementById('FilePath');
+    const preview = document.getElementById('preview');
+
+    input.style.opacity = 0;
+    input.addEventListener('change', updateImageDisplay);
+    const list = document.createElement('ol');
+    list.style = 'list-style: none;';
+    function updateImageDisplay() {
+        while (preview.firstChild) {
+            preview.removeChild(preview.firstChild);
+        }
+
+        const curFiles = input.files;
+        if (curFiles.length === 0) {
+            const para = document.createElement('p');
+            para.textContent = 'Nenhum arquivo selecionado.';
+            preview.appendChild(para);
+        } else {
+            preview.appendChild(list);
+
+            for (const file of curFiles) {
+                const listItem = document.createElement('li');
+                const para = document.createElement('p');
+                if (validFileType(file)) {
+                    para.textContent = `Arquivo ${file.name}`;
+                    const image = document.createElement('img');
+                    image.src = URL.createObjectURL(file);
+                    image.width = 300;
+                    image.height = 150;
+                    listItem.appendChild(image);
+                    listItem.appendChild(para);
+                } else {
+                    para.textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
+                    listItem.appendChild(para);
+                }
+
+                list.appendChild(listItem);
             }
-        </tbody>
-    </table>
-</div>*@
+        }
+    }
+
+    const fileTypes = [
+        "application/pdf",
+        "image/apng",
+        "image/bmp",
+        "image/jpg",
+        "image/jpeg",
+        "image/pjpeg",
+        "image/png",
+    ];
+
+    function validFileType(file) {
+        return fileTypes.includes(file.type);
+    }
+
+    function showfields(value) {
+        if (value == "Outros") {
+            $('#Type').hide();
+            $('#BucketLidType').hide();
+            $('#BucketType').hide();
+            $('#Other').show();
+        } else if (value == "Especificações técnicas") {
+            $('#Type').hide();
+            $('#BucketLidType').show();
+            $('#BucketType').show();
+            $('#Other').hide();
+        } else if (value == "Certidões negativas de débitos") {
+            $('#Type').show();
+            $('#BucketLidType').hide();
+            $('#BucketType').hide();
+            $('#Other').hide();
+        } else {
+            $('#Type').hide();
+            $('#BucketLidType').hide();
+            $('#BucketType').hide();
+            $('#Other').hide();
+        }
+    }
+</script>
+
+<style>
+    .tag {
+        height: 12px;
+        width: 12px;
+    }
+</style>
