@@ -12,7 +12,10 @@
 <div class="container ">
 
     <div class="clearfix mx-5">
-        @if (User.IsInRole("Employee"))
+        <div>
+            <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
+        </div>
+        @*@if (User.IsInRole("Employee"))
         {
             <div class="pagination-history">
                 <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
@@ -32,7 +35,7 @@
                 <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
                 <a class="pagina-atual">Usuários</a>
             </div>
-        }
+        }*@
         <div class="row ml-1 mt-4">
             @using (Html.BeginForm())
             {
@@ -133,7 +136,4 @@
             }
         </div>
     </div>
-
-
-
 </div>
