@@ -120,12 +120,27 @@ namespace Bomix_Force.Controllers
             }
 
         }
-        public async Task<ActionResult> Download(FinancialViewModel file)
+        [HttpPost]
+        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect = null)
         {
             try
             {
+                string sufixPath = "";
+                switch (typeFinancial)
+                {
+                    case "NF":
+                         sufixPath = $"DANFE\\{Nota}.pdf";
+                            break;
+                    case "XAML":
+                        sufixPath = $"XAML\\{Nota}.xml";
+                        break;
+                    
+    
+
+                }
                 string wwwPath = _environment.WebRootPath;
-                var path = wwwPath + "\\Documentos\\DANFE\\" + file.Nota.ToString() + ".pdf";
+                var path = wwwPath + $"\\Documentos\\{sufixPath}";
+
                 var memory = new MemoryStream();
                 using (var stream = new FileStream(path, FileMode.Open))
                 {
@@ -144,9 +159,10 @@ namespace Bomix_Force.Controllers
 
 
         // GET: FinancialController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string nota)
         {
-            return View();
+            FinancialViewModel financial =  financialViewModel.Where(e => e.Nota == nota).First();
+            return View(financial);
         }
 
         // GET: FinancialController/Create

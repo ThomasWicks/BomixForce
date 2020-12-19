@@ -1,11 +1,7 @@
-﻿@model List<Bomix_Force.ViewModels.FinancialViewModel>
+﻿@model Bomix_Force.ViewModels.FinancialViewModel
 @{
     ViewData["Title"] = "Details";
 
-    @*<div style="display:none" id="loadingSpinnerOverlay">
-            <div class="spinner" id="spinner"></div>
-            <div class="overlay" id="overlay"></div>
-        </div>*@
 }
 <div class="container createNonconf">
     <div class="">
@@ -15,30 +11,33 @@
         <h3 class="card-header align-self-stretch">Arquivos</h3>
         <div class="align-items-center col-md-6">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-12">
-                <label>Arquivos</label>
-                <select onchange="showfields(this.value)" class="form-control">
-                    <option value="">Selecione o documento</option>
-                    <option value="NF">Nota Fiscal</option>
-                    <option value="Boletos">Boletos </option>
-                    <option value="XAML">XAML</option>
-                </select>
-                <span id="createSetorSpan" class="text-danger"></span>
-            </div>
-            <div class="form-group col-12" id="parcelasType" style="display: none">
-                <label>Parcelas</label>
-                <select class="form-control">
-                    <option value="">Selecione uma parcela</option>
-                    <option >Parcela 1</option>
-                    <option >Parcela 2 </option>
-                    <option >Parcela 3</option>
-                </select>
-                <span id="createSetorSpan" class="text-danger"></span>
-            </div>
-            <div class="form-group float-right">
-                <input type="submit" onclick="startOverlay()" value="Baixar" class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" />
-                @*<a class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" ><i class="fas fa-file-download"></i></a>*@
-            </div>
+            <form asp-action="Download">
+                @Html.HiddenFor(model => model.Nota);
+                <div class="form-group col-12">
+                    <label>Arquivos</label>
+                    <select name="typeFinancial" onchange="showfields(this.value)" id="typeFinancial" class="form-control">
+                        <option value="">Selecione o documento</option>
+                        <option value="NF">Nota Fiscal</option>
+                        <option value="Boletos">Boletos </option>
+                        <option value="XAML">XAML</option>
+                    </select>
+                    <span id="createSetorSpan" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="parcelas" style="display: none">
+                    <label>Parcelas</label>
+                    <select name="parcelaSelect" id="parcelaSelect" class="form-control">
+                        <option value="">Selecione uma parcela</option>
+                        <option value="1">Parcela 1</option>
+                        <option value="2">Parcela 2 </option>
+                        <option value="3">Parcela 3</option>
+                    </select>
+                    <span id="createSetorSpan" class="text-danger"></span>
+                </div>
+                <div class="form-group float-right">
+                    <input type="submit" @*onclick="DownloadFinancial(@Model.Nota)"*@ value="Baixar" class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" />
+                    @*<a class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" ><i class="fas fa-file-download"></i></a>*@
+                </div>
+            </form>
         </div>
     </div>
     <ol></ol>
@@ -49,12 +48,25 @@
 <script>
     function showfields(value) {
         if (value != "Boletos") {
-            $('#parcelasType').hide();
+            $('#parcelas').hide();
         } else {
-            console.log("here")
-            $('#parcelasType').show();
+            $('#parcelas').show();
         }
     }
+    function DownloadFinancial(Nota) {
+        var typeFinancial = document.getElementById("typeFinancial").value;
+        var parcela = document.getElementById("parcelaSelect").value
+        $.ajax({
+            url: 'Download',
+            method: 'Post',
+            data: {
+                Nota: Nota,
+                type: typeFinancial,
+                parcela: parcela,
+            },
+        })
+    }
+
 
 </script>
 

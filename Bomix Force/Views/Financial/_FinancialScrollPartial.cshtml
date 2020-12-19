@@ -4,22 +4,20 @@
 }
 @if (Model?.Count() > 0)
 {
-    @foreach(var item in Model) { 
-    <tr>
-        <td class="text-center ">
-            @Html.DisplayFor(modelItem => item.Nota)
-        </td>
-        <td class="text-center ">
-            @Html.DisplayFor(modelItem => item.Emissao)
-        </td>
-        <td class="text-center">
-            <form asp-action="Download">
-                <input type="hidden" id="Nota" name="Nota" value="@item.Nota" />
-                <button class="float-right mb-2 mr-3" asp-action="Details">Download</button>
-                <p>
-                    <a class="float-right mb-2 mr-3" type="button" asp-action="Details"></a>
-                </p>
-                @*<button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Download</button>*@
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center ">
+                @Html.DisplayFor(modelItem => item.Nota)
+            </td>
+            <td class="text-center ">
+                @Html.DisplayFor(modelItem => item.Emissao)
+            </td>
+            <td class="text-center">
+                <form asp-action="Details">
+                    <input type="hidden" id="Nota" name="Nota" value="@item.Nota" />
+                    <button type="submit" class="mb-2 mr-3 font-project" asp-action="Details" style="border: none; background: none;"><i class="fas fa-chevron-circle-right fa-2x"></i></button>
+
             </form>
         </td>
     </tr>
