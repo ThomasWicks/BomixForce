@@ -27,9 +27,10 @@ namespace Bomix_Force.Controllers
         private readonly INonconformityRepository _nonconformityRepository;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
+        private readonly IPedidoVendaRepository _pedidoVendaRepository;
 
         public DocumentController(INonconformityRepository nonconformityRepository, IGenericRepository<Company> genericCompanyService, IGenericRepository<Person> genericPersonService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger, IPedidoVendaRepository pedidoVendaRepository)
         {
             _mapper = mapper;
             _signInManager = signInManager;
@@ -39,6 +40,7 @@ namespace Bomix_Force.Controllers
             _nonconformityRepository = nonconformityRepository;
             _genericCompanyService = genericCompanyService;
             _genericPersonService = genericPersonService;
+            _pedidoVendaRepository = pedidoVendaRepository;
 
         }
         // GET: DocumentController
@@ -99,6 +101,7 @@ namespace Bomix_Force.Controllers
                 {
                     Message += "<br>" + "Tipo: " + document.Debit + "<br>";
                 }
+                Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
                 await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Documento", Message, document.FilePath);
                 Notify("Documento enviado com sucesso", "Documento");
                 return RedirectToAction(nameof(Index));

@@ -30,10 +30,12 @@ namespace Bomix_Force.Controllers
         private readonly INonconformityRepository _nonconformityRepository;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
+        private readonly IPedidoVendaRepository _pedidoVendaRepository;
         private IWebHostEnvironment _environment;
 
         public NonconformityController(INonconformityRepository nonconformityRepository, IGenericRepository<Company> genericCompanyService, IGenericRepository<Person> genericPersonService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger, IWebHostEnvironment environment)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger, IWebHostEnvironment environment,
+        IPedidoVendaRepository pedidoVendaRepository)
         {
             _mapper = mapper;
             _signInManager = signInManager;
@@ -44,6 +46,7 @@ namespace Bomix_Force.Controllers
             _genericCompanyService = genericCompanyService;
             _genericPersonService = genericPersonService;
             _environment = environment;
+            _pedidoVendaRepository = pedidoVendaRepository;
 
         }
         // GET: Nonconformity
@@ -159,6 +162,7 @@ namespace Bomix_Force.Controllers
                 msg = msg.Replace("Descricao", nonconformityViewModel.Description);
 
                 str.Close();
+                Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
                 await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
                 Nonconformity nonconformity = _mapper.Map<Nonconformity>(nonconformityViewModel);
                 nonconformity.Company = company;

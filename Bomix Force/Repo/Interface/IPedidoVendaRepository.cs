@@ -9,5 +9,7 @@ namespace Bomix_Force.Repo.Interface
     public interface IPedidoVendaRepository: IGenericRepository<Bomix_PedidoVenda>
     {
         List<Bomix_PedidoVenda> GetParameters(string type, string InitialDate, string FinalDate, string UserId);
+        Employee GetEmployeesBySeller_id(string seller_id);
+        Employee GetEmployeesByCNPJ(string cnpj);
     }
 }
