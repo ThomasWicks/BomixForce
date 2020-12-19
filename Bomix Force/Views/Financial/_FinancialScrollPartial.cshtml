@@ -15,7 +15,11 @@
         <td class="text-center">
             <form asp-action="Download">
                 <input type="hidden" id="Nota" name="Nota" value="@item.Nota" />
-                <button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Download</button>
+                <button class="float-right mb-2 mr-3" asp-action="Details">Download</button>
+                <p>
+                    <a class="float-right mb-2 mr-3" type="button" asp-action="Details"></a>
+                </p>
+                @*<button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Download</button>*@
             </form>
         </td>
     </tr>
