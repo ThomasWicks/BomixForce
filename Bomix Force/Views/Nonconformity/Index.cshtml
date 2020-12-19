@@ -4,9 +4,10 @@
     ViewData["Title"] = "Index";
 }
 <div class="mr-5 ml-5">
-    <div class="pagination-history">
-        <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-        <a class="pagina-atual">Não Conformidade</a>
+    <div >
+        <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
+        @*<a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+        <a class="pagina-atual">Não Conformidade</a>*@
     </div>
     <p>
         <a class="float-right mb-2 mr-3" type="button" asp-action="Create"><img class="ic-size" src="~/Assets/ic_add_non_conf.png" /></a>
@@ -75,7 +76,7 @@
                                             <input type="file" onchange="updatePreview(@item.Id)" id="FilePath/@item.Id" name="FilePath" multiple accept=".pdf" />
 
                                         </div>
-                                        <button id="uploadRNC" type="submit" class="btn btn-primary font-project" style="display:none; color: white; background-color: #002A51;">Upload</button>
+                                        <button id="uploadRNC/@item.Id" type="submit" class="btn btn-primary font-project" style="display:none; color: white; background-color: #002A51;">Upload</button>
                                     </form>
                                 </td>
                             }
@@ -115,7 +116,8 @@
             "application/pdf"
         ];
         const input = document.getElementById('FilePath/' + id);
-        const upload = $('#uploadRNC');
+        //teste = 
+        const upload = document.getElementById(`uploadRNC/${id}`);
         const preview = document.getElementById('preview');
         input.style.opacity = 0;
 
@@ -125,17 +127,17 @@
             textContent = 'Nenhum arquivo selecionado.';
             preview.appendChild(para);
             document.getElementById('LabelFilePath/' + id).innerText = textContent
-            upload.hide()
+            upload.style.display='none'
         } else {
 
             for (const file of curFiles) {
                 if (validFileType(file)) {
                     var textContent = `Arquivo ${file.name}`;
                     document.getElementById('LabelFilePath/' + id).innerText = textContent
-                    upload.show()
+                    upload.style.display = ''
                 } else {
                     var textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
-                    upload.hide()
+                    upload.style.display = 'none'
                     document.getElementById('LabelFilePath/' + id).innerText = textContent
                 }
             }

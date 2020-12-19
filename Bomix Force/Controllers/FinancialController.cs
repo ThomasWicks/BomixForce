@@ -125,8 +125,7 @@ namespace Bomix_Force.Controllers
             try
             {
                 string wwwPath = _environment.WebRootPath;
-                var path = wwwPath + "\\answers\\" + file.Nota.ToString() + ".pdf";
-
+                var path = wwwPath + "\\Documentos\\DANFE\\" + file.Nota.ToString() + ".pdf";
                 var memory = new MemoryStream();
                 using (var stream = new FileStream(path, FileMode.Open))
                 {
