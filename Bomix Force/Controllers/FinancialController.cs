@@ -120,7 +120,51 @@ namespace Bomix_Force.Controllers
             }
 
         }
-        public async Task<ActionResult> Download(FinancialViewModel file)
+        public async Task<ActionResult> DownloadPDF(FinancialViewModel file)
+        {
+            try
+            {
+                string wwwPath = _environment.WebRootPath;
+                //var path = wwwPath + "\\Documentos\\DANFE\\" + file.Nota.ToString() + ".pdf";
+                var path = wwwPath + "\\Documentos\\DANFE\\000380040.pdf";
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+
+                memory.Position = 0;
+                return File(memory, "application/pdf", Path.GetFileName(path));
+            }
+            catch (Exception x)
+            {
+                Notify("O arquivo não está disponivél", "Erro", NotificationType.error);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public async Task<ActionResult> DownloadXAML(FinancialViewModel file)
+        {
+            try
+            {
+                string wwwPath = _environment.WebRootPath;
+                var path = wwwPath + "\\Documentos\\XAML\\LoadingView.xaml";
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+
+                memory.Position = 0;
+                return File(memory, "application/xaml", Path.GetFileName(path));
+            }
+            catch (Exception x)
+            {
+                Notify("O arquivo não está disponivél", "Erro", NotificationType.error);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+        public async Task<ActionResult> DownloadBoleto(FinancialViewModel file)
         {
             try
             {
@@ -141,8 +185,6 @@ namespace Bomix_Force.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
-
         // GET: FinancialController/Details/5
         public ActionResult Details(int id)
         {
