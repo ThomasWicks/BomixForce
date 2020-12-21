@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,9 @@ namespace Bomix_Force.ViewModels
     public class FinancialViewModel
     {
         public string Nota { get; set; }
-        public string Emissao { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime Emissao { get; set; }
         public string Pedido { get; set; }
         public string Sequencia { get; set; }
         public string Item { get; set; }
