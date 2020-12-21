@@ -97,7 +97,7 @@
                                 }
 
                             </div>
-                            @if (User.IsInRole("Company") || ViewBag.indexEmployees)
+                            @if (User.IsInRole("Company"))
                             {
                                 <div class="container-btn">
                                     <button class="btn float-right" data-toggle="edit-modal" data-target="#editUser" data-url="@Url.Action($"Edit/{item.Id}")"><img src="~/Assets/ic_edit.png" /></button>

@@ -126,17 +126,19 @@ namespace Bomix_Force.Controllers
             try
             {
                 string sufixPath = "";
+                var typeFile = "";
                 switch (typeFinancial)
                 {
                     case "NF":
-                         sufixPath = $"DANFE\\{Nota}.pdf";
-                            break;
-                    case "XAML":
-                        sufixPath = $"XAML\\{Nota}.xml";
+                        //sufixPath = $"DANFE\\{Nota}.pdf";
+                        sufixPath = $"DANFE\\000380040.pdf";
+                        typeFile = "pdf";
                         break;
-                    
-    
-
+                    case "XAML":
+                        //sufixPath = $"XAML\\{Nota}.xml";
+                        sufixPath = $"XAML\\LoadingView.xaml";
+                        typeFile = "xaml";
+                        break;
                 }
                 string wwwPath = _environment.WebRootPath;
                 var path = wwwPath + $"\\Documentos\\{sufixPath}";
@@ -148,7 +150,7 @@ namespace Bomix_Force.Controllers
                 }
 
                 memory.Position = 0;
-                return File(memory, "application/pdf", Path.GetFileName(path));
+                return File(memory, $"application/{typeFile}", Path.GetFileName(path));
             }
             catch (Exception x)
             {

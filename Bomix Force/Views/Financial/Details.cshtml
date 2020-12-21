@@ -12,7 +12,7 @@
         <div class="align-items-center col-md-6">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <form asp-action="Download">
-                @Html.HiddenFor(model => model.Nota);
+                @Html.HiddenFor(model => model.Nota)
                 <div class="form-group col-12">
                     <label>Arquivos</label>
                     <select name="typeFinancial" onchange="showfields(this.value)" id="typeFinancial" class="form-control">
