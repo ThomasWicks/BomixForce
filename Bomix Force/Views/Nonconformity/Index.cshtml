@@ -3,14 +3,14 @@
 @{
     ViewData["Title"] = "Index";
 }
-<div class="container">
-    <div class="pagination-history">
-        <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-        <a class="pagina-atual">Não Conformidade</a>
+<div class="mr-5 ml-5">
+    <div >
+        <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
+        @*<a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+        <a class="pagina-atual">Não Conformidade</a>*@
     </div>
     <p>
         <a class="float-right mb-2 mr-3" type="button" asp-action="Create"><img class="ic-size" src="~/Assets/ic_add_non_conf.png" /></a>
-        @*<a class="btn btn-primary float-right mb-2" asp-action="Create">Abrir registro</a>*@
     </p>
     <div class="table-responsive mt-5">
         <table class="table table-striped">
@@ -28,11 +28,18 @@
                     <th class="text-center text-white">
                         Status
                     </th>
-                    <th class="text-center text-white">
-                        Resposta
-                    </th>
-
-
+                    @if (User.IsInRole("Employee"))
+                    {
+                        <th class="text-center text-white">
+                            Upload
+                        </th>
+                    }
+                    @if (User.IsInRole("User"))
+                    {
+                        <th class="text-center text-white">
+                            Ações
+                        </th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -40,6 +47,7 @@
                 {
                     @foreach (var item in Model)
                     {
+
                         <tr>
                             <td class="text-center ">
                                 @Html.DisplayFor(modelItem => item.Lote)
@@ -50,20 +58,41 @@
                             <td class="text-center">
                                 @Html.DisplayFor(modelItem => item.Nf)
                             </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            @if (User.IsInRole("Employee"))
+                            {
+                                <td class="text-left">
+                                    <form class="text-center" asp-action="Upload" enctype="multipart/form-data">
+                                        <input type="hidden" name="Id" id="Id" value="@item.Id" />
+                                        <div class="image-upload text-center">
+                                            <label for="FilePath/@item.Id">
+                                                <img style="width: 30px; height: 30px; cursor: pointer;" src="~/Assets/ic_upload.png" />
+                                            </label>
+                                            <label id="LabelFilePath/@item.Id">
+                                                Nenhum arquivo Selecionado
+                                            </label>
+                                            <input type="file" onchange="updatePreview(@item.Id)" id="FilePath/@item.Id" name="FilePath" multiple accept=".pdf" />
+
+                                        </div>
+                                        <button id="uploadRNC/@item.Id" type="submit" class="btn btn-primary font-project" style="display:none; color: white; background-color: #002A51;">Upload</button>
+                                    </form>
+                                </td>
+                            }
                             @if (User.IsInRole("User"))
                             {
-                                <td>
-                                    <a class="col-xl-9 ml-4">
-                                        <span  type="button" id="answerModal" data-url="@Url.Action($"UploadAnswer/{item.Id}")" data-target="#AnswerModal" class="ic-size" src="~/Assets/ic_add_user.png"> </span>
-                                    </a>
+                                <td class="text-center">
+                                    <form asp-action="Download">
+                                        <input type="hidden" id="Id" name="Id" value="@item.Id" />
+                                        @if (item.Status == "Concluido")
+                                        {
+                                            <button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Download</button>
+                                        }
+                                    </form>
                                 </td>
                             }
-                            else
-                            {
-                                <td>
-                                    <a asp-action="GetPdf" asp-controller="Nonconformity">Download</a>
-                                </td>
-                            }
+
 
                         </tr>
                     }
@@ -80,4 +109,46 @@
         </table>
     </div>
 </div>
+
+<script>
+    function updatePreview(id) {
+        const fileTypes = [
+            "application/pdf"
+        ];
+        const input = document.getElementById('FilePath/' + id);
+        //teste = 
+        const upload = document.getElementById(`uploadRNC/${id}`);
+        const preview = document.getElementById('preview');
+        input.style.opacity = 0;
+
+
+        const curFiles = input.files;
+        if (curFiles.length === 0) {
+            textContent = 'Nenhum arquivo selecionado.';
+            preview.appendChild(para);
+            document.getElementById('LabelFilePath/' + id).innerText = textContent
+            upload.style.display='none'
+        } else {
+
+            for (const file of curFiles) {
+                if (validFileType(file)) {
+                    var textContent = `Arquivo ${file.name}`;
+                    document.getElementById('LabelFilePath/' + id).innerText = textContent
+                    upload.style.display = ''
+                } else {
+                    var textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
+                    upload.style.display = 'none'
+                    document.getElementById('LabelFilePath/' + id).innerText = textContent
+                }
+            }
+        }
+
+
+
+
+        function validFileType(file) {
+            return fileTypes.includes(file.type);
+        }
+    }
+</script>
 

@@ -77,24 +77,11 @@ namespace Bomix_Force.Controllers
             }
             catch (Exception ex)
             {
-                //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
                 List<OrderViewModel> orderView = new List<OrderViewModel>();
-                //ModelState.AddModelError("orderIndexError", "Não foi possivel adquirir a lista de pedidos devido ao seguinte erro: " + ex.Message);
                 return View(orderView);
             }
         }
 
-        // GET: OrderController/Details/5
-        //[Route("Order/Details/{id}")]
-        //public ActionResult Details(int id)
-        //{
-        //    string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        //    Bomix_PedidoVenda orders = _pedidoVendaRepository.GetParameters(user, id.ToString()).First();
-        //    List<Bomix_PedidoVendaItem> item = _pedidoItemRepository.GetParameters(user, id.ToString()).ToList();
-        //    OrderViewModel orderView = _mapper.Map<OrderViewModel>(orders);
-        //    orderView.Item = item;
-        //    return PartialView("_orderDetailsPartial", orderView);
-        //}
 
 
         [HttpGet]
@@ -118,6 +105,7 @@ namespace Bomix_Force.Controllers
                 List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
                 Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
                 company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
+                Employee employee = _pedidoVendaRepository.GetEmployeesBySeller_id(order[0].Vendedor_FK);
                 string FilePath = ".\\Views\\Template Email\\Order.html";
                 StreamReader str = new StreamReader(FilePath);
                 string mensage = str.ReadToEnd();

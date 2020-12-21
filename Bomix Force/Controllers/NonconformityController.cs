@@ -12,6 +12,7 @@ using Bomix_Force.Data.Enum;
 using Bomix_Force.Models;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +30,12 @@ namespace Bomix_Force.Controllers
         private readonly INonconformityRepository _nonconformityRepository;
         private readonly IGenericRepository<Company> _genericCompanyService;
         private readonly IGenericRepository<Person> _genericPersonService;
+        private readonly IPedidoVendaRepository _pedidoVendaRepository;
+        private IWebHostEnvironment _environment;
 
         public NonconformityController(INonconformityRepository nonconformityRepository, IGenericRepository<Company> genericCompanyService, IGenericRepository<Person> genericPersonService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger, IWebHostEnvironment environment,
+        IPedidoVendaRepository pedidoVendaRepository)
         {
             _mapper = mapper;
             _signInManager = signInManager;
@@ -41,6 +45,8 @@ namespace Bomix_Force.Controllers
             _nonconformityRepository = nonconformityRepository;
             _genericCompanyService = genericCompanyService;
             _genericPersonService = genericPersonService;
+            _environment = environment;
+            _pedidoVendaRepository = pedidoVendaRepository;
 
         }
         // GET: Nonconformity
@@ -74,6 +80,16 @@ namespace Bomix_Force.Controllers
                     nonconformities = _nonconformityRepository.Get(n => n.CompanyId == company.Id).ToList();
                     nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities).ToList();
                 }
+                foreach (var nonConformity in nonconformityView)
+                {
+                    var path = Path.Combine(
+                   Directory.GetCurrentDirectory(),
+                   "wwwroot/answers", nonConformity.Id.ToString() + ".pdf");
+                    if (System.IO.File.Exists(path))
+                        nonConformity.Status = "Concluido";
+                    else
+                        nonConformity.Status = "Análise";
+                }
 
                 return View(nonconformityView);
             }
@@ -81,7 +97,7 @@ namespace Bomix_Force.Controllers
             {
                 return LocalRedirect("./Identity/Account/Manage");
             }
-           
+
         }
 
         // GET: Nonconformity/Details/5
@@ -124,7 +140,6 @@ namespace Bomix_Force.Controllers
                 {
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     company = _genericCompanyService.Get(u => u.IdentityUserId == user).First();
-                    //string Email = _nonconformityRepository.GetSellerEmail(company.Cnpj);
 
                 }
                 else if (User.IsInRole("User"))
@@ -132,18 +147,8 @@ namespace Bomix_Force.Controllers
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
                     company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
-                    //string Email = _nonconformityRepository.GetSellerEmail(company.Cnpj);
 
                 }
-                //string Message = string.Format(
-                //    "Prezado(a), <br> " +
-                //    "o cliente <b>{0}</b> de cnpj: {1}, abriu um registro de não conformidade em seu pedido:<br>" +
-                //    "Nota Fiscal: {2}<br> " +
-                //    "Lote: {3}<br>" +
-                //    "Quantidade:{4}<br> " +
-                //    "Item: {5}<br> " +
-                //    "Descrição do problema: {6}\n ", company.Name, company.Cnpj, nonconformityViewModel.Nf, nonconformityViewModel.Lote, nonconformityViewModel.Quantity,
-                //    nonconformityViewModel.SelectedItem, nonconformityViewModel.Description);
 
                 string FilePath = ".\\Views\\Template Email\\RNC.html";
                 StreamReader str = new StreamReader(FilePath);
@@ -157,7 +162,8 @@ namespace Bomix_Force.Controllers
                 msg = msg.Replace("Descricao", nonconformityViewModel.Description);
 
                 str.Close();
-                await _emailSender.SendEmailAsync("thomas.wicks@hotmail.com", "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
+                Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
+                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
                 Nonconformity nonconformity = _mapper.Map<Nonconformity>(nonconformityViewModel);
                 nonconformity.Company = company;
                 var values = Enum.GetValues(typeof(ItemEnum));
@@ -175,7 +181,7 @@ namespace Bomix_Force.Controllers
                 Notify("Registro enviado com sucesso", "Não Conformidade");
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception e)
             {
                 Notify("Não foi possivel criar o registro", "Não Conformidade", NotificationType.error);
                 return View();
@@ -224,25 +230,59 @@ namespace Bomix_Force.Controllers
             }
         }
 
-        [Route("Nonconformity/UploadAnswer/{id}")]
-        public ActionResult UploadAnswer(int id)
-        {
-
-            Nonconformity nonconformity = _nonconformityRepository.Get(u => u.Id == id).First();
-            NonconformityViewModel nonconformityViewModel = _mapper.Map<NonconformityViewModel>(nonconformity);
-            return PartialView("_uploadAnswer", nonconformityViewModel);
-
-        }
-
         [HttpPost]
-        public async Task<ActionResult> UploadAnswer(NonconformityViewModel nonconformityViewModel)
+        public async Task<ActionResult> Download(NonconformityViewModel file)
         {
-            try {
+            try
+            {
+                string wwwPath = _environment.WebRootPath;
+                var path = wwwPath + "\\answers\\" + file.Id.ToString() + ".pdf";
+
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+
+                memory.Position = 0;
+                return File(memory, "application/pdf", Path.GetFileName(path));
+            }
+            catch (Exception x)
+            {
+                Notify("O arquivo não está disponivél", "Erro", NotificationType.error);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> Upload(NonconformityViewModel file)
+        {
+            try
+            {
+                string wwwPath = _environment.WebRootPath;
+                var path = wwwPath + "\\answers\\" + file.Id.ToString() + ".pdf";
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.FilePath[0].CopyToAsync(stream);
+                    }
+                    Notify("O arquivo foi atualizado com sucesso", "Sucesso", NotificationType.success);
+                }
+                else
+                {
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.FilePath[0].CopyToAsync(stream);
+                    }
+                    Notify("O arquivo foi enviado com sucesso", "Sucesso", NotificationType.success);
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception x)
             {
-                return StatusCode(500);
+                Notify("Um erro aconteceu ao enviar o arquivo, por favor verifique se um arquivo foi selecionado e  tente novamente", "Erro", NotificationType.error);
+                return RedirectToAction(nameof(Index));
             }
         }
     }

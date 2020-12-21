@@ -30,6 +30,10 @@ namespace Bomix_Force.Util
             #region Nonconformity
             CreateMap<Nonconformity, NonconformityViewModel>().ReverseMap();
             #endregion
+
+            #region Financial
+            CreateMap<Bomix_NotaFiscalVenda, FinancialViewModel>().ReverseMap();
+            #endregion
         }
     }
 }

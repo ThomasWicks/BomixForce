@@ -29,5 +29,27 @@ namespace Bomix_Force.Repo.Interface
                 typeParam,InitialDateParam, FinalDateParam, UserParam).ToList();
             return PedidoVenda;
         }
+
+        public Employee GetEmployeesBySeller_id(string seller_id)
+        {
+            var employee = _context.Employee.FromSqlRaw("select ep.[Id], ep.[Name], ep.[Email], ep.[Login], ep.[Idtotvs], ep.[IdentityUserId]" +
+                " from((Employee ep" +
+                " inner join Employee_Seller On ep.Id = Employee_Seller.EmployeeId)" +
+                " inner join Bomix_PedidoVenda On Bomix_PedidoVenda.Vendedor_FK = Employee_Seller.SellerId)" +
+                " where Bomix_PedidoVenda.Vendedor_FK = @Seller", new SqlParameter("@Seller", seller_id)
+);
+            return employee.FirstOrDefault();
+        } 
+
+        public Employee GetEmployeesByCNPJ(string cnpj)
+        {
+            var employee = _context.Employee.FromSqlRaw("select ep.[Id], ep.[Name], ep.[Email], ep.[Login], ep.[Idtotvs], ep.[IdentityUserId]" +
+                " from((Employee ep" +
+                " inner join Employee_Seller On ep.Id = Employee_Seller.EmployeeId)" +
+                " inner join Bomix_Cliente On Bomix_Cliente.Vendedor_FK = Employee_Seller.SellerId)" +
+                " where Bomix_Cliente.CNPJ = @cnpj", new SqlParameter("@cnpj", cnpj));
+
+            return employee.FirstOrDefault();
+        }
     }
 }
