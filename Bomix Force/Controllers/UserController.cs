@@ -14,12 +14,8 @@ using Microsoft.AspNetCore.Http;
 using IEmailSender = Bomix_Force.AppServices.Interface.IEmailSender;
 using Microsoft.AspNetCore.Identity;
 using Bomix_Force.Util;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Bomix_Force.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient;
 
 namespace Bomix_Force.Controllers
 {

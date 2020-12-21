@@ -17,6 +17,11 @@ using System;
 using Bomix_Force.AppServices.Interface;
 using Bomix_Force.AppServices;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Quartz.Impl;
+using Quartz;
+using Bomix_Force.Service;
+using Bomix_Force.Service.Job;
+using Quartz.Spi;
 
 namespace Bomix_Force
 {
@@ -79,6 +84,15 @@ namespace Bomix_Force
             //services.AddScoped<IGenericRepository<Item>, GenericRepository<Item>>();
             //services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
             services.AddScoped<IGenericRepository<IdentityUser>, GenericRepository<IdentityUser>>();
+            // Creating schedule repeat job as service
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddSingleton<ResetPassJob>();
+            services.AddSingleton(new JobSchedule(
+                    jobType: typeof(ResetPassJob),
+                    cronExpression: "0/15 * * * * ?")); // run every 15 seconds ( 0 0 00 1 1/3 ? - a cada 3 meses no dia 1º)
+            services.AddHostedService<QuartzHostedService>();
         }
 
         private async Task CreateRolesandUsers(IServiceProvider serviceProvider)
@@ -166,6 +180,7 @@ namespace Bomix_Force
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -195,6 +210,6 @@ namespace Bomix_Force
             });
             CreateRolesandUsers(services).Wait();
         }
-
+        
     }
 }
