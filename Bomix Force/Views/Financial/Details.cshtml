@@ -1,0 +1,78 @@
+﻿@model Bomix_Force.ViewModels.FinancialViewModel
+@{
+    ViewData["Title"] = "Details";
+
+}
+<div class="container createNonconf">
+    <div class="">
+        <a asp-action="Index" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
+    </div>
+    <div class="card text-center align-items-center mt-3">
+        <h3 class="card-header align-self-stretch">Arquivos</h3>
+        <div class="align-items-center col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form asp-action="Download">
+                @Html.HiddenFor(model => model.Nota);
+                <div class="form-group col-12">
+                    <label>Arquivos</label>
+                    <select name="typeFinancial" onchange="showfields(this.value)" id="typeFinancial" class="form-control">
+                        <option value="">Selecione o documento</option>
+                        <option value="NF">Nota Fiscal</option>
+                        <option value="Boletos">Boletos </option>
+                        <option value="XAML">XAML</option>
+                    </select>
+                    <span id="createSetorSpan" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="parcelas" style="display: none">
+                    <label>Parcelas</label>
+                    <select name="parcelaSelect" id="parcelaSelect" class="form-control">
+                        <option value="">Selecione uma parcela</option>
+                        <option value="1">Parcela 1</option>
+                        <option value="2">Parcela 2 </option>
+                        <option value="3">Parcela 3</option>
+                    </select>
+                    <span id="createSetorSpan" class="text-danger"></span>
+                </div>
+                <div class="form-group float-right">
+                    <input type="submit" @*onclick="DownloadFinancial(@Model.Nota)"*@ value="Baixar" class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" />
+                    @*<a class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" ><i class="fas fa-file-download"></i></a>*@
+                </div>
+            </form>
+        </div>
+    </div>
+    <ol></ol>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    function showfields(value) {
+        if (value != "Boletos") {
+            $('#parcelas').hide();
+        } else {
+            $('#parcelas').show();
+        }
+    }
+    function DownloadFinancial(Nota) {
+        var typeFinancial = document.getElementById("typeFinancial").value;
+        var parcela = document.getElementById("parcelaSelect").value
+        $.ajax({
+            url: 'Download',
+            method: 'Post',
+            data: {
+                Nota: Nota,
+                type: typeFinancial,
+                parcela: parcela,
+            },
+        })
+    }
+
+
+</script>
+
+<style>
+    .tag {
+        height: 12px;
+        width: 12px;
+    }
+</style>
