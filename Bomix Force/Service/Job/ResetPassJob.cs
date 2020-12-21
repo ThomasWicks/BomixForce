@@ -21,7 +21,7 @@ namespace Bomix_Force.Service
         {
             _logger.LogInformation($"ResetPass: {DateTime.Now}");
             _logger.LogInformation($"JobKey: {context.JobDetail.Key}");
-            _logger.LogInformation($"User id: {_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value}");
+            //_logger.LogInformation($"User id: {_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value}");
             return Task.CompletedTask;
         }
     }
