@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Bomix_Force.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-
 namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
@@ -23,7 +18,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
         public ChangePasswordModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            ILogger<ChangePasswordModel> logger
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -87,10 +82,9 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                Notify("Usuário não encontrado no sistema.", "Atenção", NotificationType.warning);
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-            
+
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
             if (changePasswordResult.Succeeded)
             {
@@ -100,50 +94,17 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             else if (!changePasswordResult.Succeeded)
             {
 
-
                 foreach (var error in changePasswordResult.Errors)
                 {
                     ModelState.AddModelError("changepasswordError", error.Description);
                 }
-                Notify("Não foi possível alterar a senha", "Erro", NotificationType.error);
                 return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("Usuário alterou a senha.");
             StatusMessage = "Sua senha foi alterada com sucesso.";
-
-            Notify("Senha alterada com sucesso!", "Alterado", NotificationType.success);
-            return RedirectToPage();
-        }
-
-        public void Notify(string message, string title = "Sweet Alert Toastr Demo",
-                                   NotificationType notificationType = NotificationType.success)
-        {
-            var msg = new
-            {
-                message = message,
-                title = title,
-                icon = notificationType.ToString(),
-                type = notificationType.ToString(),
-                provider = GetProvider()
-            };
-
-            TempData["Message"] = JsonConvert.SerializeObject(msg);
-        }
-
-        private string GetProvider()
-        {
-            var builder = new ConfigurationBuilder()
-                            .SetBasePath(Directory.GetCurrentDirectory())
-                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                            .AddEnvironmentVariables();
-
-            IConfigurationRoot configuration = builder.Build();
-
-            var value = configuration["NotificationProvider"];
-
-            return value;
+            return Redirect("~/");
         }
     }
 }
