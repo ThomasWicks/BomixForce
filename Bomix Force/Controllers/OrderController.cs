@@ -129,7 +129,7 @@ namespace Bomix_Force.Controllers
                     msg = msg.Replace("Qtd", item.Quantidade.ToString());
                     mensage = mensage.Replace("<!--replace-->", msg);
                 };
-                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", mensage, null);
+                await _emailSender.SendEmailAsync(employee.Email, "Replicação Pedido", mensage, null);
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception ex)

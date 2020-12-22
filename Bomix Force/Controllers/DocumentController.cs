@@ -108,7 +108,7 @@ namespace Bomix_Force.Controllers
                     Message += "<br>" + "Tipo: " + document.Debit + "<br>";
                 }
                 Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
-                await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Documento", Message, document.FilePath);
+                await _emailSender.SendEmailAsync(employee.Email, "Documento", Message, document.FilePath);
                 Notify("Documento enviado com sucesso", "Documento");
                 return RedirectToAction(nameof(Index));
             }

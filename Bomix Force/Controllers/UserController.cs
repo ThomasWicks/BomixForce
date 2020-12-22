@@ -30,9 +30,12 @@ namespace Bomix_Force.Controllers
         private readonly IGenericRepository<Employee> _genericEmployeeService;
         private readonly IGenericRepository<Person> _genericPersonService;
         private readonly IMapper _mapper;
+        private readonly IPedidoVendaRepository _pedidoVendaRepository;
+
         public UserController(IGenericRepository<Person> genericPersonService,
             IGenericRepository<Company> genericCompanyService, IGenericRepository<Employee> genericEmployeeService,
-        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger)
+        IMapper mapper, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger,
+        IPedidoVendaRepository pedidoVendaRepository)
         {
             _genericPersonService = genericPersonService;
             _mapper = mapper;
@@ -42,6 +45,8 @@ namespace Bomix_Force.Controllers
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
+            _pedidoVendaRepository = pedidoVendaRepository;
+
 
         }
         [Authorize]
@@ -263,7 +268,8 @@ namespace Bomix_Force.Controllers
                 if (User.IsInRole("Company"))
                 {
                     Company company = _genericCompanyService.Get(c => c.IdentityUserId == user).First();
-                    await _emailSender.SendEmailAsync("bc.guerra12345@gmail.com", "Usuário Editado", "O Usuário " + newperson.Name + " foi editado pela companhia " + company.Name, null);
+                    Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
+                    await _emailSender.SendEmailAsync(employee.Email, "Usuário Editado", "O Usuário " + newperson.Name + " foi editado pela companhia " + company.Name, null);
                 }
 
                 return RedirectToAction(nameof(Index));
