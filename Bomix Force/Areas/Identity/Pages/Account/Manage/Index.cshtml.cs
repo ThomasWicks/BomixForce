@@ -18,7 +18,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
         public ChangePasswordModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            ILogger<ChangePasswordModel> logger
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -84,7 +84,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-            
+
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
             if (changePasswordResult.Succeeded)
             {
@@ -93,7 +93,6 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             }
             else if (!changePasswordResult.Succeeded)
             {
-
 
                 foreach (var error in changePasswordResult.Errors)
                 {
@@ -105,8 +104,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("Usuário alterou a senha.");
             StatusMessage = "Sua senha foi alterada com sucesso.";
-
-            return RedirectToPage();
+            return Redirect("~/");
         }
     }
 }
