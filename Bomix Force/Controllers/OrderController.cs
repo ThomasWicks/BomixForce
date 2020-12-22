@@ -103,8 +103,16 @@ namespace Bomix_Force.Controllers
                 Company company = new Company();
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
+                if (User.IsInRole("User"))
+                {
                 Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
                 company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
+
+                }
+                else
+                {
+                    company = _genericCompanyService.Get(u => user == u.IdentityUserId).First();
+                }
                 Employee employee = _pedidoVendaRepository.GetEmployeesBySeller_id(order[0].Vendedor_FK);
                 string FilePath = ".\\Views\\Template Email\\Order.html";
                 StreamReader str = new StreamReader(FilePath);

@@ -25,6 +25,7 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
+                                <label id="pedido" style="display:none">@Model[0].Pedido</label>
                                 <tr>
                                     @if (item.Produto != "")
                                     {
@@ -59,7 +60,7 @@
                     </table>
                 </div>
                 <button data-dismiss="modal" class="btn btn-danger">Cancelar</button>
-                <button type="button" onclick="duplicate(@Model[0].Pedido)" class="btn btn-primary btn-lg fas fa-copy float-right">  Duplicar</button>
+                <button type="button" onclick="duplicate()" class="btn btn-primary btn-lg fas fa-copy float-right">  Duplicar</button>
             </div>
 
         </div>
@@ -69,7 +70,9 @@
 
 </div>
 <script>
-    function duplicate(Pedido) {
+    function duplicate() {
+        var Pedido = document.getElementById("pedido").innerText
+        console.log(Pedido)
         Swal.fire({
           title: 'Deseja duplicar pedido?',
           icon: 'warning',
@@ -79,13 +82,13 @@
         }).then((result) => {
             if (result.value) {
                 var pedidos = Pedido.toString();
-                Pedidos = "0".concat(Pedido)
+                //Pedidos = "0".concat(Pedido)
                 $('#duplicateModal').modal('hide');
                 document.getElementById('loadingSpinnerOverlay').style.display = 'block'
                 $.ajax({
                     url: 'Duplicate',
                     data: {
-                        Pedido: Pedidos
+                        Pedido: Pedido
                     },
                     complete: function (e, xhr, settings) {
                         document.getElementById('loadingSpinnerOverlay').style.display = 'none'

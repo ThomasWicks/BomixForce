@@ -108,12 +108,12 @@
                 <a class="text-info">@item.Status</a>
             </th>
         }
-        @if (User.IsInRole("User"))
+        @if (User.IsInRole("User") || User.IsInRole("Company"))
         {
             <th>
                 <div>
 
-                    <button data-toggle="orderDetails" onclick="openConfirmationModal(this)" data-url="@Url.Action($"DuplicateData/{@item.Pedido}")" data-target="#duplicateModal" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
+                    <button data-toggle="orderDetails" onclick="openConfirmationModal(this, @item.Pedido)" data-url="@Url.Action($"DuplicateData/{@item.Pedido}")" data-target="#duplicateModal" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
                 </div>
             </th>
         }
@@ -123,7 +123,8 @@
     }
 }
 <script>
-    function openConfirmationModal(button) {
+    function openConfirmationModal(button, pedido) {
+        console.log(pedido)
         var OrderDetailsElement = $('#OrderDetailsHere');
         var url = $(button).data('url');
         var decodedUrl = decodeURIComponent(url)
