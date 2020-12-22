@@ -118,7 +118,7 @@
                                 <a href="@Url.Action("Index", "Order", new { filter = "StatusAsc" })"><i class="fas fa-caret-down"></i></a>
                             }
                         </th>
-                        @if (User.IsInRole("User"))
+                        @if (User.IsInRole("User") || User.IsInRole("Company"))
                         {
                             <th class="text-center">
                                 Duplicar
