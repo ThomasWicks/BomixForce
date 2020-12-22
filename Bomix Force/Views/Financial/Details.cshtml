@@ -25,17 +25,28 @@
                 </div>
                 <div class="form-group col-12" id="parcelas" style="display: none">
                     <label>Parcelas</label>
-                    <select name="parcelaSelect" id="parcelaSelect" class="form-control">
-                        <option value="">Selecione uma parcela</option>
-                        <option value="1">Parcela 1</option>
-                        <option value="2">Parcela 2 </option>
-                        <option value="3">Parcela 3</option>
-                    </select>
+                    @if (Model.QtdParcelas > 1)
+                    {
+                        <select name="parcelaSelect" id="parcelaSelect" class="form-control">
+                            <option value="">Selecione uma parcela</option>
+                            @{int i;
+                                for (i = 1; i <= Model.QtdParcelas; i++)
+                                {
+                                    <option value="@i">@i° Parcela</option>
+                                }
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <select name="parcelaSelect" id="parcelaSelect" class="form-control">
+                            <option value="0">Parcela Única</option>
+                        </select>
+                    }
                     <span id="createSetorSpan" class="text-danger"></span>
                 </div>
                 <div class="form-group float-right">
-                    <input type="submit" @*onclick="DownloadFinancial(@Model.Nota)"*@ value="Baixar" class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" />
-                    @*<a class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" ><i class="fas fa-file-download"></i></a>*@
+                    <input type="submit" value="Baixar" class="btn btn-primary font-project mr-3" style="color: white; background-color: #002A51;" />
                 </div>
             </form>
         </div>

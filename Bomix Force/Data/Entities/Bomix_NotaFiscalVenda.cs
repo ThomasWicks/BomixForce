@@ -31,5 +31,6 @@ namespace Bomix_Force.Data.Entities
         public string Gerente { get; set; }
         public string Transportadora { get; set; }
         public string CondPagamento { get; set; }
+        public int QtdParcelas { get; set; }
     }
 }

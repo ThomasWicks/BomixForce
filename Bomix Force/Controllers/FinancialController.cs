@@ -121,7 +121,7 @@ namespace Bomix_Force.Controllers
 
         }
         [HttpPost]
-        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect = null)
+        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect)
         {
             try
             {
@@ -130,14 +130,16 @@ namespace Bomix_Force.Controllers
                 switch (typeFinancial)
                 {
                     case "NF":
-                        //sufixPath = $"DANFE\\{Nota}.pdf";
-                        sufixPath = $"DANFE\\000380040.pdf";
+                        sufixPath = $"DANFE\\{Nota}.pdf";
                         typeFile = "pdf";
                         break;
                     case "XAML":
-                        //sufixPath = $"XAML\\{Nota}.xml";
-                        sufixPath = $"XAML\\LoadingView.xaml";
-                        typeFile = "xaml";
+                        sufixPath = $"XML\\{Nota}.xml";
+                        typeFile = "xml";
+                        break;
+                    case "Boletos":
+                        sufixPath = $"Boletos\\Itau\\${Nota}-${parcelaSelect} - bolitau.pdf";
+                        typeFile = "pdf";
                         break;
                 }
                 string wwwPath = _environment.WebRootPath;

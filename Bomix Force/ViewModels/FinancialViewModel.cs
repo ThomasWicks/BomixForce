@@ -27,6 +27,7 @@ namespace Bomix_Force.ViewModels
         public float ValorLiquido { get; set; }
         public float ValorBruto { get; set; }
         public float ValorUnitario { get; set; }
+        public int QtdParcelas { get; set; }
 
     }
 }
