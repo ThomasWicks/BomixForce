@@ -70,26 +70,43 @@
 </div>
 <script>
     function duplicate(Pedido) {
-        //var pedidos = Pedido.toString();
-        Pedidos = "0".concat(Pedido)
-        $('#duplicateModal').modal('hide');
-        document.getElementById('loadingSpinnerOverlay').style.display = 'block'
-        $.ajax({
-            url: 'Duplicate',
-            data: {
-                Pedido: Pedidos
-            },
-            complete: function (e, xhr, settings) {
-                document.getElementById('loadingSpinnerOverlay').style.display = 'none'
-                if (e.status === 200) {
-                    toastr.success("Requisição para repetir o pedido enviada com sucesso", "Pedido");
-                } else {
-                    toastr.error("Ocorreu uma falha na duplicação do pedido", "Pedido");
-                }
-            },
-            method: 'Post',
-            dataType: 'json',
+        Swal.fire({
+          title: 'Deseja duplicar pedido?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sim',
+          cancelButtonText: 'Não'
+        }).then((result) => {
+            if (result.value) {
+                var pedidos = Pedido.toString();
+                Pedidos = "0".concat(Pedido)
+                $('#duplicateModal').modal('hide');
+                document.getElementById('loadingSpinnerOverlay').style.display = 'block'
+                $.ajax({
+                    url: 'Duplicate',
+                    data: {
+                        Pedido: Pedidos
+                    },
+                    complete: function (e, xhr, settings) {
+                        document.getElementById('loadingSpinnerOverlay').style.display = 'none'
+                        if (e.status === 200) {
+                            toastr.success("Requisição para repetir o pedido enviada com sucesso", "Pedido");
+                        } else {
+                            toastr.error("Ocorreu uma falha na duplicação do pedido", "Pedido");
+                        }
+                    },
+                    method: 'Post',
+                    dataType: 'json',
+                })
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+              'Cancelado',
+              'Ação cancelada',
+              'error'
+            )
+          }
         })
+
     }
 
 </script>
