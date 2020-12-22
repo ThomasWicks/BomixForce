@@ -46,8 +46,14 @@ namespace Bomix_Force.Controllers
         // GET: DocumentController
         public ActionResult Index()
         {
-            DocumentViewModel documentViewModel = new DocumentViewModel();
-            return View(documentViewModel);
+            var identityUser = _userManager.GetUserAsync(User);
+            if (identityUser.Result.EmailConfirmed == true)
+            {
+                DocumentViewModel documentViewModel = new DocumentViewModel();
+                return View(documentViewModel);
+            }
+            else
+                return Redirect("~/Identity/Account/Manage");
         }
 
         // GET: DocumentController/Details/5
@@ -93,8 +99,8 @@ namespace Bomix_Force.Controllers
                 }
                 else if (document.Type == "Especificações técnicas")
                 {
-                    Message += "<br>" +  "Tipo de balde: " + document.BucketType + "<br>";
-                    Message += "<br>" +  "Tipo de tampa: " + document.BucketLidType + "<br>";
+                    Message += "<br>" + "Tipo de balde: " + document.BucketType + "<br>";
+                    Message += "<br>" + "Tipo de tampa: " + document.BucketLidType + "<br>";
 
                 }
                 else if (document.Type == "Certidões negativas de débitos")

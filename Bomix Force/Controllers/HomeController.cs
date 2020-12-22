@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Bomix_Force.Models;
 using Microsoft.AspNetCore.Authorization;
 using Bomix_Force.AppServices;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bomix_Force.Controllers
 {
@@ -15,10 +16,12 @@ namespace Bomix_Force.Controllers
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
@@ -34,7 +37,15 @@ namespace Bomix_Force.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            var identityUser = _userManager.GetUserAsync(User);
+            if (identityUser.Result.EmailConfirmed == true)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("~/Identity/Account/Manage");
+            }
         }
 
 

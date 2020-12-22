@@ -91,9 +91,10 @@ namespace Bomix_Force
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             services.AddSingleton<ResetPassJob>();
-            services.AddSingleton(new JobSchedule(
-                    jobType: typeof(ResetPassJob),
-                    cronExpression: "0/15 * * * * ?")); // run every 15 seconds ( 0 0 00 1 1/3 ? - a cada 3 meses no dia 1º)
+            //TODO Master
+            //services.AddSingleton(new JobSchedule(
+            //        jobType: typeof(ResetPassJob),
+            //        cronExpression: "0 0 00 1 1/3 ?"));
             services.AddHostedService<QuartzHostedService>();
         }
 

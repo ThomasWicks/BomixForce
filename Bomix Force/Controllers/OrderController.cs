@@ -72,7 +72,7 @@ namespace Bomix_Force.Controllers
                 }
                 else
                 {
-                    return LocalRedirect("./Identity/Account/Manage");
+                    return Redirect("~/Identity/Account/Manage");
                 }
             }
             catch (Exception ex)
