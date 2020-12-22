@@ -9,9 +9,12 @@
         @*<a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
         <a class="pagina-atual">Não Conformidade</a>*@
     </div>
-    <p>
-        <a class="float-right mb-2 mr-3" type="button" asp-action="Create"><img class="ic-size" src="~/Assets/ic_add_non_conf.png" /></a>
-    </p>
+    @if (!User.IsInRole("Employee"))
+    {
+        <p>
+            <a class="float-right mb-2 mr-3" type="button" asp-action="Create"><img class="ic-size" src="~/Assets/ic_add_non_conf.png" /></a>
+        </p>
+    }
     <div class="table-responsive mt-5">
         <table class="table table-striped">
             <thead>
