@@ -73,6 +73,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account.Manage
             {
                 return RedirectToPage("./SetPassword");
             }
+            ViewData["emailConfirmed"] = user.EmailConfirmed ? "" : "Este é o seu primeiro acesso ou sua senha expirou, uma nova senha deve ser criada.";
 
             return Page();
         }

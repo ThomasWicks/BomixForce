@@ -12,6 +12,8 @@
                 <h5>Mudar senha</h5>
                 <form id="change-password-form" method="post">
                     @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                 <label>@ViewData["emailConfirmed"]</label>
+                    
                     <div class="login-inputs">
                         <label>Senha atual</label>
                         <input asp-for="Input.OldPassword" class="input" />
