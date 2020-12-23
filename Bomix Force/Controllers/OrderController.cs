@@ -105,8 +105,8 @@ namespace Bomix_Force.Controllers
                 List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
                 if (User.IsInRole("User"))
                 {
-                Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
-                company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
+                    Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                    company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
 
                 }
                 else
@@ -122,8 +122,8 @@ namespace Bomix_Force.Controllers
                 mensage = mensage.Replace("Pedido", order[0].Pedido);
                 foreach (var item in order)
                 {
-                string Orderpath = ".\\Views\\Template Email\\OrderTable.html";
-                StreamReader oederstr = new StreamReader(Orderpath);
+                    string Orderpath = ".\\Views\\Template Email\\OrderTable.html";
+                    StreamReader oederstr = new StreamReader(Orderpath);
                     string msg = oederstr.ReadToEnd();
                     msg = msg.Replace("Produto", item.Produto);
                     msg = msg.Replace("Qtd", item.Quantidade.ToString());
@@ -132,7 +132,7 @@ namespace Bomix_Force.Controllers
                 await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", mensage, null);
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -177,15 +177,15 @@ namespace Bomix_Force.Controllers
                 if (!String.IsNullOrEmpty(searchString))
                 {
 
-                    var orderViewPedido = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewEmissao = orderView.Where(o => o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewStatus = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewArte = orderView.Where(o => o.Arte.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewProduto = orderView.Where(o => o.Produto.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewPedido = orderView.Where(o => o.Pedido != null && o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewEmissao = orderView.Where(o => o.Emissao != null && o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewStatus = orderView.Where(o => o.Status != null && o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewArte = orderView.Where(o => o.Arte != null && o.Arte.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewProduto = orderView.Where(o => o.Produto != null && o.Produto.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao != null && o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     //var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
                     //var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCliente = orderView.Where(o => o.Cliente!=null && o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {

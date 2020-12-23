@@ -14,36 +14,36 @@
     <div class="clearfix mx-5">
         @if (ViewBag.indexEmployees)
         {
-        <a asp-area="" asp-controller="User" asp-action="Index" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
+            <a asp-area="" asp-controller="User" asp-action="Index" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
         }
         else
         {
 
-        <div>
-            <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
-        </div>
+            <div>
+                <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
+            </div>
         }
         @*@if (User.IsInRole("Employee"))
-        {
-            <div class="pagination-history">
-                <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-                <a class="pagina-atual">Clientes</a>
-            </div>
-        }
-        else if (User.IsInRole("Company"))
-        {
-            <div class="pagination-history">
-                <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-                <a class="pagina-atual">Funcionários</a>
-            </div>
-        }
-        else
-        {
-            <div class="pagination-history">
-                <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-                <a class="pagina-atual">Usuários</a>
-            </div>
-        }*@
+            {
+                <div class="pagination-history">
+                    <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+                    <a class="pagina-atual">Clientes</a>
+                </div>
+            }
+            else if (User.IsInRole("Company"))
+            {
+                <div class="pagination-history">
+                    <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+                    <a class="pagina-atual">Funcionários</a>
+                </div>
+            }
+            else
+            {
+                <div class="pagination-history">
+                    <a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+                    <a class="pagina-atual">Usuários</a>
+                </div>
+            }*@
         <div class="row ml-1 mt-4">
             @using (Html.BeginForm())
             {
@@ -51,7 +51,7 @@
                     <div class="search">
                         <input type="hidden" id="id" name="id" value="@ViewBag.indexEmployeeID">
                         <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
-                        @Html.TextBox("searchS  tring", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                        @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
                     </div>
                 </form>
             }
@@ -117,19 +117,38 @@
                 }
                 <div class="container">
                     <div class="row float-right">
-                        <div class="col-xs-12">
-                            @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, id = ViewBag.indexEmployeeID }),
-                                new X.PagedList.Mvc.Core.Common.PagedListRenderOptions()
-                                {
-                                 ContainerDivClasses = new[] { "container-pagination" },
-                                 LiElementClasses = new[] { "page-item" },
-                                 PageClasses = new[] { "attributes-pag" },
-                                 MaximumPageNumbersToDisplay = 4,
-                                 ActiveLiElementClass = "page-active",
-                                 DisplayEllipsesWhenNotShowingAllPageNumbers = false,
-                                 DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Never
-                                })
-                        </div>
+                        @if (@ViewBag.indexEmployees)
+                        {
+                            <div class="col-xs-12">
+                                @Html.PagedListPager(Model, pageNumber => Url.Action("indexEmployees", new { pageNumber, searchString = ViewBag.searchString, id = ViewBag.indexEmployeeID }),
+                                             new X.PagedList.Mvc.Core.Common.PagedListRenderOptions()
+                                             {
+                                                 ContainerDivClasses = new[] { "container-pagination" },
+                                                 LiElementClasses = new[] { "page-item" },
+                                                 PageClasses = new[] { "attributes-pag" },
+                                                 MaximumPageNumbersToDisplay = 4,
+                                                 ActiveLiElementClass = "page-active",
+                                                 DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+                                                 DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Never
+                                             })
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-xs-12">
+                                @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, searchString = ViewBag.searchString, id = ViewBag.indexEmployeeID }),
+                                             new X.PagedList.Mvc.Core.Common.PagedListRenderOptions()
+                                             {
+                                                 ContainerDivClasses = new[] { "container-pagination" },
+                                                 LiElementClasses = new[] { "page-item" },
+                                                 PageClasses = new[] { "attributes-pag" },
+                                                 MaximumPageNumbersToDisplay = 4,
+                                                 ActiveLiElementClass = "page-active",
+                                                 DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+                                                 DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Never
+                                             })
+                            </div>
+                        }
                     </div>
                 </div>
 
