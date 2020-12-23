@@ -82,7 +82,6 @@
         }).then((result) => {
             if (result.value) {
                 var pedidos = Pedido.toString();
-                //Pedidos = "0".concat(Pedido)
                 $('#duplicateModal').modal('hide');
                 document.getElementById('loadingSpinnerOverlay').style.display = 'block'
                 $.ajax({

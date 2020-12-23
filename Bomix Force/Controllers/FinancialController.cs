@@ -90,8 +90,8 @@ namespace Bomix_Force.Controllers
 
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    var financialNota = financialViewModel.Where(f => f.Nota.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var financialEmissao = financialViewModel.Where(f => f.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var financialNota = financialViewModel.Where(f =>f.Nota!=null && f.Nota.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var financialEmissao = financialViewModel.Where(f =>f.Emissao!=null && f.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     financialViewModel = financialNota.Union(financialEmissao).ToList();
                 }
                 switch (filter)

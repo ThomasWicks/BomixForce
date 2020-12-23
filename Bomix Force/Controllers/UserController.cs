@@ -60,13 +60,13 @@ namespace Bomix_Force.Controllers
             if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
 
-                List<Company> Company = _genericCompanyService.GetAll().ToList();
+                IEnumerable<Company> Company = _genericCompanyService.GetAll();
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
                 if (!String.IsNullOrEmpty(searchString))
                 {
 
-                    var userViewCompany = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                    var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewCompany = userView.Where(s => s.Name != null && s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewEmail = userView.Where(s => s.Email != null && s.Email.ToLower().Contains(searchString.ToLower())).ToList();
                     userView = userViewCompany.Union(userViewEmail).ToList();
 
                 }
@@ -87,10 +87,10 @@ namespace Bomix_Force.Controllers
                 if (!String.IsNullOrEmpty(searchString))
                 {
 
-                    var userViewName = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                    var userViewCargo = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
-                    var userViewSetor = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
-                    var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewName = userView.Where(s =>s.Name !=null && s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewCargo = userView.Where(s =>s.Cargo !=null && s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewSetor = userView.Where(s =>s.Setor !=null && s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
+                    var userViewEmail = userView.Where(s =>s.Email !=null && s.Email.ToLower().Contains(searchString.ToLower())).ToList();
                     userView = userViewName.Union(userViewCargo).Union(userViewSetor).Union(userViewEmail).Union(userViewName).ToList();
 
                 }
@@ -106,6 +106,7 @@ namespace Bomix_Force.Controllers
         }
         public ActionResult indexEmployees(int id, string searchString, int? pageNumber)
         {
+            ViewBag.searchString = searchString;
             int page = (pageNumber ?? 1);
             ViewBag.searchString = searchString;
             ViewBag.indexEmployeeID = id;
@@ -121,10 +122,10 @@ namespace Bomix_Force.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
 
-                var userViewName = userView.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
-                var userViewCargo = userView.Where(s => s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
-                var userViewSetor = userView.Where(s => s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
-                var userViewEmail = userView.Where(s => s.Email.ToLower().Contains(searchString.ToLower())).ToList();
+                var userViewName = userView.Where(s =>s.Name !=null && s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                var userViewCargo = userView.Where(s =>s.Cargo !=null && s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
+                var userViewSetor = userView.Where(s =>s.Setor !=null && s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
+                var userViewEmail = userView.Where(s =>s.Email !=null && s.Email.ToLower().Contains(searchString.ToLower())).ToList();
                 userView = userViewName.Union(userViewCargo).Union(userViewSetor).Union(userViewEmail).Union(userViewName).ToList();
 
             }
@@ -214,7 +215,7 @@ namespace Bomix_Force.Controllers
         [HttpGet]
         public JsonResult getUserName()
         {
-                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (User.IsInRole("Employee"))
             {
                 Employee employee = _genericEmployeeService.Get(e => e.IdentityUserId == userId).First();
@@ -231,7 +232,7 @@ namespace Bomix_Force.Controllers
                   "}";
                 return Json(json);
             }
-           
+
             else
             {
                 Person person = _genericPersonService.Get(p => p.IdentityUserId == userId).First();
@@ -244,7 +245,7 @@ namespace Bomix_Force.Controllers
             }
         }
         // GET: UserController/Edit/5
-        
+
         [Route("User/Edit/{id}")]
         public ActionResult Edit(int id)
         {
@@ -256,11 +257,11 @@ namespace Bomix_Force.Controllers
         }
         // POST: UserController/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(string IdentityUserId, string Name,string Id, string Setor, string Cargo, string Email, int CompanyId)
+        public async Task<ActionResult> Edit(string IdentityUserId, string Name, string Id, string Setor, string Cargo, string Email, int CompanyId)
         {
             try
             {
-                UserViewEdit userviewEdit = new UserViewEdit {Id=Convert.ToInt32(Id), IdentityUserId = IdentityUserId, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, CompanyId = CompanyId };
+                UserViewEdit userviewEdit = new UserViewEdit { Id = Convert.ToInt32(Id), IdentityUserId = IdentityUserId, Name = Name, Cargo = Cargo, Setor = Setor, Email = Email, CompanyId = CompanyId };
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 Person newperson = _mapper.Map<Person>(userviewEdit);
                 _genericPersonService.Update(newperson);
