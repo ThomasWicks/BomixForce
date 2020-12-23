@@ -51,7 +51,7 @@
                     <div class="search">
                         <input type="hidden" id="id" name="id" value="@ViewBag.indexEmployeeID">
                         <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
-                        @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                        @Html.TextBox("searchS  tring", null, new { placeholder = "Pesquisar", @class = "input-search" })
                     </div>
                 </form>
             }
@@ -138,7 +138,7 @@
             }
             else
             {
-                <div colspan="3" class="text-center">
+                <div colspan="3" class="text-center mt-3 ml-3">
                     <h6>Não foi possível encontrar Usuários.</h6>
                 </div>
             }
