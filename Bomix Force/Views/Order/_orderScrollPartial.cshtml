@@ -7,50 +7,39 @@
 {
     @foreach (var item in Model)
     {
-    <tr>
-        <th class="text-center">
-            @item.Pedido
+<tr>
+    <th class="text-center">
+        @item.Pedido
 
+    </th>
+    @if (@item.Produto != "")
+    {
+        <th class="text-center ">
+            @item.Produto
         </th>
-        @if (@item.Produto != "")
-        {
-            <th class="text-center ">
-                @item.Produto
-            </th>
 
-        }
-        else
-        {
-            <th class="text-center ">
-                -
-            </th>
-        }
-        @if (@item.Quantidade != 0)
-        {
-            <th class="text-center">
-                @item.Quantidade
-            </th>
+    }
+    else
+    {
+        <th class="text-center ">
+            -
+        </th>
+    }
+    @if (@item.Quantidade != 0)
+    {
+        <th class="text-center">
+            @item.Quantidade
+        </th>
 
-        }
-        else
-        {
-            <th class="text-center">
-                -
-            </th>
-        }
-        @if (@item.Arte != "")
-        {
-            <th class="text-center ">
-                @item.Arte
-            </th>
-
-        }
-        else
-        {
-            <th class="text-center ">
-                -
-            </th>
-        }
+    }
+    else
+    {
+        <th class="text-center">
+            -
+        </th>
+    }
+    @if (!User.IsInRole("Employee"))
+    {
         @if (@item.Personalizacao != "")
         {
             <th class="text-center">
@@ -65,6 +54,7 @@
             </th>
 
         }
+    }
         @if (!User.IsInRole("User") && !User.IsInRole("Company"))
         {
             <th class="text-center">

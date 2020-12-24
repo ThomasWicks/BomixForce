@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Bomix_Force.AppServices.Interface;
@@ -90,8 +91,9 @@ namespace Bomix_Force.Controllers
 
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    var financialNota = financialViewModel.Where(f =>f.Nota!=null && f.Nota.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var financialEmissao = financialViewModel.Where(f =>f.Emissao!=null && f.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    searchString = searchString.Trim();
+                    var financialNota = financialViewModel.Where(f => f.Nota != null && f.Nota.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var financialEmissao = financialViewModel.Where(f => f.Emissao != null && f.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     financialViewModel = financialNota.Union(financialEmissao).ToList();
                 }
                 switch (filter)
@@ -130,20 +132,20 @@ namespace Bomix_Force.Controllers
                 switch (typeFinancial)
                 {
                     case "NF":
-                        sufixPath = $"DANFE\\{Nota}.pdf";
+                        sufixPath = $"Danfe\\{Nota}.pdf";
                         typeFile = "pdf";
                         break;
-                    case "XAML":
+                    case "XML":
                         sufixPath = $"XML\\{Nota}.xml";
                         typeFile = "xml";
                         break;
                     case "Boletos":
-                        sufixPath = $"Boletos\\Itau\\${Nota}-${parcelaSelect} - bolitau.pdf";
+                        sufixPath = $"Boletos\\Itau\\{Nota}-{parcelaSelect} - bolitau.pdf";
                         typeFile = "pdf";
                         break;
                 }
                 string wwwPath = _environment.WebRootPath;
-                var path = wwwPath + $"\\Documentos\\{sufixPath}";
+                var path = wwwPath + $"\\documentos\\{sufixPath}";
 
                 var memory = new MemoryStream();
                 using (var stream = new FileStream(path, FileMode.Open))
@@ -165,7 +167,7 @@ namespace Bomix_Force.Controllers
         // GET: FinancialController/Details/5
         public ActionResult Details(string nota)
         {
-            FinancialViewModel financial =  financialViewModel.Where(e => e.Nota == nota).First();
+            FinancialViewModel financial = financialViewModel.Where(e => e.Nota == nota).First();
             return View(financial);
         }
 

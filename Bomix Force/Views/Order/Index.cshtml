@@ -64,20 +64,12 @@
                         <th class="text-center">
                             Quantidade
                         </th>
-                        <th class="text-center">
-                            Arte
-                            @if (ViewBag.filter == "ArteDesc")
-                            {
-                                <a href="@Url.Action("Index", "Order", new { filter = "ArteAsc" })"><i class="fas fa-caret-up"></i></a>
-                            }
-                            @if (ViewBag.filter != "ArteDesc")
-                            {
-                                <a href="@Url.Action("Index", "Order", new { filter = "ArteDesc" })"><i class="fas fa-caret-down"></i></a>
-                            }
-                        </th>
+                        @if (!User.IsInRole("Employee"))
+                        {
                         <th class="text-center">
                             Personalizado
                         </th>
+                        }
                         @if (!User.IsInRole("User") && !User.IsInRole("Company"))
                         {
                             <th class="text-center">

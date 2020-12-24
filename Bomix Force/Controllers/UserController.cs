@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Bomix_Force.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
 
 namespace Bomix_Force.Controllers
 {
@@ -59,7 +60,7 @@ namespace Bomix_Force.Controllers
                 userView = _mapper.Map<IEnumerable<UserViewModel>>(Company).ToList();
                 if (!String.IsNullOrEmpty(searchString))
                 {
-
+                    searchString = searchString.Trim();
                     var userViewCompany = userView.Where(s => s.Name != null && s.Name.ToLower().Contains(searchString.ToLower())).ToList();
                     var userViewEmail = userView.Where(s => s.Email != null && s.Email.ToLower().Contains(searchString.ToLower())).ToList();
                     userView = userViewCompany.Union(userViewEmail).ToList();
@@ -81,7 +82,7 @@ namespace Bomix_Force.Controllers
                 }
                 if (!String.IsNullOrEmpty(searchString))
                 {
-
+                    searchString = searchString.Trim();
                     var userViewName = userView.Where(s =>s.Name !=null && s.Name.ToLower().Contains(searchString.ToLower())).ToList();
                     var userViewCargo = userView.Where(s =>s.Cargo !=null && s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();
                     var userViewSetor = userView.Where(s =>s.Setor !=null && s.Setor.ToLower().Contains(searchString.ToLower())).ToList();
@@ -116,6 +117,7 @@ namespace Bomix_Force.Controllers
             }
             if (!String.IsNullOrEmpty(searchString))
             {
+                searchString = searchString.Trim();
 
                 var userViewName = userView.Where(s =>s.Name !=null && s.Name.ToLower().Contains(searchString.ToLower())).ToList();
                 var userViewCargo = userView.Where(s =>s.Cargo !=null && s.Cargo.ToLower().Contains(searchString.ToLower())).ToList();

@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using System.Text.RegularExpressions;
 
 namespace Bomix_Force.Controllers
 {
@@ -176,26 +177,27 @@ namespace Bomix_Force.Controllers
                 IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 if (!String.IsNullOrEmpty(searchString))
                 {
-
+                    searchString = searchString.Trim();
                     var orderViewPedido = orderView.Where(o => o.Pedido != null && o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewEmissao = orderView.Where(o => o.Emissao != null && o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewStatus = orderView.Where(o => o.Status != null && o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewArte = orderView.Where(o => o.Arte != null && o.Arte.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewProduto = orderView.Where(o => o.Produto != null && o.Produto.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao != null && o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    //var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
-                    //var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewCliente = orderView.Where(o => o.Cliente!=null && o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
                         orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).
-                            Union(orderViewPersonalizacao).Union(orderViewProduto).Union(orderViewArte).Union(orderViewCliente).ToList();
+                            Union(orderViewPersonalizacao).Union(orderViewProduto).Union(orderViewCidade)
+                            .Union(orderViewUF).Union(orderViewCliente).ToList();
                     }
                     else
                     {
                         orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewPersonalizacao)
-                            .Union(orderViewProduto).Union(orderViewArte).Union(orderViewStatus).ToList();
+                            .Union(orderViewCidade).Union(orderViewUF)
+                            .Union(orderViewProduto).Union(orderViewStatus).ToList();
                     }
 
                 }
