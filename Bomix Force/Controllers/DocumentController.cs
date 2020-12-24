@@ -75,6 +75,19 @@ namespace Bomix_Force.Controllers
         {
             try
             {
+                List<string> documentos = new List<string>();
+                if (document.AF) documentos.Add("Alvará de funcionamento");
+                if (document.AVCB) documentos.Add("AVCB – Auto de vistoria do Corpo de Bombeiros");
+                if (document.AS) documentos.Add("Alvará sanitário");
+                if (document.LA) documentos.Add("Licença ambiental");
+                if (document.CISSO9001) documentos.Add("Certificado ISO 9001");
+                if (document.CFSSC22000) documentos.Add("Certificado FSSC 22000");
+                if (document.LMG) documentos.Add("Laudo de migração");
+                if (document.LMB) documentos.Add("Laudo microbiológico");
+                if (document.ET) documentos.Add("Especificações técnicas");
+                if (document.CND) documentos.Add("Certidões negativas de débitos");
+                if (document.DAA) documentos.Add("Declaração ausência de alergênicos");
+                if (document.OT) documentos.Add("Outros");
                 Company company = new Company();
                 if (User.IsInRole("Company"))
                 {
@@ -92,24 +105,27 @@ namespace Bomix_Force.Controllers
 
                 string Message = string.Format(
                     "Prezado(a), <br> " +
-                    "o cliente <b>{0}</b> de cnpj: {1}, abriu um requerimento solicitando o seguinte documento: {2} <br> \n ", company.Name, company.Cnpj, document.Type);
-                if (document.Type == "Outros")
+                    "o cliente <b>{0}</b> de cnpj: {1}, abriu um requerimento solicitando o(s) seguinte(s) documento(s): <br> \n ", company.Name, company.Cnpj);
+                foreach (string documento in documentos)
                 {
-                    Message += "<br>" + "Outros: " + document.Other;
-                }
-                else if (document.Type == "Especificações técnicas")
-                {
-                    Message += "<br>" + "Tipo de balde: " + document.BucketType + "<br>";
-                    Message += "<br>" + "Tipo de tampa: " + document.BucketLidType + "<br>";
-
-                }
-                else if (document.Type == "Certidões negativas de débitos")
-                {
-                    Message += "<br>" + "Tipo: " + document.Debit + "<br>";
+                    Message += "<br> -" + documento;
+                    if (documento == "Outros")
+                    {
+                        Message += "<br>" + "--Outros: " + document.Other;
+                    }
+                    else if (documento == "Especificações técnicas")
+                    {
+                        Message += "<br>" + "Tipo de balde: " + document.BucketType + "<br>";
+                        Message += "<br>" + "Tipo de tampa: " + document.BucketLidType + "<br>";
+                    }
+                    else if (documento == "Certidões negativas de débitos")
+                    {
+                        Message += "<br>" + "Tipo de certidão: " + document.Debit + "<br>";
+                    }
                 }
                 Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
                 await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Documento", Message, document.FilePath);
-                Notify("Documento enviado com sucesso", "Documento");
+                Notify("Documento(s) enviado(s) com sucesso", "Documento");
                 return RedirectToAction(nameof(Index));
             }
             catch

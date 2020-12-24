@@ -8,7 +8,18 @@ namespace Bomix_Force.ViewModels
 {
     public class DocumentViewModel
     {
-        public string Type { get; set; }
+        public bool AF { get; set; }
+        public bool AVCB { get; set; }
+        public bool AS { get; set; }
+        public bool LA { get; set; }
+        public bool CISSO9001 { get; set; }
+        public bool CFSSC22000 { get; set; }
+        public bool LMG { get; set; }
+        public bool LMB { get; set; }
+        public bool ET { get; set; }
+        public bool CND { get; set; }
+        public bool DAA { get; set; }
+        public bool OT { get; set; }
         public string BucketType { get; set; }
         public string BucketLidType { get; set; }
         public string Debit { get; set; }

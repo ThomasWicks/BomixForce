@@ -9,11 +9,11 @@
     </div>
 }
 <div class="container createNonconf">
-    <div >
+    <div>
         <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
         @*<a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-        <a asp-action="Index" class="pagina-anterior">Não Conformidade /</a>
-        <a class="pagina-atual">Registar não Conformidade</a>*@
+            <a asp-action="Index" class="pagina-anterior">Não Conformidade /</a>
+            <a class="pagina-atual">Registar não Conformidade</a>*@
     </div>
     @*<h3 class="text-center title-font">Documentos</h3>*@
     <hr />
@@ -22,81 +22,87 @@
         <div class="align-items-center col-md-6">
             <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-12">
-                    <label asp-for="@Model.Type">Tipo</label>
-                    <select id="´selectCreateSetor" onchange="showfields(this.value)" asp-for="@Model.Type" class="form-control">
-                        <option value="">Selecione o tipo de documento</option>
-                        <option value="Alvará de funcionamento">Alvará de funcionamento</option>
-                        <option value="AVCB – Auto de vistoria do Corpo de Bombeiros">AVCB – Auto de vistoria do Corpo de Bombeiros </option>
-                        <option value="Alvará sanitário">Alvará sanitário</option>
-                        <option value="Licença ambiental">Licença ambiental</option>
-                        <option value="Certificado ISSO 9001">Certificado ISSO 9001</option>
-                        <option value="Certificado FSSC 22000">Certificado FSSC 22000</option>
-                        <option value="Laudo de migração">Laudo de migração</option>
-                        <option value="Laudo microbiológico">Laudo microbiológico</option>
-                        <option value="Especificações técnicas">Especificações técnicas</option>
-                        <option value="Certidões negativas de débitos">Certidões negativas de débitos</option>
-                        <option value="Declaração ausência de alergênicos">Declaração ausência de alergênicos</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                    <span id="createSetorSpan" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12" id="BucketLidType" style="display: none">
-                    <label class="control-label font-project">Tipo de tampa</label>
-                    <input asp-for="BucketLidType" class="form-control input font-project" />
-                    <span asp-validation-for="BucketLidType" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12" id="BucketType" style="display: none">
-                    <label class="control-label font-project">Tipo de balde</label>
-                    <input asp-for="BucketType" class="form-control input font-project" />
-                    <span asp-validation-for="BucketType" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12" id="Other" style="display: none">
-                    <label class="control-label font-project">Outros</label>
-                    <input asp-for="Other" class="form-control input font-project" />
-                    <span asp-validation-for="Other" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12" id="Type" style="display: none">
-                    <label asp-for="@Model.Type">Tipo</label>
-                    <select id="´selectCreateSetor" asp-for="@Model.Type" class="form-control">
-                        <option value="">Selecione o tipo de certidão</option>
-                        <option value="Municipais">Municipais</option>
-                        <option value="Estaduais">Estaduais</option>
-                        <option value="Federais">Federais</option>
-                    </select>
-                    <span id="createSetorSpan" class="text-danger"></span>
-                </div>
-                <div>
+                <label value="">Selecione o tipo de documento</label> <br />
+                <div class="multiselect">
+                    <div class="selectBox" onclick="showCheckboxes()">
+                        <select>
+                            <option>Select an option</option>
+                        </select>
+                        <div class="overSelect"></div>
+                    </div>
+                    <div id="checkboxes" class="form-group col-12">
 
-                    <div id="prodImagem" style="width: 50px; height: 50px; display: none; position: absolute; padding: 5px; margin-left:35%">
-                        <img src="~/Assets/Etiqueta.png" />
+                        <input type="checkbox" asp-for="@Model.AF">Alvará de funcionamento<br />
+                        <input type="checkbox" asp-for="@Model.AVCB">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
+                        <input type="checkbox" asp-for="@Model.AS">Alvará sanitário<br />
+                        <input type="checkbox" asp-for="@Model.LA">Licença ambiental<br />
+                        <input type="checkbox" asp-for="@Model.CISSO9001">Certificado ISO 9001<br />
+                        <input type="checkbox" asp-for="@Model.CFSSC22000">Certificado FSSC 22000<br />
+                        <input type="checkbox" asp-for="@Model.LMG">Laudo de migração<br />
+                        <input type="checkbox" asp-for="@Model.LMB">Laudo microbiológico<br />
+                        <input type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
+                        <input type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
+                        <input type="checkbox" asp-for="@Model.DAA">Declaração ausência de alergênicos<br />
+                        <input type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
+                        <span id="createSetorSpan" class="text-danger" />
+                    </div>
+                    </div>
+                    <div class="form-group col-12" id="BucketLidType" style="display: none">
+                        <label class="control-label font-project">Tipo de tampa</label>
+                        <input asp-for="BucketLidType" class="form-control input font-project" />
+                        <span asp-validation-for="BucketLidType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-12" id="BucketType" style="display: none">
+                        <label class="control-label font-project">Tipo de balde</label>
+                        <input asp-for="BucketType" class="form-control input font-project" />
+                        <span asp-validation-for="BucketType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-12" id="Other" style="display: none">
+                        <label class="control-label font-project">Outros</label>
+                        <input asp-for="Other" class="form-control input font-project" />
+                        <span asp-validation-for="Other" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-12" id="Type" style="display: none">
+                        <label asp-for="@Model.Debit">Tipo</label>
+                        <select id="´selectCreateSetor" asp-for="@Model.Debit" class="form-control">
+                            <option value="">Selecione o tipo de certidão</option>
+                            <option value="Municipais">Municipais</option>
+                            <option value="Estaduais">Estaduais</option>
+                            <option value="Federais">Federais</option>
+                        </select>
+                        <span id="createSetorSpan" class="text-danger"></span>
+                    </div>
+                    <div>
+
+                        <div id="prodImagem" style="width: 50px; height: 50px; display: none; position: absolute; padding: 5px; margin-left:35%">
+                            <img src="~/Assets/Etiqueta.png" />
+                        </div>
+                        <br />
+                    </div>
+                    <div>
+                        <label>
+                            Aqui, você poderá inserir algum anexo, como questionários ou alguma declaração para assinatura.
+                        </label>
+                    </div>
+                    <div class="image-upload text-center">
+                        <label for="FilePath">
+                            <img style="width: 60px; height: 60px; cursor: pointer;" src="~/Assets/ic_upload.png" />
+                        </label>
+                        <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png" />
+                        <div id="preview">
+                            <p>Nenhum arquivo selecionado.</p>
+                        </div>
+                    </div>
+                    <div style="margin-top:15px">
+                        <output name="result"></output>
                     </div>
                     <br />
-                </div>
-                <div>
-                    <label>
-                        Aqui, você poderá inserir algum anexo, como questionários ou alguma declaração para assinatura.
-                    </label>
-                </div>
-                <div class="image-upload text-center">
-                    <label for="FilePath">
-                        <img style="width: 60px; height: 60px; cursor: pointer;" src="~/Assets/ic_upload.png" />
-                    </label>
-                    <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png" />
-                    <div id="preview">
-                        <p>Nenhum arquivo selecionado.</p>
-                    </div>
-                </div>
-                <div style="margin-top:15px">
-                    <output name="result"></output>
-                </div>
-                <br />
-                <br />
+                    <br />
 
-                <div class="form-group float-right">
-                    <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
-                </div>
-                <a asp-controller="Home" asp-action="Login" class="btn btn-danger float-left font-project " style="color: white; background-color: #D52229;">Voltar</a>
+                    <div class="form-group float-right">
+                        <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
+                    </div>
+                    <a asp-controller="Home" asp-action="Login" class="btn btn-danger float-left font-project " style="color: white; background-color: #D52229;">Voltar</a>
             </form>
         </div>
     </div>
@@ -169,27 +175,35 @@
         return fileTypes.includes(file.type);
     }
 
-    function showfields(value) {
-        if (value == "Outros") {
-            $('#Type').hide();
-            $('#BucketLidType').hide();
-            $('#BucketType').hide();
-            $('#Other').show();
-        } else if (value == "Especificações técnicas") {
-            $('#Type').hide();
-            $('#BucketLidType').show();
-            $('#BucketType').show();
-            $('#Other').hide();
-        } else if (value == "Certidões negativas de débitos") {
-            $('#Type').show();
-            $('#BucketLidType').hide();
-            $('#BucketType').hide();
-            $('#Other').hide();
+    function showfieldsOther() {
+        var value = document.getElementById("othersCheckBox").checked;
+
+
+        value ? $('#Other').show() : $('#Other').hide();
+    }
+    function showfieldsCertNegDeb() {
+        var value = document.getElementById("CertNegDebCheckBox").checked;
+        value ? $('#Type').show() : $('#Type').hide();
+    }
+    function showfieldsEspecTec() {
+        var value = document.getElementById("espectecCheckBox").checked;
+
+        value ? ($('#BucketLidType').show(),
+            $('#BucketType').show()) : ($('#BucketLidType').hide(),
+                $('#BucketType').hide())
+    }
+
+
+    var expanded = false;
+
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
         } else {
-            $('#Type').hide();
-            $('#BucketLidType').hide();
-            $('#BucketType').hide();
-            $('#Other').hide();
+            checkboxes.style.display = "none";
+            expanded = false;
         }
     }
 </script>
@@ -199,4 +213,42 @@
         height: 12px;
         width: 12px;
     }
+
+
+
+
+
+    .multiselect {
+        width: 200px;
+    }
+
+    .selectBox {
+        position: relative;
+    }
+
+        .selectBox select {
+            width: 100%;
+            font-weight: bold;
+        }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    #checkboxes {
+        display: none;
+        border: 1px #dadada solid;
+    }
+
+        #checkboxes label {
+            display: block;
+        }
+
+            #checkboxes label:hover {
+                background-color: #1e90ff;
+            }
 </style>
