@@ -19,10 +19,8 @@
         {
             <form id="typeSearch" asp-controller="Order" asp-action="Index">
                 <div class="row mt-3">
-                    @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
-                            <option value="nOrder">Número pedido</option>
-                            <option value="status">Status</option>
-                        </select>*@
+                    <input name="dateInit" id="dateInit" type="date">
+                    <input name="dateEnd" id="dateEnd" type="date">
                     <div class="search ml-2">
                         <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
                         @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })

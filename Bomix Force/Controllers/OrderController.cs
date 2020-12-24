@@ -49,7 +49,7 @@ namespace Bomix_Force.Controllers
         }
         // GET: OrderController
         public static volatile List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
-        public ActionResult Index(string searchString, string filter)
+        public ActionResult Index(string searchString, DateTime dateInit, DateTime dateEnd, string filter)
         {
 
             try
@@ -58,9 +58,14 @@ namespace Bomix_Force.Controllers
                 if (identityUser.Result.EmailConfirmed == true)
                 {
                     ViewBag.filter = filter;
+                    ViewBag.dateInit = dateInit;
+                    ViewBag.dateEnd = dateEnd;
                     ViewBag.searchString = searchString;
+                    
+                    string dateInitString = dateInit == DateTime.MinValue ? DateTime.Now.AddYears(-2).Date.ToString() : dateInit.Date.ToString();
+                    string dateEndString = dateEnd == DateTime.MinValue ? DateTime.Now.Date.ToString() : dateEnd.Date.ToString();
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    orders = _pedidoVendaRepository.GetParameters("PCP", DateTime.Now.AddYears(-2).Date.ToString(), DateTime.Now.Date.ToString(), user).ToList();
+                    orders = _pedidoVendaRepository.GetParameters("PCP", dateInitString, dateEndString, user).ToList();
                     List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
                     if (orders.Count == 0)
                     {
@@ -185,7 +190,7 @@ namespace Bomix_Force.Controllers
                     var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao != null && o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewCliente = orderView.Where(o => o.Cliente!=null && o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCliente = orderView.Where(o => o.Cliente != null && o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
