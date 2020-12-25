@@ -109,11 +109,14 @@ namespace Bomix_Force.Controllers
                 Company company = new Company();
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
+                Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                var emailUser = person.Email;
+                var personCompanyId = person.CompanyId;
                 if (User.IsInRole("User"))
                 {
-                    Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
-                    company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
-
+                    //Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                    company = _genericCompanyService.Get(u => u.Id == personCompanyId).First();
+                    //var emailUser = person.Email;
                 }
                 else
                 {
@@ -136,6 +139,7 @@ namespace Bomix_Force.Controllers
                     mensage = mensage.Replace("<!--replace-->", msg);
                 };
                 await _emailSender.SendEmailAsync("bomixforcedev@gmail.com", "Replicação Pedido", mensage, null);
+                await _emailSender.SendEmailAsync(emailUser, "Confirmação da duplicação do pedido", "Solicitação de duplicação do pedido de número " + " " + order[0].Pedido + " " + " realizada com sucesso", null);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
