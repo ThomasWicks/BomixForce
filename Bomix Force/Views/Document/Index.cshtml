@@ -26,27 +26,27 @@
                 <div class="multiselect">
                     <div class="selectBox" onclick="showCheckboxes()">
                         <select>
-                            <option>Select an option</option>
+                            <option>Selecione a opção</option>
                         </select>
                         <div class="overSelect"></div>
                     </div>
-                    <div id="checkboxes" class="form-group col-12">
+                    <div id="checkboxes" class="form-group col-12" style="text-align:start; ">
 
-                        <input type="checkbox" asp-for="@Model.AF">Alvará de funcionamento<br />
-                        <input type="checkbox" asp-for="@Model.AVCB">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
-                        <input type="checkbox" asp-for="@Model.AS">Alvará sanitário<br />
-                        <input type="checkbox" asp-for="@Model.LA">Licença ambiental<br />
-                        <input type="checkbox" asp-for="@Model.CISSO9001">Certificado ISO 9001<br />
-                        <input type="checkbox" asp-for="@Model.CFSSC22000">Certificado FSSC 22000<br />
-                        <input type="checkbox" asp-for="@Model.LMG">Laudo de migração<br />
-                        <input type="checkbox" asp-for="@Model.LMB">Laudo microbiológico<br />
-                        <input type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
-                        <input type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
-                        <input type="checkbox" asp-for="@Model.DAA">Declaração ausência de alergênicos<br />
-                        <input type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AF">Alvará de funcionamento<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AS">Alvará sanitário<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LA">Licença ambiental<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001">Certificado ISO 9001<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000">Certificado FSSC 22000<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG">Laudo de migração<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB">Laudo microbiológico<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA">Declaração ausência de alergênicos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
                         <span id="createSetorSpan" class="text-danger" />
                     </div>
-                    </div>
+                </div>
                     <div class="form-group col-12" id="BucketLidType" style="display: none">
                         <label class="control-label font-project">Tipo de tampa</label>
                         <input asp-for="BucketLidType" class="form-control input font-project" />
@@ -218,8 +218,10 @@
 
 
 
+
     .multiselect {
         width: 200px;
+        display: inline-block
     }
 
     .selectBox {
@@ -228,7 +230,6 @@
 
         .selectBox select {
             width: 100%;
-            font-weight: bold;
         }
 
     .overSelect {
@@ -241,6 +242,7 @@
 
     #checkboxes {
         display: none;
+        background-color: initial;
         border: 1px #dadada solid;
     }
 
