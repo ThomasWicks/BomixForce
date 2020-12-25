@@ -31,13 +31,16 @@
                     <th class="text-center text-white">
                         Status
                     </th>
-                    @if (User.IsInRole("Employee"))
+                    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
                     {
                         <th class="text-center text-white">
                             Upload
                         </th>
+                        <th class="text-center text-white">
+                            Download
+                        </th>
                     }
-                    @if (User.IsInRole("User"))
+                    @if (User.IsInRole("User") || User.IsInRole("Company"))
                     {
                         <th class="text-center text-white">
                             Ações
@@ -83,8 +86,7 @@
                                     </form>
                                 </td>
                             }
-                            @if (User.IsInRole("User"))
-                            {
+                         
                                 <td class="text-center">
                                     <form asp-action="Download">
                                         <input type="hidden" id="Id" name="Id" value="@item.Id" />
@@ -94,7 +96,7 @@
                                         }
                                     </form>
                                 </td>
-                            }
+                            
 
 
                         </tr>
