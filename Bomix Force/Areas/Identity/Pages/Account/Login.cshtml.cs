@@ -14,6 +14,10 @@ using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.Data.Entities;
+using Bomix_Force.Models;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Bomix_Force.Areas.Identity.Pages.Account
 {
@@ -117,7 +121,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                         {
                             await _signInManager.SignOutAsync();
                             ModelState.AddModelError("loginError", "Acesso expirado, entre em contato com o comercial da Bomix");
-                            return Page();
+                            Notify("Entre em contato com o comercial da Bomix.", "Acesso expirado", NotificationType.warning);
                         }
                     }
                     if (result.RequiresTwoFactor)
@@ -146,6 +150,34 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 ModelState.AddModelError("loginError", "Erro desconhecido, se permanecer contate um administrador");
                 return LocalRedirect("/Identity/Account/Manage");
             }
+        }
+        public void Notify(string message, string title = "Sweet Alert Toastr Demo",
+                                   NotificationType notificationType = NotificationType.success)
+        {
+            var msg = new
+            {
+                message = message,
+                title = title,
+                icon = notificationType.ToString(),
+                type = notificationType.ToString(),
+                provider = GetProvider()
+            };
+
+            TempData["Message"] = JsonConvert.SerializeObject(msg);
+        }
+
+        private string GetProvider()
+        {
+            var builder = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                            .AddEnvironmentVariables();
+
+            IConfigurationRoot configuration = builder.Build();
+
+            var value = configuration["NotificationProvider"];
+
+            return value;
         }
     }
 }
