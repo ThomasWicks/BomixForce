@@ -11,8 +11,8 @@
                 <div class="row">
                     <h5 class="col-6"><strong>Numero do Pedido: @Model[0].Pedido</strong></h5>
                     <div class="col-6 float-right">
-                        <input class="float-right"/>
-                        <h5 class="float-right mr-1">Ordem de pedido</h5>
+                        <input class="form-control col-6 float-right" type="number" style="height: 30px" id="OrdemDeCompra"/>
+                        <h5 class="float-right mr-1">Ordem de compra:  </h5>
                     </div>
                 </div>
                 <div class="table-responsive mt-2 scroll">
@@ -78,7 +78,9 @@
 <script>
     function duplicate() {
         var Pedido = document.getElementById("pedido").innerText
+        var Ordem = $("#OrdemDeCompra").val();
         console.log(Pedido)
+        console.log(Ordem)
         Swal.fire({
           title: 'Deseja duplicar pedido?',
           icon: 'warning',
@@ -93,7 +95,8 @@
                 $.ajax({
                     url: 'Duplicate',
                     data: {
-                        Pedido: Pedido
+                        Pedido: Pedido,
+                        Ordem: Ordem
                     },
                     complete: function (e, xhr, settings) {
                         document.getElementById('loadingSpinnerOverlay').style.display = 'none'
