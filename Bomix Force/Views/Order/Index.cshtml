@@ -29,13 +29,13 @@
                     <div class="form-group mr-2">
                         <label for="example-date-input" class="col-2 col-form-label ">Inicio</label>
                         <div class="">
-                            <input class="form-control" name="dateInit" id="dateInit" type="date">
+                            <input class="form-control" value="@(ViewBag.dateInit)"name="dateInit" id="dateInit" type="date">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="example-date-input" class="col-2 col-form-label">Fim</label>
                         <div class="">
-                            <input class="form-control" name="dateEnd" id="dateEnd" type="date">
+                            <input class="form-control" value="@(ViewBag.dateEnd)" name="dateEnd" id="dateEnd" type="date">
                         </div>
                     </div>
                     @*<input name="dateInit" id="dateInit" type="date">
@@ -185,6 +185,7 @@
 <script src="~/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
         $("#loadingdiv").hide();
         var filter = '@(ViewBag.filter)'
         var searchString = '@(ViewBag.searchString)'

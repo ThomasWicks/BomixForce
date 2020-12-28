@@ -58,8 +58,8 @@ namespace Bomix_Force.Controllers
                 if (identityUser.Result.EmailConfirmed == true)
                 {
                     ViewBag.filter = filter;
-                    ViewBag.dateInit = dateInit;
-                    ViewBag.dateEnd = dateEnd;
+                    ViewBag.dateInit = dateInit == DateTime.MinValue? null:dateInit.Date.ToString("yyyy-MM-dd");
+                    ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
                     ViewBag.searchString = searchString;
                     
                     string dateInitString = dateInit == DateTime.MinValue ? DateTime.Now.AddYears(-2).Date.ToString() : dateInit.Date.ToString();
