@@ -102,7 +102,7 @@ namespace Bomix_Force.Controllers
 
         [HttpPost]
         // Post: OrderController/Duplicate/5
-        public async Task<ActionResult> Duplicate(string Pedido)
+        public async Task<ActionResult> Duplicate(string Pedido, string Ordem)
         {
             try
             {
@@ -129,6 +129,7 @@ namespace Bomix_Force.Controllers
                 mensage = mensage.Replace("NomeCliente", company.Name);
                 mensage = mensage.Replace("CnpjCliente", company.Cnpj);
                 mensage = mensage.Replace("Pedido", order[0].Pedido);
+                mensage = mensage.Replace("Ordem", Ordem);
                 foreach (var item in order)
                 {
                     string Orderpath = ".\\Views\\Template Email\\OrderTable.html";

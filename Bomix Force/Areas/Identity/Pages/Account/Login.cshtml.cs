@@ -12,6 +12,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using Bomix_Force.Repo.Interface;
+using Bomix_Force.Data.Entities;
+using Bomix_Force.Models;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Bomix_Force.Areas.Identity.Pages.Account
 {
@@ -21,14 +27,23 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IBomixNotaFiscalVendaRepository _bomixNotaFiscalVendaRepository;
+        private readonly IGenericRepository<Company> _genericCompanyRepository;
+        private readonly IGenericRepository<Person> _genericPersonRepository;
 
         public LoginModel(SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IBomixNotaFiscalVendaRepository bomixNotaFiscalVendaRepository,
+            IGenericRepository<Person> genericPersonRepository,
+            IGenericRepository<Company> genericCompanyRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _bomixNotaFiscalVendaRepository = bomixNotaFiscalVendaRepository;
+            _genericPersonRepository = genericPersonRepository;
+            _genericCompanyRepository = genericCompanyRepository;
         }
 
         [BindProperty]
@@ -75,47 +90,94 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
-            if (ModelState.IsValid)
+            try
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                returnUrl ??= Url.Content("~/");
+                if (ModelState.IsValid)
                 {
-
-                    _logger.LogInformation("User logged in.");
-                    var user = await _userManager.FindByNameAsync(Input.UserName);
-                    if (user.EmailConfirmed)
+                    // This doesn't count login failures towards account lockout
+                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                    var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                    if (result.Succeeded)
                     {
-                        return LocalRedirect(returnUrl);
+
+                        _logger.LogInformation("User logged in.");
+                        var user = await _userManager.FindByNameAsync(Input.UserName);
+                        var person = _genericPersonRepository.Get(g => g.IdentityUserId == user.Id);
+                        Company company = _genericCompanyRepository.GetById(person.First().CompanyId);
+                        List<Bomix_NotaFiscalVenda> bomix_NotaFiscalVenda = _bomixNotaFiscalVendaRepository.GetParameters(DateTime.Now.AddYears(-1).ToString(), DateTime.Now.ToString(), company.IdentityUserId);
+                        if (bomix_NotaFiscalVenda.Count > 0)
+                        {
+                            if (user.EmailConfirmed)
+                            {
+                                return LocalRedirect(returnUrl);
+                            }
+                            else
+                            {
+                                return LocalRedirect("/Identity/Account/Manage");
+                            }
+                        }
+                        else
+                        {
+                            await _signInManager.SignOutAsync();
+                            ModelState.AddModelError("loginError", "Acesso expirado, entre em contato com o comercial da Bomix");
+                            Notify("Entre em contato com o comercial da Bomix.", "Acesso expirado", NotificationType.warning);
+                        }
+                    }
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User account locked out.");
+                        return RedirectToPage("./Lockout");
                     }
                     else
                     {
+                        ModelState.AddModelError("loginError", "Usuário ou senha inválidos");
                         return LocalRedirect("/Identity/Account/Manage");
+
                     }
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
-                {
 
-                    ModelState.AddModelError("loginError", "Usuário ou senha inválidos");
-                    
-
-                    //return Page();
                 }
+
+                // If we got this far, something failed, redisplay form
+                return Page();
             }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("loginError", "Erro desconhecido, se permanecer contate um administrador");
+                return LocalRedirect("/Identity/Account/Manage");
+            }
+        }
+        public void Notify(string message, string title = "Sweet Alert Toastr Demo",
+                                   NotificationType notificationType = NotificationType.success)
+        {
+            var msg = new
+            {
+                message = message,
+                title = title,
+                icon = notificationType.ToString(),
+                type = notificationType.ToString(),
+                provider = GetProvider()
+            };
 
-            // If we got this far, something failed, redisplay form
-            return Page();
+            TempData["Message"] = JsonConvert.SerializeObject(msg);
+        }
+
+        private string GetProvider()
+        {
+            var builder = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                            .AddEnvironmentVariables();
+
+            IConfigurationRoot configuration = builder.Build();
+
+            var value = configuration["NotificationProvider"];
+
+            return value;
         }
     }
 }
