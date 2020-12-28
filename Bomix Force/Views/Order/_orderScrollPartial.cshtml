@@ -7,43 +7,41 @@
 {
     @foreach (var item in Model)
     {
-<tr>
-    <th class="text-center">
-        @item.Pedido
-
-    </th>
-    @if (@item.Produto != "")
-    {
-        <th class="text-center ">
-            @item.Produto
-        </th>
-
-    }
-    else
-    {
-        <th class="text-center ">
-            -
-        </th>
-    }
-    @if (@item.Quantidade != 0)
-    {
+    <tr>
         <th class="text-center">
-            @item.Quantidade
-        </th>
+            @item.Pedido
 
-    }
-    else
-    {
-        <th class="text-center">
-            -
         </th>
-    }
-    @if (!User.IsInRole("Employee"))
-    {
-        @if (@item.Personalizacao != "")
+        @if (@item.OrdemCompra != 0)
+        {
+            <th class="text-center ">
+                @item.OrdemCompra
+            </th>
+
+        }
+        else
+        {
+            <th class="text-center ">
+                -
+            </th>
+        }
+        @if (@item.Produto != "")
+        {
+            <th class="text-center ">
+                @item.Produto
+            </th>
+
+        }
+        else
+        {
+            <th class="text-center ">
+                -
+            </th>
+        }
+        @if (@item.Quantidade != 0)
         {
             <th class="text-center">
-                @item.Personalizacao
+                @item.Quantidade
             </th>
 
         }
@@ -52,9 +50,37 @@
             <th class="text-center">
                 -
             </th>
+        }
+        @if (@item.Valor != 0)
+        {
+            <th class="text-center">
+                @item.Valor
+            </th>
 
         }
-    }
+        else
+        {
+            <th class="text-center">
+                -
+            </th>
+        }
+        @if (!User.IsInRole("Employee"))
+        {
+            @if (@item.Personalizacao != "")
+            {
+                <th class="text-center">
+                    @item.Personalizacao
+                </th>
+
+            }
+            else
+            {
+                <th class="text-center">
+                    -
+                </th>
+
+            }
+        }
         @if (!User.IsInRole("User") && !User.IsInRole("Company"))
         {
             <th class="text-center">

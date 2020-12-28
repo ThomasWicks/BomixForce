@@ -267,6 +267,8 @@ namespace Bomix_Force.Controllers
                     order.Produto = !String.IsNullOrEmpty(order.Produto) ? order.Produto : "-";
                     order.Personalizacao = !String.IsNullOrEmpty(order.Personalizacao) ? order.Personalizacao : "-";
                     order.Quantidade = !String.IsNullOrEmpty(order.Quantidade.ToString()) ? order.Quantidade : 0;
+                    order.OrdemCompra = !String.IsNullOrEmpty(order.OrdemCompra.ToString()) ? order.OrdemCompra : 0;
+                    order.Valor = !String.IsNullOrEmpty(order.Valor.ToString()) ? order.Valor : 0;
 
 
                 }
