@@ -58,10 +58,10 @@ namespace Bomix_Force.Controllers
                 if (identityUser.Result.EmailConfirmed == true)
                 {
                     ViewBag.filter = filter;
-                    ViewBag.dateInit = dateInit == DateTime.MinValue? null:dateInit.Date.ToString("yyyy-MM-dd");
+                    ViewBag.dateInit = dateInit == DateTime.MinValue ? null : dateInit.Date.ToString("yyyy-MM-dd");
                     ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
                     ViewBag.searchString = searchString;
-                    
+
                     string dateInitString = dateInit == DateTime.MinValue ? DateTime.Now.AddYears(-2).Date.ToString() : dateInit.Date.ToString();
                     string dateEndString = dateEnd == DateTime.MinValue ? DateTime.Now.Date.ToString() : dateEnd.Date.ToString();
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -109,14 +109,13 @@ namespace Bomix_Force.Controllers
                 Company company = new Company();
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
-                Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
-                var emailUser = person.Email;
-                var personCompanyId = person.CompanyId;
+                string email = String.Empty;
                 if (User.IsInRole("User"))
                 {
-                    //Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                    Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                    var personCompanyId = person.CompanyId;
+                    email = person.Email;
                     company = _genericCompanyService.Get(u => u.Id == personCompanyId).First();
-                    //var emailUser = person.Email;
                 }
                 else
                 {
@@ -138,9 +137,9 @@ namespace Bomix_Force.Controllers
                     string msg = oederstr.ReadToEnd();
                     msg = msg.Replace("Produto", item.Produto);
                     msg = msg.Replace("Qtd", item.Quantidade.ToString());
-                    message = message.Replace("<!--replace-->", msg);
+                    mensage = mensage.Replace("<!--replace-->", msg);
                 };
-                await _emailSender.SendEmailAsync(employee.Email, "Replicação Pedido", message, null);
+                await _emailSender.SendEmailAsync(employee.Email, "Replicação Pedido", mensage, null);
                 await _emailSender.SendEmailAsync(email, "Replicação Pedido", $"A requisição do pedido de número: {order[0].Pedido} foi realiada com sucesso.", null);
                 return RedirectToAction(nameof(Index));
             }
