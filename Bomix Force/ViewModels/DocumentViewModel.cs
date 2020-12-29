@@ -8,6 +8,8 @@ namespace Bomix_Force.ViewModels
 {
     public class DocumentViewModel
     {
+        public int Id { get; set; }
+        public string IdentityUserId { get; set; }
         public bool AF { get; set; }
         public bool AVCB { get; set; }
         public bool AS { get; set; }
@@ -20,10 +22,14 @@ namespace Bomix_Force.ViewModels
         public bool CND { get; set; }
         public bool DAA { get; set; }
         public bool OT { get; set; }
+        public string Status { get; set; }
+        public string Type { get; set; }
+        public DateTime Date { get; set; }
         public string BucketType { get; set; }
         public string BucketLidType { get; set; }
         public string Debit { get; set; }
         public string Other { get; set; }
+        public string PathExtFile { get; set; }
         public List<IFormFile> FilePath { get; set; }
     }
 }

@@ -103,10 +103,36 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
 
                         _logger.LogInformation("User logged in.");
                         var user = await _userManager.FindByNameAsync(Input.UserName);
-                        var person = _genericPersonRepository.Get(g => g.IdentityUserId == user.Id);
-                        Company company = _genericCompanyRepository.GetById(person.First().CompanyId);
-                        List<Bomix_NotaFiscalVenda> bomix_NotaFiscalVenda = _bomixNotaFiscalVendaRepository.GetParameters(DateTime.Now.AddYears(-1).ToString(), DateTime.Now.ToString(), company.IdentityUserId);
-                        if (bomix_NotaFiscalVenda.Count > 0)
+                        if (User.IsInRole("User") || User.IsInRole("Company"))
+                        {
+                            Company company = new Company();
+                            if (User.IsInRole("User"))
+                            {
+                                var person = _genericPersonRepository.Get(g => g.IdentityUserId == user.Id);
+                                company = _genericCompanyRepository.GetById(person.First().CompanyId);
+                            }
+                            else company = _genericCompanyRepository.Get(c => c.IdentityUserId == user.Id).First();
+                            List<Bomix_NotaFiscalVenda> bomix_NotaFiscalVenda = _bomixNotaFiscalVendaRepository.GetParameters(DateTime.Now.AddYears(-1).ToString(), DateTime.Now.ToString(), company.IdentityUserId);
+
+                            if (bomix_NotaFiscalVenda.Count > 0)
+                            {
+                                if (user.EmailConfirmed)
+                                {
+                                    return LocalRedirect(returnUrl);
+                                }
+                                else
+                                {
+                                    return LocalRedirect("/Identity/Account/Manage");
+                                }
+                            }
+                            else
+                            {
+                                await _signInManager.SignOutAsync();
+                                ModelState.AddModelError("loginError", "Acesso expirado, entre em contato com o comercial da Bomix");
+                                Notify("Entre em contato com o comercial da Bomix.", "Acesso expirado", NotificationType.warning);
+                            }
+                        }
+                        else
                         {
                             if (user.EmailConfirmed)
                             {
@@ -116,12 +142,6 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                             {
                                 return LocalRedirect("/Identity/Account/Manage");
                             }
-                        }
-                        else
-                        {
-                            await _signInManager.SignOutAsync();
-                            ModelState.AddModelError("loginError", "Acesso expirado, entre em contato com o comercial da Bomix");
-                            Notify("Entre em contato com o comercial da Bomix.", "Acesso expirado", NotificationType.warning);
                         }
                     }
                     if (result.RequiresTwoFactor)
@@ -148,7 +168,8 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
             catch (Exception e)
             {
                 ModelState.AddModelError("loginError", "Erro desconhecido, se permanecer contate um administrador");
-                return LocalRedirect("/Identity/Account/Manage");
+                await _signInManager.SignOutAsync();
+                return Page();
             }
         }
         public void Notify(string message, string title = "Sweet Alert Toastr Demo",
