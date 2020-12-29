@@ -264,7 +264,7 @@ namespace Bomix_Force.Controllers
                     _genericDocumentService.Save();
                 }
                 Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
-                await _emailSender.SendEmailAsync(employee.Email, "Documento", Message, document.FilePath);
+                await _emailSender.SendEmailAsync(employee.Email, "Documento", Message, documentViewModel.FilePath);
                 Notify("Documento enviado com sucesso", "Documento");
                 return RedirectToAction(nameof(Index));
             }
