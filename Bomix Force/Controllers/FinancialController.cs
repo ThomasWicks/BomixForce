@@ -140,7 +140,7 @@ namespace Bomix_Force.Controllers
                         typeFile = "xml";
                         break;
                     case "Boletos":
-                        sufixPath = $"Boletos\\Itau\\{Nota}-{parcelaSelect} - bolitau.pdf";
+                        sufixPath = $"Boletos\\Itau\\{Nota}-{parcelaSelect}.pdf";
                         typeFile = "pdf";
                         break;
                 }

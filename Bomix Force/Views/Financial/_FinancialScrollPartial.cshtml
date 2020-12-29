@@ -13,6 +13,9 @@
             <td class="text-center ">
                 @Html.DisplayFor(modelItem => item.Emissao)
             </td>
+            <td class="text-center ">
+                @Html.DisplayFor(modelItem => item.Cliente)
+            </td>
             <td class="text-center">
                 <form asp-action="Details">
                     <input type="hidden" id="Nota" name="Nota" value="@item.Nota" />
