@@ -127,13 +127,12 @@
         var searchString = '@(ViewBag.searchString)'
         var orders = '@(ViewBag.orders)'
         var modelLenght = '@(Model?.Count)'
-        modelLenght = modelLenght ? modelLenght:0
-        var dataexist = false
+        modelLenght = modelLenght ? modelLenght : 0
+        var dataexist = true
         var inProgress = false
         currentPageNumber = 0;
         loadData(currentPageNumber)
         $(window).scroll(function () {
-
             if ($(window).scrollTop() + $(window).height() > $(document).height() - 20 && !inProgress && dataexist) {
                 inProgress = true;
                 currentPageNumber += 1;
