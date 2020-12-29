@@ -50,18 +50,22 @@ namespace Bomix_Force.Controllers
 
         }
         public static volatile List<FinancialViewModel> financialViewModel = new List<FinancialViewModel>();
-        public ActionResult Index(string filter, string searchString)
+        public ActionResult Index(string filter, string searchString,DateTime dateInit, DateTime dateEnd)
         {
             ViewBag.filter = filter;
             ViewBag.searchString = searchString;
+            ViewBag.dateInit = dateInit == DateTime.MinValue ? null : dateInit.Date.ToString("yyyy-MM-dd");
+            ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
 
+            string dateInitString = dateInit == DateTime.MinValue ? DateTime.Now.AddYears(-2).Date.ToString() : dateInit.Date.ToString();
+            string dateEndString = dateEnd == DateTime.MinValue ? DateTime.Now.Date.ToString() : dateEnd.Date.ToString();
             var identityUser = _userManager.GetUserAsync(User);
             if (identityUser.Result.EmailConfirmed == true)
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
 
-                financialViewModel = _mapper.Map<IEnumerable<FinancialViewModel>>(_bomixNotaFiscalVendaRepository.GetParameters(DateTime.Now.AddMonths(-3).ToString(), DateTime.Now.ToString(), user)).ToList();
+                financialViewModel = _mapper.Map<IEnumerable<FinancialViewModel>>(_bomixNotaFiscalVendaRepository.GetParameters(dateInitString, dateEndString, user)).ToList();
                 if (financialViewModel.Count == 0)
                 {
                     return View();
