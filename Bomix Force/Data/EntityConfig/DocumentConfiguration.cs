@@ -10,6 +10,18 @@ namespace Bomix_Force.Data.EntityConfig
         {
             builder.ToTable("DOCUMENT");
             builder.HasKey(e => new { e.Id });
+
+            builder.Property(u => u.Type)
+               .HasColumnName("TYPE")
+               .IsRequired();
+
+            builder.Property(u => u.Date)
+              .HasColumnName("DATE")
+              .IsRequired();
+
+            builder.Property(u => u.PathExtFile)
+              .HasColumnName("PATH")
+              .IsRequired();
         }
     }
 }
