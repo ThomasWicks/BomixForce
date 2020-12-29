@@ -21,26 +21,33 @@
             <form id="typeSearch" asp-controller="Order" asp-action="Index">
                 <div class="row">
                     <div class="form-group">
+                        <label for="example-date-input" class="col-2 col-form-label">Busca</label>
                         <div class="search ml-3 mr-2">
                             <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
                             @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
                         </div>
-                        <div class="form-group mr-2">
-                            <label for="example-date-input" class="col-2 col-form-label ">Inicio</label>
-                            <div class="">
-                                <input class="form-control" value="@(ViewBag.dateInit)" name="dateInit" id="dateInit" type="date">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="example-date-input" class="col-2 col-form-label">Fim</label>
-                            <div class="">
-                                <input class="form-control" value="@(ViewBag.dateEnd)" name="dateEnd" id="dateEnd" type="date">
-                            </div>
+                    </div>
+                    <div class="form-group mr-2">
+                        <label for="example-date-input" class="col-2 col-form-label ">Inicio</label>
+                        <div class="">
+                            <input class="form-control" value="@(ViewBag.dateInit)" name="dateInit" id="dateInit" type="date">
                         </div>
                     </div>
-                    <div class=" mb-5 ml-2">
-                        <button class="btn btn-primary font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
+                    <div class="form-group">
+                        <label for="example-date-input" class="col-2 col-form-label">Fim</label>
+                        <div class="">
+                            <input class="form-control" value="@(ViewBag.dateEnd)" name="dateEnd" id="dateEnd" type="date">
+                        </div>
                     </div>
+                    <div class="form-group mt-2 ml-2">
+                        <label for="example-date-input" class="col-2 col-form-label"></label>
+                        <div class="mt-1">
+                            <button class="btn btn-primary mr-4 font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
+                        </div>
+                    </div>
+                    @*<div class=" ml-2">
+            <button class="btn btn-primary font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
+        </div>*@
                 </div>
             </form>
 
