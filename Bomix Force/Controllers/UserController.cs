@@ -190,7 +190,10 @@ namespace Bomix_Force.Controllers
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Novo usuário criado.");
+                        Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
+
                         await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass, null);
+                        await _emailSender.SendEmailAsync(employee.Email, "Cadastro usuário",$"O Cliente {company.Name} criou o usuario {person.Name}." , null); ;
 
 
                         return RedirectToAction(nameof(Index));

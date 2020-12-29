@@ -121,6 +121,7 @@ namespace Bomix_Force.Controllers
                 else
                 {
                     company = _genericCompanyService.Get(u => user == u.IdentityUserId).First();
+                    email = company.Email;
                 }
                 Employee employee = _pedidoVendaRepository.GetEmployeesBySeller_id(order[0].Vendedor_FK);
                 string FilePath = ".\\Views\\Template Email\\Order.html";
@@ -137,9 +138,10 @@ namespace Bomix_Force.Controllers
                     string msg = oederstr.ReadToEnd();
                     msg = msg.Replace("Produto", item.Produto);
                     msg = msg.Replace("Qtd", item.Quantidade.ToString());
-                    mensage = mensage.Replace("<!--replace-->", msg);
+                    message = message.Replace("<!--replace-->", msg);
                 };
-                await _emailSender.SendEmailAsync(employee.Email, "Replicação Pedido", mensage, null);
+                await _emailSender.SendEmailAsync(employee.Email, "Replicação Pedido", message, null);
+                await _emailSender.SendEmailAsync(email, "Replicação Pedido", $"A requisição do pedido de número: {order[0].Pedido} foi realiada com sucesso.", null);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
