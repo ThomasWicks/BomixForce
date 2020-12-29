@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using System.Text.RegularExpressions;
 
 namespace Bomix_Force.Controllers
 {
@@ -48,7 +49,7 @@ namespace Bomix_Force.Controllers
         }
         // GET: OrderController
         public static volatile List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
-        public ActionResult Index(string searchString, string filter)
+        public ActionResult Index(string searchString, DateTime dateInit, DateTime dateEnd, string filter)
         {
 
             try
@@ -57,9 +58,14 @@ namespace Bomix_Force.Controllers
                 if (identityUser.Result.EmailConfirmed == true)
                 {
                     ViewBag.filter = filter;
+                    ViewBag.dateInit = dateInit == DateTime.MinValue? null:dateInit.Date.ToString("yyyy-MM-dd");
+                    ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
                     ViewBag.searchString = searchString;
+                    
+                    string dateInitString = dateInit == DateTime.MinValue ? DateTime.Now.AddYears(-2).Date.ToString() : dateInit.Date.ToString();
+                    string dateEndString = dateEnd == DateTime.MinValue ? DateTime.Now.Date.ToString() : dateEnd.Date.ToString();
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    orders = _pedidoVendaRepository.GetParameters("PCP", DateTime.Now.AddYears(-2).Date.ToString(), DateTime.Now.Date.ToString(), user).ToList();
+                    orders = _pedidoVendaRepository.GetParameters("PCP", dateInitString, dateEndString, user).ToList();
                     List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
                     if (orders.Count == 0)
                     {
@@ -96,18 +102,21 @@ namespace Bomix_Force.Controllers
 
         [HttpPost]
         // Post: OrderController/Duplicate/5
-        public async Task<ActionResult> Duplicate(string Pedido)
+        public async Task<ActionResult> Duplicate(string Pedido, string Ordem)
         {
             try
             {
                 Company company = new Company();
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
+                Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                var emailUser = person.Email;
+                var personCompanyId = person.CompanyId;
                 if (User.IsInRole("User"))
                 {
-                Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
-                company = _genericCompanyService.Get(u => u.Id == person.CompanyId).First();
-
+                    //Person person = _genericPersonService.Get(p => p.IdentityUserId == user).First();
+                    company = _genericCompanyService.Get(u => u.Id == personCompanyId).First();
+                    //var emailUser = person.Email;
                 }
                 else
                 {
@@ -120,10 +129,11 @@ namespace Bomix_Force.Controllers
                 mensage = mensage.Replace("NomeCliente", company.Name);
                 mensage = mensage.Replace("CnpjCliente", company.Cnpj);
                 mensage = mensage.Replace("Pedido", order[0].Pedido);
+                mensage = mensage.Replace("Ordem", Ordem);
                 foreach (var item in order)
                 {
-                string Orderpath = ".\\Views\\Template Email\\OrderTable.html";
-                StreamReader oederstr = new StreamReader(Orderpath);
+                    string Orderpath = ".\\Views\\Template Email\\OrderTable.html";
+                    StreamReader oederstr = new StreamReader(Orderpath);
                     string msg = oederstr.ReadToEnd();
                     msg = msg.Replace("Produto", item.Produto);
                     msg = msg.Replace("Qtd", item.Quantidade.ToString());
@@ -132,7 +142,7 @@ namespace Bomix_Force.Controllers
                 await _emailSender.SendEmailAsync(employee.Email, "Replicação Pedido", mensage, null);
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -176,26 +186,27 @@ namespace Bomix_Force.Controllers
                 IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 if (!String.IsNullOrEmpty(searchString))
                 {
-
-                    var orderViewPedido = orderView.Where(o => o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewEmissao = orderView.Where(o => o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewStatus = orderView.Where(o => o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewArte = orderView.Where(o => o.Arte.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewProduto = orderView.Where(o => o.Produto.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    //var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
-                    //var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewCliente = orderView.Where(o => o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
+                    searchString = searchString.Trim();
+                    var orderViewPedido = orderView.Where(o => o.Pedido != null && o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewEmissao = orderView.Where(o => o.Emissao != null && o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewStatus = orderView.Where(o => o.Status != null && o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewProduto = orderView.Where(o => o.Produto != null && o.Produto.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao != null && o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewCliente = orderView.Where(o => o.Cliente != null && o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
                         orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).
-                            Union(orderViewPersonalizacao).Union(orderViewProduto).Union(orderViewArte).Union(orderViewCliente).ToList();
+                            Union(orderViewPersonalizacao).Union(orderViewProduto).Union(orderViewCidade)
+                            .Union(orderViewUF).Union(orderViewCliente).ToList();
                     }
                     else
                     {
                         orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewPersonalizacao)
-                            .Union(orderViewProduto).Union(orderViewArte).Union(orderViewStatus).ToList();
+                            .Union(orderViewCidade).Union(orderViewUF)
+                            .Union(orderViewProduto).Union(orderViewStatus).ToList();
                     }
 
                 }
@@ -256,6 +267,8 @@ namespace Bomix_Force.Controllers
                     order.Produto = !String.IsNullOrEmpty(order.Produto) ? order.Produto : "-";
                     order.Personalizacao = !String.IsNullOrEmpty(order.Personalizacao) ? order.Personalizacao : "-";
                     order.Quantidade = !String.IsNullOrEmpty(order.Quantidade.ToString()) ? order.Quantidade : 0;
+                    order.OrdemCompra = !String.IsNullOrEmpty(order.OrdemCompra.ToString()) ? order.OrdemCompra : 0;
+                    order.Valor = !String.IsNullOrEmpty(order.Valor.ToString()) ? order.Valor : 0;
 
 
                 }

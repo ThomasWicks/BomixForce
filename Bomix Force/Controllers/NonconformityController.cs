@@ -84,7 +84,7 @@ namespace Bomix_Force.Controllers
                 {
                     var path = Path.Combine(
                    Directory.GetCurrentDirectory(),
-                   "wwwroot/answers", nonConformity.Id.ToString() + ".pdf");
+                   "wwwroot/answers", "RNC_"+nonConformity.Id.ToString() + ".pdf");
                     if (System.IO.File.Exists(path))
                         nonConformity.Status = "Concluido";
                     else
@@ -236,7 +236,7 @@ namespace Bomix_Force.Controllers
             try
             {
                 string wwwPath = _environment.WebRootPath;
-                var path = wwwPath + "\\answers\\" + file.Id.ToString() + ".pdf";
+                var path = wwwPath + "\\answers\\RNC_" + file.Id.ToString() + ".pdf";
 
                 var memory = new MemoryStream();
                 using (var stream = new FileStream(path, FileMode.Open))
@@ -259,7 +259,7 @@ namespace Bomix_Force.Controllers
             try
             {
                 string wwwPath = _environment.WebRootPath;
-                var path = wwwPath + "\\answers\\" + file.Id.ToString() + ".pdf";
+                var path = wwwPath + "\\answers\\RNC_" + file.Id.ToString() + ".pdf";
                 if (System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);

@@ -18,16 +18,36 @@
         @using (Html.BeginForm())
         {
             <form id="typeSearch" asp-controller="Order" asp-action="Index">
-                <div class="row mt-3">
-                    @*<select id="selectType" class="form-control col-6 mr-5" name="selectType">
-                            <option value="nOrder">Número pedido</option>
-                            <option value="status">Status</option>
-                        </select>*@
-                    <div class="search ml-2">
-                        <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
-                        @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                <div class="row ">
+                    <div class="form-group">
+                        <label for="example-date-input" class="col-2 col-form-label">Busca</label>
+                        <div class="search ml-3 mr-2 ">
+                            <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
+                            @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                        </div>
+                    </div>
+                    <div class="form-group mr-2">
+                        <label for="example-date-input" class="col-2 col-form-label ">Inicio</label>
+                        <div class="">
+                            <input class="form-control" value="@(ViewBag.dateInit)"name="dateInit" id="dateInit" type="date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-date-input" class="col-2 col-form-label">Fim</label>
+                        <div class="">
+                            <input class="form-control" value="@(ViewBag.dateEnd)" name="dateEnd" id="dateEnd" type="date">
+                        </div>
+                    </div>
+                    @*<input name="dateInit" id="dateInit" type="date">
+        <input name="dateEnd" id="dateEnd" type="date">*@
+                <div class="form-group mt-2 ml-2">
+                    <label for="example-date-input" class="col-2 col-form-label"></label>
+                    <div class="mt-1">
+                        <button class="btn btn-primary mr-4 font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
                     </div>
                 </div>
+                </div>
+
             </form>
             <!-- <a class="btn btn-primary float-right mr-1" style="float: right" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                 Expandir pedidos
@@ -51,6 +71,9 @@
                             }
                         </th>
                         <th class="text-center">
+                            Ordem
+                        </th>
+                        <th class="text-center">
                             Produto
                             @if (ViewBag.filter == "ProdutoDesc")
                             {
@@ -65,19 +88,14 @@
                             Quantidade
                         </th>
                         <th class="text-center">
-                            Arte
-                            @if (ViewBag.filter == "ArteDesc")
-                            {
-                                <a href="@Url.Action("Index", "Order", new { filter = "ArteAsc" })"><i class="fas fa-caret-up"></i></a>
-                            }
-                            @if (ViewBag.filter != "ArteDesc")
-                            {
-                                <a href="@Url.Action("Index", "Order", new { filter = "ArteDesc" })"><i class="fas fa-caret-down"></i></a>
-                            }
+                            Valor
                         </th>
-                        <th class="text-center">
-                            Personalizado
-                        </th>
+                        @if (!User.IsInRole("Employee"))
+                        {
+                            <th class="text-center">
+                                Personalizado
+                            </th>
+                        }
                         @if (!User.IsInRole("User") && !User.IsInRole("Company"))
                         {
                             <th class="text-center">
@@ -167,6 +185,7 @@
 <script src="~/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
         $("#loadingdiv").hide();
         var filter = '@(ViewBag.filter)'
         var searchString = '@(ViewBag.searchString)'

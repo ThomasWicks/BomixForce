@@ -1,0 +1,256 @@
+﻿@model Bomix_Force.ViewModels.DocumentViewModel
+
+@{
+    ViewData["Title"] = "Create";
+
+    <div style="display:none" id="loadingSpinnerOverlay">
+        <div class="spinner" id="spinner"></div>
+        <div class="overlay" id="overlay"></div>
+    </div>
+}
+<div class="container createNonconf">
+    <div>
+        <a asp-action="Index" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
+        @*<a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
+            <a asp-action="Index" class="pagina-anterior">Não Conformidade /</a>
+            <a class="pagina-atual">Registar não Conformidade</a>*@
+    </div>
+    @*<h3 class="text-center title-font">Documentos</h3>*@
+    <hr />
+    <div class="card text-center align-items-center">
+        <h3 class="card-header align-self-stretch">Documentos</h3>
+        <div class="align-items-center col-md-6">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label value="">Selecione o tipo de documento</label> <br />
+                <div class="multiselect">
+                    <div class="selectBox" onclick="showCheckboxes()">
+                        <select>
+                            <option>Selecione a opção</option>
+                        </select>
+                        <div class="overSelect"></div>
+                    </div>
+                    <div id="checkboxes" class="form-group col-12" style="text-align:start; ">
+
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AF">Alvará de funcionamento<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AS">Alvará sanitário<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LA">Licença ambiental<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001">Certificado ISO 9001<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000">Certificado FSSC 22000<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG">Laudo de migração<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB">Laudo microbiológico<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA">Declaração ausência de alergênicos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
+                        <span id="createSetorSpan" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group col-12" id="BucketLidType" style="display: none">
+                    <label class="control-label font-project">Tipo de tampa</label>
+                    <input asp-for="BucketLidType" class="form-control input font-project" />
+                    <span asp-validation-for="BucketLidType" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="BucketType" style="display: none">
+                    <label class="control-label font-project">Tipo de balde</label>
+                    <input asp-for="BucketType" class="form-control input font-project" />
+                    <span asp-validation-for="BucketType" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="Other" style="display: none">
+                    <label class="control-label font-project">Outros</label>
+                    <input asp-for="Other" class="form-control input font-project" />
+                    <span asp-validation-for="Other" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12" id="Type" style="display: none">
+                    <label asp-for="@Model.Debit">Tipo</label>
+                    <select id="´selectCreateSetor" asp-for="@Model.Debit" class="form-control">
+                        <option value="">Selecione o tipo de certidão</option>
+                        <option value="Municipais">Municipais</option>
+                        <option value="Estaduais">Estaduais</option>
+                        <option value="Federais">Federais</option>
+                    </select>
+                    <span id="createSetorSpan" class="text-danger"></span>
+                </div>
+                <div>
+
+                    <div id="prodImagem" style="width: 50px; height: 50px; display: none; position: absolute; padding: 5px; margin-left:35%">
+                        <img src="~/Assets/Etiqueta.png" />
+                    </div>
+                    <br />
+                </div>
+                <div>
+                    <label>
+                        Aqui, você poderá inserir algum anexo, como questionários ou alguma declaração para assinatura.
+                    </label>
+                </div>
+                <div class="image-upload text-center">
+                    <label for="FilePath">
+                        <img style="width: 60px; height: 60px; cursor: pointer;" src="~/Assets/ic_upload.png" />
+                    </label>
+                    <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png" />
+                    <div id="preview">
+                        <p>Nenhum arquivo selecionado.</p>
+                    </div>
+                </div>
+                <div style="margin-top:15px">
+                    <output name="result"></output>
+                </div>
+                <br />
+                <br />
+
+                <div class="form-group float-right">
+                    <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
+                </div>
+                @*<a asp-controller="Home" asp-action="Login" class="btn btn-danger float-left font-project " style="color: white; background-color: #D52229;">Voltar</a>*@
+            </form>
+        </div>
+    </div>
+    <ol></ol>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    function startOverlay() {
+        document.getElementById('loadingSpinnerOverlay').style.display = 'block';
+    }
+
+    function mostrarElemento(id, visibilidade) {
+        document.getElementById(id).style.display = visibilidade;
+    }
+
+    const input = document.getElementById('FilePath');
+    const preview = document.getElementById('preview');
+
+    input.style.opacity = 0;
+    input.addEventListener('change', updateImageDisplay);
+    const list = document.createElement('ol');
+    list.style = 'list-style: none;';
+    function updateImageDisplay() {
+        while (preview.firstChild) {
+            preview.removeChild(preview.firstChild);
+        }
+
+        const curFiles = input.files;
+        if (curFiles.length === 0) {
+            const para = document.createElement('p');
+            para.textContent = 'Nenhum arquivo selecionado.';
+            preview.appendChild(para);
+        } else {
+            preview.appendChild(list);
+
+            for (const file of curFiles) {
+                const listItem = document.createElement('li');
+                const para = document.createElement('p');
+                if (validFileType(file)) {
+                    para.textContent = `Arquivo ${file.name}`;
+                    const image = document.createElement('img');
+                    image.src = URL.createObjectURL(file);
+                    image.width = 300;
+                    image.height = 150;
+                    listItem.appendChild(image);
+                    listItem.appendChild(para);
+                } else {
+                    para.textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
+                    listItem.appendChild(para);
+                }
+
+                list.appendChild(listItem);
+            }
+        }
+    }
+
+    const fileTypes = [
+        "application/pdf",
+        "image/apng",
+        "image/bmp",
+        "image/jpg",
+        "image/jpeg",
+        "image/pjpeg",
+        "image/png",
+    ];
+
+    function validFileType(file) {
+        return fileTypes.includes(file.type);
+    }
+
+    function showfieldsOther() {
+        var value = document.getElementById("othersCheckBox").checked;
+
+
+        value ? $('#Other').show() : $('#Other').hide();
+    }
+    function showfieldsCertNegDeb() {
+        var value = document.getElementById("CertNegDebCheckBox").checked;
+        value ? $('#Type').show() : $('#Type').hide();
+    }
+    function showfieldsEspecTec() {
+        var value = document.getElementById("espectecCheckBox").checked;
+
+        value ? ($('#BucketLidType').show(),
+            $('#BucketType').show()) : ($('#BucketLidType').hide(),
+                $('#BucketType').hide())
+    }
+
+
+    var expanded = false;
+
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
+</script>
+
+<style>
+    .tag {
+        height: 12px;
+        width: 12px;
+    }
+
+
+
+
+
+
+    .multiselect {
+        width: 200px;
+        display: inline-block
+    }
+
+    .selectBox {
+        position: relative;
+    }
+
+        .selectBox select {
+            width: 100%;
+        }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    #checkboxes {
+        display: none;
+        background-color: initial;
+        border: 1px #dadada solid;
+    }
+
+        #checkboxes label {
+            display: block;
+        }
+
+            #checkboxes label:hover {
+                background-color: #1e90ff;
+            }
+</style>

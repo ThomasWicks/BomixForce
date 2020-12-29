@@ -8,7 +8,13 @@
                 <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <h5 class="text-center"><strong>Numero do Pedido: @Model[0].Pedido</strong></h5>
+                <div class="row">
+                    <h5 class="col-6"><strong>Numero do Pedido: @Model[0].Pedido</strong></h5>
+                    <div class="col-6 float-right">
+                        <input class="form-control col-6 float-right" type="number" style="height: 30px" id="OrdemDeCompra"/>
+                        <h5 class="float-right mr-1">Ordem de compra:  </h5>
+                    </div>
+                </div>
                 <div class="table-responsive mt-2 scroll">
                     <table id="#tableOrder" class="table table-striped">
                         <thead class="thead-light">
@@ -72,7 +78,9 @@
 <script>
     function duplicate() {
         var Pedido = document.getElementById("pedido").innerText
+        var Ordem = $("#OrdemDeCompra").val();
         console.log(Pedido)
+        console.log(Ordem)
         Swal.fire({
           title: 'Deseja duplicar pedido?',
           icon: 'warning',
@@ -82,13 +90,13 @@
         }).then((result) => {
             if (result.value) {
                 var pedidos = Pedido.toString();
-                //Pedidos = "0".concat(Pedido)
                 $('#duplicateModal').modal('hide');
                 document.getElementById('loadingSpinnerOverlay').style.display = 'block'
                 $.ajax({
                     url: 'Duplicate',
                     data: {
-                        Pedido: Pedido
+                        Pedido: Pedido,
+                        Ordem: Ordem
                     },
                     complete: function (e, xhr, settings) {
                         document.getElementById('loadingSpinnerOverlay').style.display = 'none'

@@ -34,6 +34,9 @@ namespace Bomix_Force.Util
             #region Financial
             CreateMap<Bomix_NotaFiscalVenda, FinancialViewModel>().ReverseMap();
             #endregion
+            #region Document
+            CreateMap<Document, DocumentViewModel>().ReverseMap();
+            #endregion
         }
     }
 }

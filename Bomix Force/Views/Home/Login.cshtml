@@ -61,7 +61,69 @@
             </div>
         </div>
         <div class="col-5 col-lg-2 col-sm-6 col-md-2 col-xl-2 py-3 px-3 mt-2 mr-2">
-            
+
+        </div>
+    </div>
+}
+else if (User.IsInRole("Employee"))
+{
+    <div class="row justify-content-md-center">
+        <div class="col-5 col-lg-2 col-sm-6 col-md-2 col-xl-2 py-3 px-3 mt-5 ml-5">
+            <div class="sheet-menu">
+                <a class="text-white" href="@Url.Action("Index", "User")">
+                    <div class="card-body text-center">
+                        @*--imagem do card--*@
+                        <img src="~/Assets/users.png" />
+                        <p class="text-label-menu">Clientes</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-5 col-lg-2 col-sm-6 col-md-2 col-xl-2 py-3 px-3 mt-5 mr-2">
+            <div class="sheet-menu">
+                <a class="text-white" href="@Url.Action("Index", "Order")">
+                    <div class="card-body text-center">
+                        <!-- <img src="~/Assets/bag.png"/> -->
+                        <img src="~/Assets/bucket.png" style="color:white;" title="Pixelmeetup" />
+                        <p class="text-label-menu" style="margin-top:15px">Pedidos</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-5 col-lg-2 col-sm-6 col-md-2 col-xl-2 py-3 px-3 mt-5 ml-5">
+            <div class="sheet-menu">
+                <a class="text-white" href="@Url.Action("Index", "Nonconformity")">
+                    <div class="card-body text-center">
+                        <img src="~/Assets/warning.png" />
+                        <p class="text-label-menu" style="width:101%">Não conformidade</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-5 col-lg-2 col-sm-6 col-md-2 col-xl-2 py-3 px-3 mt-5 mr-2">
+            <div class="sheet-menu">
+                <a class="text-white" href="@Url.Action("Index", "Document")">
+                    <div class="card-body text-center">
+                        <img src="~/Assets/doc.png" />
+                        <p class="text-label-menu">Documentos</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-5 col-lg-2 col-sm-6 col-md-2 col-xl-2 py-3 px-3 mt-5 ml-5">
+            <div class="sheet-menu">
+                <a class="text-white" href="@Url.Action("Index", "Financial")">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-invoice-dollar fa-4x"></i>
+                        <p class="text-label-menu" style="margin-top:10px">Financeiro</p>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 }
@@ -74,11 +136,8 @@ else
                     <div class="card-body text-center">
                         @*--imagem do card--*@
                         <img src="~/Assets/users.png" />
-                        @if (User.IsInRole("Employee"))
-                        {
-                            <p class="text-label-menu">Clientes</p>
-                        }
-                        else if (User.IsInRole("Company"))
+
+                        @if (User.IsInRole("Company"))
                         {
                             <p class="text-label-menu">Funcionários</p>
                         }

@@ -1,202 +1,150 @@
-﻿@model Bomix_Force.ViewModels.DocumentViewModel
+﻿@model IEnumerable<Bomix_Force.ViewModels.DocumentViewModel>
 
 @{
-    ViewData["Title"] = "Create";
-
-    <div style="display:none" id="loadingSpinnerOverlay">
-        <div class="spinner" id="spinner"></div>
-        <div class="overlay" id="overlay"></div>
-    </div>
+    ViewData["Title"] = "Index";
 }
-<div class="container createNonconf">
-    <div >
+<div class="mr-5 ml-5">
+    <div>
         <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
-        @*<a asp-area="" asp-controller="Home" asp-action="Login" class="pagina-anterior">Home / </a>
-        <a asp-action="Index" class="pagina-anterior">Não Conformidade /</a>
-        <a class="pagina-atual">Registar não Conformidade</a>*@
     </div>
-    @*<h3 class="text-center title-font">Documentos</h3>*@
-    <hr />
-    <div class="card text-center align-items-center">
-        <h3 class="card-header align-self-stretch">Documentos</h3>
-        <div class="align-items-center col-md-6">
-            <form asp-action="Create" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-12">
-                    <label asp-for="@Model.Type">Tipo</label>
-                    <select id="´selectCreateSetor" onchange="showfields(this.value)" asp-for="@Model.Type" class="form-control">
-                        <option value="">Selecione o tipo de documento</option>
-                        <option value="Alvará de funcionamento">Alvará de funcionamento</option>
-                        <option value="AVCB – Auto de vistoria do Corpo de Bombeiros">AVCB – Auto de vistoria do Corpo de Bombeiros </option>
-                        <option value="Alvará sanitário">Alvará sanitário</option>
-                        <option value="Licença ambiental">Licença ambiental</option>
-                        <option value="Certificado ISSO 9001">Certificado ISSO 9001</option>
-                        <option value="Certificado FSSC 22000">Certificado FSSC 22000</option>
-                        <option value="Laudo de migração">Laudo de migração</option>
-                        <option value="Laudo microbiológico">Laudo microbiológico</option>
-                        <option value="Especificações técnicas">Especificações técnicas</option>
-                        <option value="Certidões negativas de débitos">Certidões negativas de débitos</option>
-                        <option value="Declaração ausência de alergênicos">Declaração ausência de alergênicos</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                    <span id="createSetorSpan" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12" id="BucketLidType" style="display: none">
-                    <label class="control-label font-project">Tipo de tampa</label>
-                    <input asp-for="BucketLidType" class="form-control input font-project" />
-                    <span asp-validation-for="BucketLidType" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12" id="BucketType" style="display: none">
-                    <label class="control-label font-project">Tipo de balde</label>
-                    <input asp-for="BucketType" class="form-control input font-project" />
-                    <span asp-validation-for="BucketType" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12" id="Other" style="display: none">
-                    <label class="control-label font-project">Outros</label>
-                    <input asp-for="Other" class="form-control input font-project" />
-                    <span asp-validation-for="Other" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12" id="Type" style="display: none">
-                    <label asp-for="@Model.Type"></label>
-                    <select id="´selectCreateSetor" asp-for="@Model.Type" class="form-control">
-                        <option value="">Selecione o tipo de certidão</option>
-                        <option value="Municipais">Municipais</option>
-                        <option value="Estaduais">Estaduais</option>
-                        <option value="Federais">Federais</option>
-                    </select>
-                    <span id="createSetorSpan" class="text-danger"></span>
-                </div>
-                <div>
+    @if (!User.IsInRole("Employee"))
+    {
+        <p>
+            <a class="float-right mb-2 mr-3" type="button" asp-action="Create"><img class="ic-size" src="~/Assets/ic_add_non_conf.png" /></a>
+        </p>
+    }
+    <div class="table-responsive mt-5">
+        <table class="table table-striped">
+            <thead>
+                <tr class="bg-dark">
+                    <th class="text-center text-white">
+                        Tipo
+                    </th>
+                    <th class="text-center text-white">
+                        Data
+                    </th>
+                    <th class="text-center text-white">
+                        Status
+                    </th>
+                    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+                    {
+                        <th class="text-center text-white">
+                            Upload
+                        </th>
+                        <th class="text-center text-white">
+                            Download
+                        </th>
+                    }
+                    @if (User.IsInRole("User") || User.IsInRole("Company"))
+                    {
+                        <th class="text-center text-white">
+                            Ações
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model?.Count() > 0)
+                {
+                    @foreach (var item in Model)
+                    {
 
-                    <div id="prodImagem" style="width: 50px; height: 50px; display: none; position: absolute; padding: 5px; margin-left:35%">
-                        <img src="~/Assets/Etiqueta.png" />
-                    </div>
-                    <br />
-                </div>
-                <div>
-                    <label>
-                        Aqui, você poderá inserir algum anexo, como questionários ou alguma declaração para assinatura.
-                    </label>
-                </div>
-                <div class="image-upload text-center">
-                    <label for="FilePath">
-                        <img style="width: 60px; height: 60px; cursor: pointer;" src="~/Assets/ic_upload.png" />
-                    </label>
-                    <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png" />
-                    <div id="preview">
-                        <p>Nenhum arquivo selecionado.</p>
-                    </div>
-                </div>
-                <div style="margin-top:15px">
-                    <output name="result"></output>
-                </div>
-                <br />
-                <br />
+                        <tr>
+                            <td class="text-center ">
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            <td class="text-center ">
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            @if (User.IsInRole("Employee"))
+                            {
+                                <td class="text-left">
+                                    <form class="text-center" asp-action="Upload" enctype="multipart/form-data">
+                                        <input type="hidden" name="Id" id="Id" value="@item.Id" />
+                                        <div class="image-upload text-center">
+                                            <label for="FilePathDOC/@item.Id">
+                                                <img style="width: 30px; height: 30px; cursor: pointer;" src="~/Assets/ic_upload.png" />
+                                            </label>
+                                            <label id="LabelFilePathDOC/@item.Id">
+                                                Nenhum arquivo Selecionado
+                                            </label>
+                                            <input type="file" onchange="updatePreview(@item.Id)" id="FilePathDOC/@item.Id" name="FilePath" multiple accept=".pdf" />
 
-                <div class="form-group float-right">
-                    <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
-                </div>
-                <a asp-action="Index" class="btn btn-danger float-left font-project " style="color: white; background-color: #D52229;">Voltar</a>
-            </form>
-        </div>
+                                        </div>
+                                        <button id="uploadDOC/@item.Id" type="submit" class="btn btn-primary font-project" style="display:none; color: white; background-color: #002A51;">Upload</button>
+                                    </form>
+                                </td>
+                            }
+
+                            <td class="text-center">
+                                <form asp-action="Download">
+                                    <input type="hidden" id="Id" name="Id" value="@item.Id" />
+                                    @if (item.Status == "Concluido")
+                                    {
+                                        <button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Download</button>
+                                    }
+                                </form>
+                            </td>
+
+
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <h6>Não foi possível achar as informações de não conformidade.</h6>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-    <ol></ol>
 </div>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
 <script>
-    function startOverlay() {
-        document.getElementById('loadingSpinnerOverlay').style.display = 'block';
-    }
+    function updatePreview(id) {
+        const fileTypes = [
+            "application/pdf"
+        ];
+        const input = document.getElementById('FilePathDOC/' + id);
+        const upload = document.getElementById(`uploadDOC/${id}`);
+        const preview = document.getElementById('preview');
+        input.style.opacity = 0;
 
-    function mostrarElemento(id, visibilidade) {
-        document.getElementById(id).style.display = visibilidade;
-    }
-
-    const input = document.getElementById('FilePath');
-    const preview = document.getElementById('preview');
-
-    input.style.opacity = 0;
-    input.addEventListener('change', updateImageDisplay);
-    const list = document.createElement('ol');
-    list.style = 'list-style: none;';
-    function updateImageDisplay() {
-        while (preview.firstChild) {
-            preview.removeChild(preview.firstChild);
-        }
 
         const curFiles = input.files;
         if (curFiles.length === 0) {
-            const para = document.createElement('p');
-            para.textContent = 'Nenhum arquivo selecionado.';
+            textContent = 'Nenhum arquivo selecionado.';
             preview.appendChild(para);
+            document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
+            upload.style.display = 'none'
         } else {
-            preview.appendChild(list);
 
             for (const file of curFiles) {
-                const listItem = document.createElement('li');
-                const para = document.createElement('p');
                 if (validFileType(file)) {
-                    para.textContent = `Arquivo ${file.name}`;
-                    const image = document.createElement('img');
-                    image.src = URL.createObjectURL(file);
-                    image.width = 300;
-                    image.height = 150;
-                    listItem.appendChild(image);
-                    listItem.appendChild(para);
+                    var textContent = `Arquivo ${file.name}`;
+                    document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
+                    upload.style.display = ''
                 } else {
-                    para.textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
-                    listItem.appendChild(para);
+                    var textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
+                    upload.style.display = 'none'
+                    document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
                 }
-
-                list.appendChild(listItem);
             }
         }
-    }
 
-    const fileTypes = [
-        "application/pdf",
-        "image/apng",
-        "image/bmp",
-        "image/jpg",
-        "image/jpeg",
-        "image/pjpeg",
-        "image/png",
-    ];
 
-    function validFileType(file) {
-        return fileTypes.includes(file.type);
-    }
 
-    function showfields(value) {
-        if (value == "Outros") {
-            $('#Type').hide();
-            $('#BucketLidType').hide();
-            $('#BucketType').hide();
-            $('#Other').show();
-        } else if (value == "Especificações técnicas") {
-            $('#Type').hide();
-            $('#BucketLidType').show();
-            $('#BucketType').show();
-            $('#Other').hide();
-        } else if (value == "Certidões negativas de débitos") {
-            $('#Type').show();
-            $('#BucketLidType').hide();
-            $('#BucketType').hide();
-            $('#Other').hide();
-        } else {
-            $('#Type').hide();
-            $('#BucketLidType').hide();
-            $('#BucketType').hide();
-            $('#Other').hide();
+
+        function validFileType(file) {
+            return fileTypes.includes(file.type);
         }
     }
 </script>
 
-<style>
-    .tag {
-        height: 12px;
-        width: 12px;
-    }
-</style>

@@ -29,6 +29,7 @@ namespace Bomix_Force.Data.Context
         [NotMapped]
         public virtual DbSet<Bomix_NotaFiscalVenda> Bomix_NotaFiscalVendas { get; set; }
         public virtual DbSet<Nonconformity> Nonconformity { get; set; }
+        public virtual DbSet<Document> Document { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

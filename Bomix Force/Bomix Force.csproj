@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20201008121039_Nonconformity.Designer.cs" />
     <Compile Remove="Migrations\20201211210120_BomixNota.cs" />
     <Compile Remove="Migrations\20201211210120_BomixNota.Designer.cs" />
+    <Compile Remove="Migrations\20201229134648_AddDocument.cs" />
+    <Compile Remove="Migrations\20201229134648_AddDocument.Designer.cs" />
     <Compile Remove="Views\Home\Login.cs" />
   </ItemGroup>
 
