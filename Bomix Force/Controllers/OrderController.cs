@@ -58,8 +58,8 @@ namespace Bomix_Force.Controllers
                 if (identityUser.Result.EmailConfirmed == true)
                 {
                     ViewBag.filter = filter;
-                    ViewBag.dateInit = dateInit;
-                    ViewBag.dateEnd = dateEnd;
+                    ViewBag.dateInit = dateInit == DateTime.MinValue? null:dateInit.Date.ToString("yyyy-MM-dd");
+                    ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
                     ViewBag.searchString = searchString;
                     
                     string dateInitString = dateInit == DateTime.MinValue ? DateTime.Now.AddYears(-2).Date.ToString() : dateInit.Date.ToString();
@@ -268,6 +268,8 @@ namespace Bomix_Force.Controllers
                     order.Produto = !String.IsNullOrEmpty(order.Produto) ? order.Produto : "-";
                     order.Personalizacao = !String.IsNullOrEmpty(order.Personalizacao) ? order.Personalizacao : "-";
                     order.Quantidade = !String.IsNullOrEmpty(order.Quantidade.ToString()) ? order.Quantidade : 0;
+                    order.OrdemCompra = !String.IsNullOrEmpty(order.OrdemCompra.ToString()) ? order.OrdemCompra : 0;
+                    order.Valor = !String.IsNullOrEmpty(order.Valor.ToString()) ? order.Valor : 0;
 
 
                 }

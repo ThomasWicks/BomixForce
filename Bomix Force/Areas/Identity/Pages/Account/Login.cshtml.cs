@@ -136,7 +136,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                     else
                     {
                         ModelState.AddModelError("loginError", "Usuário ou senha inválidos");
-                        return LocalRedirect("/Identity/Account/Manage");
+                        //return LocalRedirect("/Identity/Account/Manage");
 
                     }
 
