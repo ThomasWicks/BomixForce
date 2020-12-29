@@ -35,5 +35,6 @@ namespace Bomix_Force.Data.Entities
         public int Quantidade { get; set; }
         public double ValorUnitario { get; set; }
         public double Valor { get; set; }
+        public string OrdemCompra { get; set; }
     }
 }

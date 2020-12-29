@@ -23,7 +23,7 @@ namespace Bomix_Force.ViewModels
         public string Arte { get; set; }
         public string Personalizacao { get; set; }
         public float Valor { get; set; }
-        public float OrdemCompra { get; set; }
+        public string OrdemCompra { get; set; }
 
         public List<OrderViewModel> orderViewModelDetails;
 
