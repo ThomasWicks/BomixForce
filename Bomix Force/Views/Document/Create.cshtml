@@ -23,27 +23,26 @@
             <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <label value="">Selecione o tipo de documento</label> <br />
-                <div class="multiselect">
-                    <div class="selectBox" onclick="showCheckboxes()">
-                        <select>
+                <div class="multiselect" >
+                    <div class="selectBox" onclick="showCheckboxes()" style="cursor: pointer;">
+                        <select class="form-control">
                             <option>Selecione a opção</option>
                         </select>
                         <div class="overSelect"></div>
                     </div>
-                    <div id="checkboxes" class="form-group col-12" style="text-align:start; ">
-
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AF">Alvará de funcionamento<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AS">Alvará sanitário<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LA">Licença ambiental<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001">Certificado ISO 9001<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000">Certificado FSSC 22000<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG">Laudo de migração<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB">Laudo microbiológico<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA">Declaração ausência de alergênicos<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
+                    <div id="checkboxes" class="form-group col-12" style="text-align:start;">
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AF" onclick="showCheckboxes(this)">Alvará de funcionamento<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB" onclick="showCheckboxes(this)">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AS" onclick="showCheckboxes(this)">Alvará sanitário<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LA" onclick="showCheckboxes(this)">Licença ambiental<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001" onclick="showCheckboxes(this)">Certificado ISO 9001<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000" onclick="showCheckboxes(this)">Certificado FSSC 22000<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG" onclick="showCheckboxes(this)">Laudo de migração<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB" onclick="showCheckboxes(this)">Laudo microbiológico<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()" onclick="showCheckboxes(this)">Especificações técnicas<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()" onclick="showCheckboxes(this)">Certidões negativas de débitos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA" onclick="showCheckboxes(this)">Declaração ausência de alergênicos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()" onclick="showCheckboxes(this)">Outros<br />
                         <span id="createSetorSpan" class="text-danger" />
                     </div>
                 </div>
@@ -64,7 +63,7 @@
                 </div>
                 <div class="form-group col-12" id="Type" style="display: none">
                     <label asp-for="@Model.Debit">Tipo</label>
-                    <select id="´selectCreateSetor" asp-for="@Model.Debit" class="form-control">
+                    <select id="selectCreateSetor" asp-for="@Model.Debit" class="form-control">
                         <option value="">Selecione o tipo de certidão</option>
                         <option value="Municipais">Municipais</option>
                         <option value="Estaduais">Estaduais</option>
@@ -72,6 +71,11 @@
                     </select>
                     <span id="createSetorSpan" class="text-danger"></span>
                 </div>
+                @*<div class="form-group col-12">
+                    <label>Documentos selecionados: </label>
+                    <ol id="selecteds" style="list-style: none;">
+                    </ol>
+                </div>*@
                 <div>
 
                     <div id="prodImagem" style="width: 50px; height: 50px; display: none; position: absolute; padding: 5px; margin-left:35%">
@@ -99,8 +103,8 @@
                 <br />
                 <br />
 
-                <div class="form-group float-right">
-                    <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
+                <div class="form-group">
+                    <input type="submit" onclick="startOverlay()" value="Solicitar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
                 </div>
                 @*<a asp-controller="Home" asp-action="Login" class="btn btn-danger float-left font-project " style="color: white; background-color: #D52229;">Voltar</a>*@
             </form>
@@ -195,8 +199,103 @@
 
 
     var expanded = false;
+    function showCheckboxes(element) {
+        //if (element != null) {
+        //    var listSelecteds = document.getElementById("selecteds");
+        //    var itens = listSelecteds.childNodes;
+        //    for (i = itens.length - 1; i >= 0; i--) {
+        //        console.log(itens[i]);
+        //        if (element.value) {
 
-    function showCheckboxes() {
+        //        }
+        //        else {
+
+        //        }
+        //    }
+
+        //    if (element.name == "AF" && element.value) {
+        //        var li = document.createElement('li');
+        //        li.innerText = "Alvará de funcionamento";
+        //        listSelecteds.appendChild(li);
+        //    }
+        //    if (element.name == "AVCB") {
+        //        var li = document.createElement('li');
+        //        li.innerText = "AVCB – Auto de vistoria do Corpo de Bombeiros";
+        //        listSelecteds.appendChild(li);
+        //    }
+        //    if (element.name == "AS") {
+        //        var li = document.createElement('li');
+        //        li.innerText = "Alvará sanitário";
+        //        listSelecteds.appendChild(li);
+        //    }
+        //    if (element.name == "LA") {
+        //        var li = document.createElement('li');
+        //        li.innerText = "Licença ambiental";
+        //        listSelecteds.appendChild(li);
+        //    }
+        //    if (element.name == "CISSO9001") {
+        //        var li = document.createElement('li');
+        //        li.innerText = "Certificado ISO 9001";
+        //        listSelecteds.appendChild(li);
+        //    }
+
+        ////if (documentViewModel.CFSSC22000) {
+        ////    Document document = new Document();
+        ////    document.Type = "Certificado FSSC 22000";
+        ////    document.PathExtFile = null;
+        ////    document.Date = DateTime.Now;
+        ////    document.IdentityUserId = user;
+        ////    documents.Add(document);
+        ////}
+        ////if (documentViewModel.LMG) {
+        ////    Document document = new Document();
+        ////    document.Type = "Laudo de migração";
+        ////    document.PathExtFile = null;
+        ////    document.Date = DateTime.Now;
+        ////    document.IdentityUserId = user;
+        ////    documents.Add(document);
+        ////}
+        ////if (documentViewModel.LMB) {
+        ////    Document document = new Document();
+        ////    document.Type = "Laudo microbiológico";
+        ////    document.PathExtFile = null;
+        ////    document.Date = DateTime.Now;
+        ////    document.IdentityUserId = user;
+        ////    documents.Add(document);
+        ////}
+        ////if (documentViewModel.ET) {
+        ////    Document document = new Document();
+        ////    document.Type = "Especificações técnicas";
+        ////    document.PathExtFile = null;
+        ////    document.Date = DateTime.Now;
+        ////    document.IdentityUserId = user;
+        ////    documents.Add(document);
+        ////}
+        ////if (documentViewModel.CND) {
+        ////    Document document = new Document();
+        ////    document.Type = "Certidões negativas de débitos";
+        ////    document.PathExtFile = null;
+        ////    document.Date = DateTime.Now;
+        ////    document.IdentityUserId = user;
+        ////    documents.Add(document);
+        ////}
+        ////if (documentViewModel.DAA) {
+        ////    Document document = new Document();
+        ////    document.Type = "Declaração ausência de alergênicos";
+        ////    document.PathExtFile = null;
+        ////    document.Date = DateTime.Now;
+        ////    document.IdentityUserId = user;
+        ////    documents.Add(document);
+        ////}
+        ////if (documentViewModel.OT) {
+        ////    Document document = new Document();
+        ////    document.Type = documentViewModel.Other;
+        ////    document.PathExtFile = null;
+        ////    document.Date = DateTime.Now;
+        ////    document.IdentityUserId = user;
+        ////    documents.Add(document);
+        ////}
+        //}
         var checkboxes = document.getElementById("checkboxes");
         if (!expanded) {
             checkboxes.style.display = "block";
