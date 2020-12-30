@@ -47,17 +47,24 @@
         <div class="row ml-1 mt-4">
             @using (Html.BeginForm())
             {
-                <form class="col-2" id="typeSearch" asp-controller="User" asp-action="Index">
-                    <div class="search">
-                        <input type="hidden" id="id" name="id" value="@ViewBag.indexEmployeeID">
-                        <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
-                        @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+            <div class="d-flex">
+                <form class="col-3" id="typeSearch" asp-controller="User" asp-action="Index">
+                    <div class="form-group">
+                        <div class="search">
+                            <input type="hidden" id="id" name="id" value="@ViewBag.indexEmployeeID">
+                            <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
+                            @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                        </div>
+                    </div>
+                    <div class="form-group ml-2 mr-5">
+                        <button class="btn btn-primary font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
                     </div>
                 </form>
+            </div>
             }
             @if (User.IsInRole("Company") || User.IsInRole("Admin"))
             {
-                <a class="col-xl-9 ml-4">
+                <a class="col-xl-7 ml-5">
                     <span class="float-right" type="button" id="createModal" data-url="@Url.Action("Create")" data-target="#CreateUserModal"><img class="ic-size" src="~/Assets/ic_add_user.png" /></span>
                 </a>
             }
@@ -164,3 +171,8 @@
         </div>
     </div>
 </div>
+<style scoped>
+    .teste{
+        display: contents !important;
+    }
+</style>

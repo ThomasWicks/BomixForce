@@ -61,6 +61,8 @@ namespace Bomix_Force.Data.EntityConfig
             builder.Property(u => u.CondPagamento)
      .HasColumnName("CondPagamento")
      .IsRequired();
+            builder.Property(u => u.OrdemCompra)
+     .HasColumnName("OrdemCompra");
         }
 
 

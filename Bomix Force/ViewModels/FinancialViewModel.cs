@@ -17,6 +17,7 @@ namespace Bomix_Force.ViewModels
         public string Item { get; set; }
         public string Lote { get; set; }
         public DateTime DataValidade { get; set; }
+        public string Cliente { get; set; }
         public string TipoProduto { get; set; }
         public string Produto_ID { get; set; }
         public string Produto { get; set; }
