@@ -46,8 +46,8 @@
                         </div>
                     </div>
                     @*<div class=" ml-2">
-            <button class="btn btn-primary font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
-        </div>*@
+                            <button class="btn btn-primary font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
+                        </div>*@
                 </div>
             </form>
 
@@ -98,22 +98,12 @@
                     }
                     else
                     {
-                        @if (!User.IsInRole("Company"))
-                        {
-                            <tr>
-                                <td colspan="9" class="text-center">
-                                    <h6>Não foi possível encontrar NFs.</h6>
-                                </td>
-                            </tr>
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="9" class="text-center">
-                                    <h6>Não foi possível encontrar NFs.</h6>
-                                </td>
-                            </tr>
-                        }
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                <h6>Não foi possível encontrar NFs.</h6>
+                            </td>
+                        </tr>
+
                     }
 
                 </tbody>

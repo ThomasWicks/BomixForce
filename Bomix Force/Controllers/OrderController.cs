@@ -278,7 +278,7 @@ namespace Bomix_Force.Controllers
             catch (Exception ex)
             {
                 //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
-                return null;
+                return View();
             }
 
         }
