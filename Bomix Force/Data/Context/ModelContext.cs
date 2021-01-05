@@ -37,6 +37,7 @@ namespace Bomix_Force.Data.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Bomix_PedidoVendaItem>().HasNoKey();
             modelBuilder.Entity<Bomix_NotaFiscalVenda>().HasNoKey();
+            modelBuilder.Entity<Bomix_PedidoVenda>().HasNoKey();
         }
     }
 }

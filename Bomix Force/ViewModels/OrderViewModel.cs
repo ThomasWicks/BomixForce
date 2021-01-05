@@ -24,16 +24,10 @@ namespace Bomix_Force.ViewModels
         public string Personalizacao { get; set; }
         public float Valor { get; set; }
         public string OrdemCompra { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime PCP { get; set; }
 
         public List<OrderViewModel> orderViewModelDetails;
-
-        //public virtual List<Bomix_PedidoVendaItem> Item { get; set; }
-
-        //public int Id { get; set; }
-        //public int Pedido { get; set; }
-        //public DateTime Emissao { get; set; }
-        //public DateTime Entrega { get; set; }
-        //public string Status { get; set; }
-        //public virtual List<Item> Item { get; set; }
     }
 }

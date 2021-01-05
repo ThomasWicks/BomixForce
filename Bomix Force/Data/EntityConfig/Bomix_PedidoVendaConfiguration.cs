@@ -13,7 +13,9 @@ namespace Bomix_Force.Data.EntityConfig
         public void Configure(EntityTypeBuilder<Bomix_PedidoVenda> builder)
         {
             builder.ToTable("BOMIX_PEDIDOVENDA");
-            builder.HasKey(e => new { e.id });
+
+            builder.HasKey(e => new { e.C6_Recno })
+                .HasName("C6_Recno");
 
             builder.Property(u => u.Pedido)
                .HasColumnName("Pedido")

@@ -189,7 +189,7 @@ namespace Bomix_Force.Controllers
                 {
                     searchString = searchString.Trim();
                     var orderViewPedido = orderView.Where(o => o.Pedido != null && o.Pedido.ToString().ToLower().Contains(searchString.ToLower())).ToList();
-                    var orderViewEmissao = orderView.Where(o => o.Emissao != null && o.Emissao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewPCP = orderView.Where(o => o.PCP != null && o.PCP.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewStatus = orderView.Where(o => o.Status != null && o.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewProduto = orderView.Where(o => o.Produto != null && o.Produto.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao != null && o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
@@ -199,13 +199,13 @@ namespace Bomix_Force.Controllers
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
-                        orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewStatus).
+                        orderView = orderViewPedido.Union(orderViewPCP).Union(orderViewStatus).
                             Union(orderViewPersonalizacao).Union(orderViewProduto).Union(orderViewCidade)
                             .Union(orderViewUF).Union(orderViewCliente).ToList();
                     }
                     else
                     {
-                        orderView = orderViewPedido.Union(orderViewEmissao).Union(orderViewPersonalizacao)
+                        orderView = orderViewPedido.Union(orderViewPCP).Union(orderViewPersonalizacao)
                             .Union(orderViewCidade).Union(orderViewUF)
                             .Union(orderViewProduto).Union(orderViewStatus).ToList();
                     }
@@ -213,11 +213,11 @@ namespace Bomix_Force.Controllers
                 }
                 switch (filter)
                 {
-                    case ("EmissaoDesc"):
-                        orderView = orderView.OrderByDescending(s => s.Emissao);
+                    case ("PCPDesc"):
+                        orderView = orderView.OrderByDescending(s => s.PCP);
                         break;
-                    case ("EmissaoAsc"):
-                        orderView = orderView.OrderBy(s => s.Emissao);
+                    case ("PCPAsc"):
+                        orderView = orderView.OrderBy(s => s.PCP);
                         break;
                     case ("nPedidoDesc"):
                         orderView = orderView.OrderByDescending(o => o.Pedido);

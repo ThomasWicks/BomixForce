@@ -8,6 +8,7 @@ namespace Bomix_Force.Data.Entities
     public class Bomix_PedidoVenda
     {
         [key]
+        public int C6_Recno { get; set; }
         public int id { get; set; }
         public string Pedido { get; set; }
         public string TipoRegistro { get; set; }
@@ -24,8 +25,6 @@ namespace Bomix_Force.Data.Entities
         public string Gerente { get; set; }
         public string CondPagamento { get; set; }
         public DateTime PCP { get; set; }
-        public int C6_Recno { get; set; }
-        //public string Pedido_FK { get; set; }
         public string Sequencia { get; set; }
         public string Produto_ID { get; set; }
         public string Produto { get; set; }
