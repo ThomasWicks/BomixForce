@@ -1,0 +1,111 @@
+﻿@model List<Bomix_Force.ViewModels.DocumentViewModel>
+@{
+    ViewData["Title"] = "DocumentScroll";
+}
+
+@if (Model?.Count() > 0)
+{
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            <td class="text-center ">
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td class="text-center ">
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+
+            @if (item.Status == "Concluido")
+            {
+                <td class="text-center">
+                    Concluído
+                </td>
+            }
+            else
+            {
+                <td class="text-center">
+                    Análise
+                </td>
+            }
+            @if (User.IsInRole("Employee"))
+            {
+                <td class="text-left">
+                    <form class="text-center" asp-action="Upload" enctype="multipart/form-data">
+                        <input type="hidden" name="Id" id="Id" value="@item.Id" />
+                        <div class="image-upload text-center">
+                            <label for="FilePathDOC/@item.Id">
+                                <img style="width: 30px; height: 30px; cursor: pointer;" src="~/Assets/ic_upload.png" />
+                            </label>
+                            <label id="LabelFilePathDOC/@item.Id">
+                                Nenhum arquivo Selecionado
+                            </label>
+                            <input type="file" onchange="updatePreview(@item.Id)" id="FilePathDOC/@item.Id" name="FilePath" multiple accept=".pdf" />
+
+                        </div>
+                        <button id="uploadDOC/@item.Id" type="submit" class="btn btn-primary font-project" style="display:none; color: white; background-color: #002A51;">Upload</button>
+                    </form>
+                </td>
+            }
+
+            <td class="text-center">
+                <form asp-action="Download">
+                    <input type="hidden" id="Id" name="Id" value="@item.Id" />
+                    @if (item.Status == "Concluido")
+                    {
+                        <button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Download</button>
+                    }
+                </form>
+            </td>
+
+
+
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="3" class="text-center">
+            <h6>Nenhum documento foi encontrado.</h6>
+        </td>
+    </tr>
+}
+
+<script>
+    function updatePreview(id) {
+        const fileTypes = [
+            "application/pdf"
+        ];
+        const input = document.getElementById('FilePathDOC/' + id);
+        const upload = document.getElementById(`uploadDOC/${id}`);
+        const preview = document.getElementById('preview');
+        input.style.opacity = 0;
+
+
+        const curFiles = input.files;
+        if (curFiles.length === 0) {
+            textContent = 'Nenhum arquivo selecionado.';
+            preview.appendChild(para);
+            document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
+            upload.style.display = 'none'
+        } else {
+
+            for (const file of curFiles) {
+                if (validFileType(file)) {
+                    var textContent = `Arquivo ${file.name}`;
+                    document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
+                    upload.style.display = ''
+                } else {
+                    var textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
+                    upload.style.display = 'none'
+                    document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
+                }
+            }
+        }
+        function validFileType(file) {
+            return fileTypes.includes(file.type);
+        }
+    }
+
+</script>

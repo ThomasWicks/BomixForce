@@ -7,6 +7,28 @@
     <div>
         <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger font-project mt-3" style="color: white; background-color: #D52229;">Voltar</a>
     </div>
+    @using (Html.BeginForm())
+    {
+        <form id="typeSearch" asp-controller="Document" asp-action="Index">
+            <div class="row ">
+                <div class="form-group">
+                    <label for="example-date-input" class="col-2 col-form-label">Busca</label>
+                    <div class="search ml-3 mr-2 ">
+                        <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
+                        @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                    </div>
+                </div>
+                <div class="form-group mt-2 ml-2">
+                    <label for="example-date-input" class="col-2 col-form-label"></label>
+                    <div class="mt-1">
+                        <button class="btn btn-primary mr-4 font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    }
     @if (!User.IsInRole("Employee"))
     {
         <p>
@@ -14,7 +36,7 @@
         </p>
     }
     <div class="table-responsive mt-5">
-        <table class="table table-striped">
+        <table id="documentTable" class="table table-striped">
             <thead>
                 <tr class="bg-dark">
                     <th class="text-center text-white">
@@ -46,59 +68,13 @@
             <tbody>
                 @if (@Model?.Count() > 0)
                 {
-                    @foreach (var item in Model)
-                    {
-
-                        <tr>
-                            <td class="text-center ">
-                                @Html.DisplayFor(modelItem => item.Type)
-                            </td>
-                            <td class="text-center ">
-                                @Html.DisplayFor(modelItem => item.Date)
-                            </td>
-                            <td class="text-center">
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </td>
-                            @if (User.IsInRole("Employee"))
-                            {
-                                <td class="text-left">
-                                    <form class="text-center" asp-action="Upload" enctype="multipart/form-data">
-                                        <input type="hidden" name="Id" id="Id" value="@item.Id" />
-                                        <div class="image-upload text-center">
-                                            <label for="FilePathDOC/@item.Id">
-                                                <img style="width: 30px; height: 30px; cursor: pointer;" src="~/Assets/ic_upload.png" />
-                                            </label>
-                                            <label id="LabelFilePathDOC/@item.Id">
-                                                Nenhum arquivo Selecionado
-                                            </label>
-                                            <input type="file" onchange="updatePreview(@item.Id)" id="FilePathDOC/@item.Id" name="FilePath" multiple accept=".pdf" />
-
-                                        </div>
-                                        <button id="uploadDOC/@item.Id" type="submit" class="btn btn-primary font-project" style="display:none; color: white; background-color: #002A51;">Upload</button>
-                                    </form>
-                                </td>
-                            }
-
-                            <td class="text-center">
-                                <form asp-action="Download">
-                                    <input type="hidden" id="Id" name="Id" value="@item.Id" />
-                                    @if (item.Status == "Concluido")
-                                    {
-                                        <button type="submit" class="btn btn-primary font-project" style="color: white; background-color: #002A51;">Download</button>
-                                    }
-                                </form>
-                            </td>
-
-
-
-                        </tr>
-                    }
+                 
                 }
                 else
                 {
                     <tr>
                         <td colspan="3" class="text-center">
-                            <h6>Não foi possível achar as informações de não conformidade.</h6>
+                            <h6>Nenhum documento foi encontrado.</h6>
                         </td>
                     </tr>
                 }
@@ -106,45 +82,66 @@
         </table>
     </div>
 </div>
+<script src="~/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+    
 
-<script>
-    function updatePreview(id) {
-        const fileTypes = [
-            "application/pdf"
-        ];
-        const input = document.getElementById('FilePathDOC/' + id);
-        const upload = document.getElementById(`uploadDOC/${id}`);
-        const preview = document.getElementById('preview');
-        input.style.opacity = 0;
+      $(document).ready(function () {
 
+        $("#loadingdiv").hide();
+        var filter = '@(ViewBag.filter)'
+        var searchString = '@(ViewBag.searchString)'
+        var dataexist = true
+        var modelLenght = '@(Model?.Count())'
+        modelLenght = modelLenght ? modelLenght : 0
+        var inProgress = false
+        currentPageNumber = 0;
+            loadData(currentPageNumber)
+        $(window).scroll(function () {
 
-        const curFiles = input.files;
-        if (curFiles.length === 0) {
-            textContent = 'Nenhum arquivo selecionado.';
-            preview.appendChild(para);
-            document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
-            upload.style.display = 'none'
-        } else {
-
-            for (const file of curFiles) {
-                if (validFileType(file)) {
-                    var textContent = `Arquivo ${file.name}`;
-                    document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
-                    upload.style.display = ''
-                } else {
-                    var textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
-                    upload.style.display = 'none'
-                    document.getElementById('LabelFilePathDOC/' + id).innerText = textContent
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - 20 && !inProgress && dataexist) {
+                    inProgress = true;
+                    currentPageNumber += 1;
+                    loadData(currentPageNumber);
+                $("#loadingdiv").show();
                 }
             }
+            )
+        function loadData(currentPage) {
+                if (currentPageNumber * 20 >modelLenght && currentPageNumber != 0) {
+                    dataexist=false
+            }
+            searchString = removeAcento(searchString);
+            $.ajax({
+                url: 'InfiniteScroll',
+                data: {
+                    pageNumber: currentPage, pageSize: 10, searchString: searchString
+                },
+                method: 'Post',
+                dataType: 'html',
+                success: function (data) {
+                    var documenttable = $('#documentTable');
+                        documenttable.append(data)
+                    inProgress = false;
+                    $("#loadingdiv").hide();
+                    }
+                })
         }
+      })
 
 
-
-
-        function validFileType(file) {
-            return fileTypes.includes(file.type);
-        }
+    function removeAcento(text) {
+        text = text.toLowerCase();
+        text = text.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a');
+        text = text.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e');
+        text = text.replace(new RegExp('[ÍÌÎ]', 'gi'), 'i');
+        text = text.replace(new RegExp('[ÓÒÔÕ]', 'gi'), 'o');
+        text = text.replace(new RegExp('[ÚÙÛ]', 'gi'), 'u');
+        text = text.replace(new RegExp('&#xE1;', 'gi'), 'a');
+        text = text.replace(new RegExp('&#xed;', 'gi'), 'i');
+        return text;
     }
+
+
 </script>
 

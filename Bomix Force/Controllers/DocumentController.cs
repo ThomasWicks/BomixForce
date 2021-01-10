@@ -50,12 +50,13 @@ namespace Bomix_Force.Controllers
             _pedidoVendaRepository = pedidoVendaRepository;
 
         }
+        public static volatile List<Document> documents = new List<Document>();
         // GET: DocumentController
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
             List<DocumentViewModel> documentView = new List<DocumentViewModel>();
-            List<Document> documents = new List<Document>();
             var identityUser = _userManager.GetUserAsync(User);
+            ViewBag.searchString = searchString;
             if (identityUser.Result.EmailConfirmed == true)
             {
                 if (User.IsInRole("Admin") || User.IsInRole("Employee"))
@@ -64,7 +65,8 @@ namespace Bomix_Force.Controllers
                     documents = _genericDocumentService.GetAll().ToList();
                     documentView = _mapper.Map<IEnumerable<DocumentViewModel>>(documents).ToList();
                 }
-                else if (User.IsInRole("Company")){
+                else if (User.IsInRole("Company"))
+                {
 
                 }
                 else if (User.IsInRole("User"))
@@ -83,7 +85,7 @@ namespace Bomix_Force.Controllers
                     if (System.IO.File.Exists(path))
                         document.Status = "Concluido";
                     else
-                        document.Status = "Análise";
+                        document.Status = "Analise";
                 }
 
                 return View(documentView);
@@ -94,6 +96,47 @@ namespace Bomix_Force.Controllers
             }
 
         }
+
+        [HttpPost]
+        [Route("Document/InfiniteScroll")]
+        public ActionResult InfiniteScroll(int? pageNumber, int pageSize, string searchString)
+        {
+            int page = (pageNumber ?? 1);
+            try
+            {
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ViewBag.searchString = searchString;
+
+                IEnumerable<DocumentViewModel> documentView = _mapper.Map<IEnumerable<DocumentViewModel>>(documents);
+                foreach (var document in documentView)
+                {
+                    var path = Path.Combine(
+                   Directory.GetCurrentDirectory(),
+                   "wwwroot/answers", "DOC_" + document.Id.ToString() + ".pdf");
+                    if (System.IO.File.Exists(path))
+                        document.Status = "Concluido";
+                    else
+                        document.Status = "Analise";
+                }
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    searchString = searchString.Trim();
+                    var documentViewType = documentView.Where(d => d.Type != null && d.Type.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var documentViewDate = documentView.Where(d => d.Date != null && d.Date.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var documentViewStatus = documentView.Where(d => d.Status != null && d.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    documentView = documentViewType.Union(documentViewDate).Union(documentViewStatus).ToList();
+                }
+                documentView = documentView.Skip(page * pageSize).Take(pageSize).ToList();
+                return PartialView("_documentScrollPartial", documentView);
+            }
+            catch (Exception ex)
+            {
+                //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
+                return null;
+            }
+
+        }
+
 
         // GET: DocumentController/Details/5
         public ActionResult Details(int id)

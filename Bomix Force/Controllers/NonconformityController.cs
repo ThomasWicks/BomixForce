@@ -50,10 +50,11 @@ namespace Bomix_Force.Controllers
 
         }
         // GET: Nonconformity
-        public ActionResult Index()
+        public static volatile List<Nonconformity> nonconformities = new List<Nonconformity>();
+        public ActionResult Index(string searchString)
         {
+            ViewBag.searchString = searchString;
             List<NonconformityViewModel> nonconformityView = new List<NonconformityViewModel>();
-            List<Nonconformity> nonconformities = new List<Nonconformity>();
             var identityUser = _userManager.GetUserAsync(User);
             if (identityUser.Result.EmailConfirmed == true)
             {
@@ -86,7 +87,7 @@ namespace Bomix_Force.Controllers
                    Directory.GetCurrentDirectory(),
                    "wwwroot/answers", "RNC_"+nonConformity.Id.ToString() + ".pdf");
                     if (System.IO.File.Exists(path))
-                        nonConformity.Status = "Concluido";
+                        nonConformity.Status = "Concluído";
                     else
                         nonConformity.Status = "Análise";
                 }
@@ -96,6 +97,46 @@ namespace Bomix_Force.Controllers
             else
             {
                 return Redirect("~/Identity/Account/Manage");
+            }
+
+        }
+
+        [HttpPost]
+        [Route("Nonconformity/InfiniteScroll")]
+        public ActionResult InfiniteScroll(int? pageNumber, int pageSize, string searchString)
+        {
+            int page = (pageNumber ?? 1);
+            try
+            {
+                string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ViewBag.searchString = searchString;
+
+                IEnumerable<NonconformityViewModel> nonconformityView = _mapper.Map<IEnumerable<NonconformityViewModel>>(nonconformities);
+                foreach (var nonConformity in nonconformityView)
+                {
+                    var path = Path.Combine(
+                   Directory.GetCurrentDirectory(),
+                   "wwwroot/answers", "RNC_" + nonConformity.Id.ToString() + ".pdf");
+                    if (System.IO.File.Exists(path))
+                        nonConformity.Status = "Concluido";
+                    else
+                        nonConformity.Status = "Analise";
+                }
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    searchString = searchString.Trim();
+                    var nonConformityLote = nonconformityView.Where(n => n.Lote != null && n.Lote.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var nonConformityNF = nonconformityView.Where(n => n.Nf != null && n.Nf.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    var nonConformityStatus = nonconformityView.Where(n => n.Status != null && n.Status.ToString().ToLower().Contains(searchString.ToLower())).ToList();
+                    nonconformityView = nonConformityLote.Union(nonConformityNF).Union(nonConformityStatus).ToList();
+                }
+                nonconformityView = nonconformityView.Skip(page * pageSize).Take(pageSize).ToList();
+                return PartialView("_nonConformityScrollPartial", nonconformityView);
+            }
+            catch (Exception ex)
+            {
+                //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
+                return null;
             }
 
         }
