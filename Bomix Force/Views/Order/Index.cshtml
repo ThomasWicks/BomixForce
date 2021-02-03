@@ -23,7 +23,8 @@
                         <label for="example-date-input" class="col-2 col-form-label">Busca</label>
                         <div class="search ml-3 mr-2 ">
                             <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
-                            @Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })
+                            <input class="input-search" id="searchString" name="searchString" placeholder="Pesquisar" value="@(ViewBag.searchString)" />
+                            @*@Html.TextBox("searchString", null, new {value = "teste", placeholder = "Pesquisar", @class = "input-search" })*@
                         </div>
                     </div>
                     <div class="form-group mr-2">
@@ -63,25 +64,25 @@
                             Número Pedido
                             @if (ViewBag.filter == "nPedidoAsc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "nPedidoDesc" })"><i class="fas fa-caret-up"></i></a>
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "nPedidoDesc" })"><i class="fas fa-caret-up"></i></a>
                             }
                             @if (ViewBag.filter != "nPedidoAsc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "nPedidoAsc" })"><i class="fas fa-caret-down"></i></a>
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "nPedidoAsc" })"><i class="fas fa-caret-down"></i></a>
                             }
                         </th>
                         <th class="text-center">
-                            Ordem
+                            Ordem de Compra
                         </th>
                         <th class="text-center">
                             Produto
                             @if (ViewBag.filter == "ProdutoDesc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "ProdutoAsc" })"><i class="fas fa-caret-up"></i></a>
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "ProdutoAsc" })"><i class="fas fa-caret-up"></i></a>
                             }
                             @if (ViewBag.filter != "ProdutoDesc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "ProdutoDesc" })"><i class="fas fa-caret-down"></i></a>
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "ProdutoDesc" })"><i class="fas fa-caret-down"></i></a>
                             }
                         </th>
                         <th class="text-center">
@@ -102,11 +103,11 @@
                                 Cliente
                                 @if (ViewBag.filter == "ClienteAsc")
                                 {
-                                    <a href="@Url.Action("Index", "Order", new { filter = "ClienteDesc" })"><i class="fas fa-caret-up"></i></a>
+                                    <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "ClienteDesc" })"><i class="fas fa-caret-up"></i></a>
                                 }
                                 @if (ViewBag.filter != "ClienteAsc")
                                 {
-                                    <a href="@Url.Action("Index", "Order", new { filter = "ClienteAsc" })"><i class="fas fa-caret-down"></i></a>
+                                    <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "ClienteAsc" })"><i class="fas fa-caret-down"></i></a>
                                 }
                             </th>
                         }
@@ -114,11 +115,11 @@
                             Entrega
                             @if (ViewBag.filter == "EmissaoAsc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>
                             }
                             @if (ViewBag.filter != "EmissaoAsc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "EmissaoAsc" })"><i class="fas fa-caret-down"></i></a>
                             }
                         </th>
 
@@ -129,11 +130,11 @@
                             Status
                             @if (ViewBag.filter == "StatusAsc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "StatusDesc" })"><i class="fas fa-caret-up"></i></a>
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "StatusDesc" })"><i class="fas fa-caret-up"></i></a>
                             }
                             @if (ViewBag.filter != "StatusAsc")
                             {
-                                <a href="@Url.Action("Index", "Order", new { filter = "StatusAsc" })"><i class="fas fa-caret-down"></i></a>
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "StatusAsc" })"><i class="fas fa-caret-down"></i></a>
                             }
                         </th>
                         @if (User.IsInRole("User") || User.IsInRole("Company"))

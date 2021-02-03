@@ -17,33 +17,32 @@
     </div>
     @*<h3 class="text-center title-font">Documentos</h3>*@
     <hr />
-    <div class="card text-center align-items-center">
+    <div class="card text-center align-items-center" >
         <h3 class="card-header align-self-stretch">Documentos</h3>
         <div class="align-items-center col-md-6">
             <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <label value="">Selecione o tipo de documento</label> <br />
-                <div class="multiselect">
-                    <div class="selectBox" onclick="showCheckboxes()">
-                        <select>
+                <div class="multiselect" >
+                    <div class="selectBox" id="div-select" onclick="showCheckboxes()" style="cursor: pointer;">
+                        <select class="form-control" id="selectOptions">
                             <option>Selecione a opção</option>
                         </select>
                         <div class="overSelect"></div>
                     </div>
-                    <div id="checkboxes" class="form-group col-12" style="text-align:start; ">
-
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AF">Alvará de funcionamento<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AS">Alvará sanitário<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LA">Licença ambiental<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001">Certificado ISO 9001<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000">Certificado FSSC 22000<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG">Laudo de migração<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB">Laudo microbiológico<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA">Declaração ausência de alergênicos<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
+                    <div id="checkboxes" class="form-group col-12" style="text-align:start;">
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AF" value="Alvará de funcionamento" >Alvará de funcionamento<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB" value="AVCB – Auto de vistoria do Corpo de Bombeiros" >AVCB – Auto de vistoria do Corpo de Bombeiros <br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AS" value="Alvará sanitário" >Alvará sanitário<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LA" value="Licença ambiental" >Licença ambiental<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001" value="Certificado ISO 9001" >Certificado ISO 9001<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000" value="Certificado FSSC 22000" >Certificado FSSC 22000<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG" value="Laudo de migração" >Laudo de migração<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB" value="Laudo microbiológico" >Laudo microbiológico<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" value="Especificações técnicas" id="espectecCheckBox" onchange="showfieldsEspecTec()" >Especificações técnicas<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" value="Certidões negativas de débitos" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()" >Certidões negativas de débitos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA" value="Declaração ausência de alergênicos" >Declaração ausência de alergênicos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" value="Outros" id="othersCheckBox" onchange="showfieldsOther()" >Outros<br />
                         <span id="createSetorSpan" class="text-danger" />
                     </div>
                 </div>
@@ -64,13 +63,18 @@
                 </div>
                 <div class="form-group col-12" id="Type" style="display: none">
                     <label asp-for="@Model.Debit">Tipo</label>
-                    <select id="´selectCreateSetor" asp-for="@Model.Debit" class="form-control">
+                    <select id="selectCreateSetor" asp-for="@Model.Debit" class="form-control">
                         <option value="">Selecione o tipo de certidão</option>
                         <option value="Municipais">Municipais</option>
                         <option value="Estaduais">Estaduais</option>
                         <option value="Federais">Federais</option>
                     </select>
                     <span id="createSetorSpan" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12">
+                    <label>Documentos selecionados: </label>
+                    <ol id="selecteds" style="list-style: none;">
+                    </ol>
                 </div>
                 <div>
 
@@ -99,8 +103,8 @@
                 <br />
                 <br />
 
-                <div class="form-group float-right">
-                    <input type="submit" onclick="startOverlay()" value="Enviar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
+                <div class="form-group">
+                    <input type="submit" onclick="startOverlay()" value="Solicitar" class="btn btn-primary font-project" style="color: white; background-color: #002A51;" />
                 </div>
                 @*<a asp-controller="Home" asp-action="Login" class="btn btn-danger float-left font-project " style="color: white; background-color: #D52229;">Voltar</a>*@
             </form>
@@ -194,8 +198,59 @@
     }
 
 
-    var expanded = false;
+    document.addEventListener('click', (evt) => {
+        const selectDivElement = document.getElementById('div-select');
+        const checkBoxesElement = document.getElementById('checkboxes');
+        let targetElement = evt.target; // clicked element
+        if (targetElement.type == 'checkbox')
+            countCheckBoxes(targetElement);
+        do {
+            if (targetElement == selectDivElement || targetElement == checkBoxesElement) {
+                // This is a click inside. Do nothing, just return.1
+                return;
+            }
+            // Go up the DOM
+            targetElement = targetElement.parentNode;
+        } while (targetElement);
 
+        // This is a click outside.
+        let checkboxes = document.getElementById('checkboxes');
+        checkboxes.style.display = 'none';
+        expanded = false;
+        let list = document.getElementById('selecteds');
+        list.querySelectorAll('*').forEach(children => children.remove());
+        listChecked.forEach(value => {
+            let newNode = document.createElement('li');
+            const newTxt = document.createTextNode(value);
+            newNode.appendChild(newTxt);
+            list.appendChild(newNode);
+        }); 
+    });
+
+    let listChecked = new Array();
+    let numChecked = 0;
+    function countCheckBoxes(element) {
+        if (element.checked) {
+            numChecked += 1;
+            listChecked.push(element.value);
+        }
+        else {
+            listChecked = listChecked.filter(item => item != element.value);
+            numChecked--;
+        }
+        if (numChecked > 0) {
+            let select = document.getElementById('selectOptions');
+            let str = 'Selecionados: ' + numChecked.toString();
+            select.options[select.selectedIndex].text = str;
+        }
+        else {
+            let select = document.getElementById('selectOptions');
+            let str = 'Selecione a opção';
+            select.options[select.selectedIndex].text = str;
+        }
+    }
+
+    var expanded = false;
     function showCheckboxes() {
         var checkboxes = document.getElementById("checkboxes");
         if (!expanded) {
@@ -204,6 +259,14 @@
         } else {
             checkboxes.style.display = "none";
             expanded = false;
+            let list = document.getElementById('selecteds');
+            list.querySelectorAll('*').forEach(children => children.remove());
+            listChecked.forEach(value => {
+                let newNode = document.createElement('li');
+                const newTxt = document.createTextNode(value);
+                newNode.appendChild(newTxt);
+                list.appendChild(newNode);
+            });            
         }
     }
 </script>

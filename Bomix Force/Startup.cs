@@ -72,7 +72,6 @@ namespace Bomix_Force
             //Injeção de dependencia
             services.AddScoped<ModelContext>();
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
-            //services.AddScoped<IGenericRepository<Order>, GenericRepository<Order>>();
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
             services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
             services.AddScoped<INonconformityRepository, NonconformityRepository>();
@@ -84,18 +83,20 @@ namespace Bomix_Force
             services.AddScoped<IPedidoItemRepository, PedidoItemRepository>();
             services.AddScoped<IBomixNotaFiscalVendaRepository, BomixNotaFiscalVendaRepository>();
 
-            //services.AddScoped<IGenericRepository<Item>, GenericRepository<Item>>();
-            //services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
             services.AddScoped<IGenericRepository<IdentityUser>, GenericRepository<IdentityUser>>();
             // Creating schedule repeat job as service
             services.AddHttpContextAccessor();
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             services.AddSingleton<ResetPassJob>();
+            services.AddSingleton<CreateNewUsers>();
             //TODO Master
             //services.AddSingleton(new JobSchedule(
             //        jobType: typeof(ResetPassJob),
             //        cronExpression: "0 0 00 1 1/3 ?"));
+            services.AddSingleton(new JobSchedule(
+                    jobType: typeof(CreateNewUsers),
+                    cronExpression: "0 00 23 ? * *"));
             services.AddHostedService<QuartzHostedService>();
         }
 
