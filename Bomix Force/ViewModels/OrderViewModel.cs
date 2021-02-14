@@ -24,6 +24,7 @@ namespace Bomix_Force.ViewModels
         public string Personalizacao { get; set; }
         public float Valor { get; set; }
         public string OrdemCompra { get; set; }
+        public bool Color { get; set; }
 
         public List<OrderViewModel> orderViewModelDetails;
 

@@ -5,71 +5,56 @@
 
 @if (Model?.Count() > 0)
 {
+    var pedido = "";
+    bool collor = true;
     @foreach (var item in Model)
     {
-    <tr>
-        <th class="text-center">
-            @item.Pedido
-
-        </th>
-        @if (@item.OrdemCompra != "")
+        if (pedido == item.Pedido)
         {
-            <th class="text-center ">
-                @item.OrdemCompra
-            </th>
-
+            item.Color = collor;
         }
         else
         {
-            <th class="text-center ">
-                -
-            </th>
+            pedido = item.Pedido;
+            collor = !collor;
+            item.Color = collor;
         }
-        @if (@item.Produto != "")
-        {
-            <th class="text-center ">
-                @item.Produto
-            </th>
+        <tr class="@item.Color.ToString()">
+            <th class="text-center">
+                @item.Pedido
 
-        }
-        else
-        {
-            <th class="text-center ">
-                -
             </th>
-        }
-        @if (@item.Quantidade != 0)
-        {
-            <th class="text-center">
-                @item.Quantidade
-            </th>
+            @if (@item.OrdemCompra != "")
+            {
+                <th class="text-center ">
+                    @item.OrdemCompra
+                </th>
 
-        }
-        else
-        {
-            <th class="text-center">
-                -
-            </th>
-        }
-        @if (@item.Valor != 0)
-        {
-            <th class="text-center">
-                @item.Valor
-            </th>
+            }
+            else
+            {
+                <th class="text-center ">
+                    -
+                </th>
+            }
+            @if (@item.Produto != "")
+            {
+                <th class="text-center ">
+                    @item.Produto
+                </th>
 
-        }
-        else
-        {
-            <th class="text-center">
-                -
-            </th>
-        }
-        @if (!User.IsInRole("Employee"))
-        {
-            @if (@item.Personalizacao != "")
+            }
+            else
+            {
+                <th class="text-center ">
+                    -
+                </th>
+            }
+            @if (@item.Quantidade != 0)
             {
                 <th class="text-center">
-                    @item.Personalizacao
+                    @string.Format("{0:0,0}", item.Quantidade)
+
                 </th>
 
             }
@@ -78,63 +63,91 @@
                 <th class="text-center">
                     -
                 </th>
+            }
+            @if (@item.Valor != 0)
+            {
+                <th class="text-center">
+                    @string.Format("{0:C}", item.Valor)
+                </th>
 
             }
-        }
-        @if (!User.IsInRole("User") && !User.IsInRole("Company"))
-        {
+            else
+            {
+                <th class="text-center">
+                    -
+                </th>
+            }
+            @if (!User.IsInRole("Employee"))
+            {
+                @if (@item.Personalizacao != "")
+                {
+                    <th class="text-center">
+                        @item.Personalizacao
+                    </th>
+
+                }
+                else
+                {
+                    <th class="text-center">
+                        -
+                    </th>
+
+                }
+            }
+            @if (!User.IsInRole("User") && !User.IsInRole("Company"))
+            {
+                <th class="text-center">
+                    @item.Cliente
+                </th>
+            }
             <th class="text-center">
-                @item.Cliente
+                @Html.DisplayFor(modelItem => @item.Emissao)
             </th>
-        }
-        <th class="text-center">
-            @Html.DisplayFor(modelItem => @item.Emissao)
-        </th>
-        <th class="text-center">
-            @item.Cidade - @item.UF
-        </th>
-        @if (@item.Status == "ENCERRADO")
-        {
-            <th class="mt-2 badge border border-danger">
-                <a class="text-danger">Encerrado</a>
+            <th class="text-center">
+                @item.Cidade - @item.UF
             </th>
+            @if (@item.Status == "ENCERRADO")
+            {
+                <th class="mt-2 badge border border-danger">
+                    <a class="text-danger">Encerrado</a>
+                </th>
 
-        }
-        else if (@item.Status == "ABERTO")
-        {
-            <th class="mt-2 badge border border-primary">
-                <a class="text-primary">Aberto</a>
-            </th>
-        }
-        else if (@item.Status == "LIBERADO")
-        {
-            <th class="mt-2 badge border border-success ">
-                <a class="text-success">Liberado</a>
-            </th>
-        }
-        else if (@item.Status == "ORCAMENTO")
-        {
-            <th class="mt-2 badge border border-secondary">
-                <a class="text-secondary">Orçamento</a>
-            </th>
-        }
-        else
-        {
-            <th class="mt-2 badge border border-info">
-                <a class="text-info">@item.Status</a>
-            </th>
-        }
-        @if (User.IsInRole("User") || User.IsInRole("Company"))
-        {
-            <th>
-                <div>
+            }
+            else if (@item.Status == "ABERTO")
+            {
+                <th class="mt-2 badge border border-primary">
+                    <a class="text-primary">Aberto</a>
+                </th>
+            }
+            else if (@item.Status == "LIBERADO")
+            {
+                <th class="mt-2 badge border border-success ">
+                    <a class="text-success">Liberado</a>
+                </th>
+            }
+            else if (@item.Status == "ORCAMENTO")
+            {
+                <th class="mt-2 badge border border-secondary">
+                    <a class="text-secondary">Orçamento</a>
+                </th>
+            }
+            else
+            {
+                <th class="mt-2 badge border border-info">
+                    <a class="text-info">@item.Status</a>
+                </th>
+            }
+            @if (User.IsInRole("User") || User.IsInRole("Company"))
+            {
+                <th>
+                    <div>
 
-                    <button data-toggle="orderDetails" onclick="openConfirmationModal(this, @item.Pedido)" data-url="@Url.Action($"DuplicateData/{@item.Pedido}")" data-target="#duplicateModal" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
-                </div>
-            </th>
-        }
+                        <button data-toggle="orderDetails" onclick="openConfirmationModal(this, @item.Pedido)" data-url="@Url.Action($"DuplicateData/{@item.Pedido}")" data-target="#duplicateModal" class="btn btn-primary btn-lg float-right"><i class="fas fa-copy"></i></button>
+                    </div>
+                </th>
+            }
 
-    </tr>
+        </tr>
 
     }
 }
@@ -149,4 +162,10 @@
             OrderDetailsElement.find('.modal').modal('show');
         })
     }
+    $(document).ready(function ($) {
+        $('.False').addClass('table-secondary');
+        $('.True').addClass('table-light');
+        $("tr").removeClass("True");
+        $("tr").removeClass("False");
+    });
 </script>
