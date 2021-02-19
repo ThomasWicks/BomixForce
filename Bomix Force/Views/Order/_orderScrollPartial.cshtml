@@ -6,18 +6,18 @@
 @if (Model?.Count() > 0)
 {
     var pedido = "";
-    bool collor = true;
+    bool color = true;
     @foreach (var item in Model)
     {
         if (pedido == item.Pedido)
         {
-            item.Color = collor;
+            item.Color = color;
         }
         else
         {
             pedido = item.Pedido;
-            collor = !collor;
-            item.Color = collor;
+            color = !color;
+            item.Color = color;
         }
         <tr class="@item.Color.ToString()">
             <th class="text-center">

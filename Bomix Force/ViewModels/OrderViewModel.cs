@@ -27,6 +27,7 @@ namespace Bomix_Force.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime PCP { get; set; }
+        public bool Color { get; set; }
 
         public List<OrderViewModel> orderViewModelDetails;
     }
