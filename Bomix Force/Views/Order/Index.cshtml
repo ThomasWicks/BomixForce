@@ -57,7 +57,7 @@
         }
         <hr />
         <div class="table-responsive mt-5">
-            <table id="#tableOrder" class="table table-striped">
+            <table id="#tableOrder" class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th class="text-center">
@@ -112,7 +112,7 @@
                             </th>
                         }
                         <th class="text-center">
-                            Entrega
+                            Data de Saída
                             @if (ViewBag.filter == "EmissaoAsc")
                             {
                                 <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "EmissaoDesc" })"><i class="fas fa-caret-up"></i></a>

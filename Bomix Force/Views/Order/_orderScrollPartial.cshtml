@@ -5,9 +5,21 @@
 
 @if (Model?.Count() > 0)
 {
+    var pedido = "";
+    bool collor = true;
     @foreach (var item in Model)
     {
-        <tr>
+        if (pedido == item.Pedido)
+        {
+            item.Color = collor;
+        }
+        else
+        {
+            pedido = item.Pedido;
+            collor = !collor;
+            item.Color = collor;
+        }
+        <tr class="@item.Color.ToString()">
             <th class="text-center">
                 @item.Pedido
 
@@ -41,7 +53,8 @@
             @if (@item.Quantidade != 0)
             {
                 <th class="text-center">
-                    @item.Quantidade
+                    @string.Format("{0:0,0}", item.Quantidade)
+
                 </th>
 
             }
@@ -54,7 +67,7 @@
             @if (@item.Valor != 0)
             {
                 <th class="text-center">
-                    @String.Format("{0:c}", item.Valor)
+                    @string.Format("{0:C}", item.Valor)
                 </th>
 
             }
@@ -88,7 +101,7 @@
                 </th>
             }
             <th class="text-center">
-                @Html.DisplayFor(modelItem => @item.PCP)
+                @Html.DisplayFor(modelItem => @item.Emissao)
             </th>
             <th class="text-center">
                 @item.Cidade - @item.UF
@@ -149,4 +162,10 @@
             OrderDetailsElement.find('.modal').modal('show');
         })
     }
+    $(document).ready(function ($) {
+        $('.False').addClass('table-secondary');
+        $('.True').addClass('table-light');
+        $("tr").removeClass("True");
+        $("tr").removeClass("False");
+    });
 </script>
