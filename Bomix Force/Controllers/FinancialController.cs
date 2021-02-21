@@ -50,10 +50,19 @@ namespace Bomix_Force.Controllers
 
         }
         public static volatile List<FinancialViewModel> financialViewModel = new List<FinancialViewModel>();
-        public ActionResult Index(string filter, string searchString,DateTime dateInit, DateTime dateEnd)
+        public ActionResult Index(string filter, string searchString, DateTime dateInit, DateTime dateEnd)
         {
             ViewBag.filter = filter;
-            ViewBag.searchString = searchString;
+            if (!String.IsNullOrEmpty(TempData["searchString"]?.ToString()) && String.IsNullOrEmpty(searchString))
+            {
+                ViewBag.searchString = TempData["searchString"].ToString();
+
+            }
+            else
+            {
+                ViewBag.searchString = searchString;
+                TempData["searchString"] = searchString;
+            }
             ViewBag.dateInit = dateInit == DateTime.MinValue ? null : dateInit.Date.ToString("yyyy-MM-dd");
             ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
 
@@ -128,7 +137,7 @@ namespace Bomix_Force.Controllers
 
         }
         [HttpPost]
-        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect)
+        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect, string searchString)
         {
             try
             {
@@ -170,9 +179,10 @@ namespace Bomix_Force.Controllers
 
 
         // GET: FinancialController/Details/5
-        public ActionResult Details(string nota)
+        public ActionResult Details(string nota, string searchString)
         {
             FinancialViewModel financial = financialViewModel.Where(e => e.Nota == nota).First();
+            ViewBag.searchString = searchString;
             return View(financial);
         }
 
