@@ -191,7 +191,7 @@ namespace Bomix_Force.Controllers
 
                 }
 
-                string FilePath = ".\\Views\\Template Email\\RNC.html";
+                string FilePath = ".\\Views\\TemplateEmail\\RNC.html";
                 StreamReader str = new StreamReader(FilePath);
                 string msg = str.ReadToEnd();
                 msg = msg.Replace("NomeCliente", company.Name);
@@ -204,7 +204,8 @@ namespace Bomix_Force.Controllers
 
                 str.Close();
                 Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
-                await _emailSender.SendEmailAsync(employee.Email, "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
+                //await _emailSender.SendEmailAsync(employee.Email, "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
+                await _emailSender.SendEmailAsync("thomaswicks96@gmail.com", "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
                 Nonconformity nonconformity = _mapper.Map<Nonconformity>(nonconformityViewModel);
                 nonconformity.Company = company;
                 var values = Enum.GetValues(typeof(ItemEnum));

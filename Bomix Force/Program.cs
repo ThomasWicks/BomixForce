@@ -21,9 +21,9 @@ namespace Bomix_Force
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
-                    .UseKestrel()
-                    .UseContentRoot(Directory.GetCurrentDirectory())
-                    .UseIISIntegration()
+                    //.UseKestrel()
+                    //.UseContentRoot(Directory.GetCurrentDirectory())
+                    //.UseIISIntegration()
                     .UseStartup<Startup>();
                 });
     }
