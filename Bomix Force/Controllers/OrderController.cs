@@ -123,7 +123,9 @@ namespace Bomix_Force.Controllers
                     email = company.Email;
                 }
                 Employee employee = _pedidoVendaRepository.GetEmployeesBySeller_id(order[0].Vendedor_FK);
-                string FilePath = ".\\Views\\TemplateEmail\\Order.html";
+                string FilePath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot/TemplateEmail", "Order.html");
                 StreamReader str = new StreamReader(FilePath);
                 string mensage = str.ReadToEnd();
                 mensage = mensage.Replace("NomeCliente", company.Name);
@@ -132,7 +134,9 @@ namespace Bomix_Force.Controllers
                 mensage = mensage.Replace("Ordem", Ordem);
                 foreach (var item in order)
                 {
-                    string Orderpath = ".\\Views\\TemplateEmail\\OrderTable.html";
+                    string Orderpath = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot/TemplateEmail", "OrderTable.html.html");
                     StreamReader oederstr = new StreamReader(Orderpath);
                     string msg = oederstr.ReadToEnd();
                     msg = msg.Replace("Produto", item.Produto);

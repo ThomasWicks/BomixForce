@@ -85,7 +85,7 @@ namespace Bomix_Force.Controllers
                 {
                     var path = Path.Combine(
                    Directory.GetCurrentDirectory(),
-                   "wwwroot/answers", "RNC_"+nonConformity.Id.ToString() + ".pdf");
+                   "wwwroot/answers", "RNC_" + nonConformity.Id.ToString() + ".pdf");
                     if (System.IO.File.Exists(path))
                         nonConformity.Status = "Concluído";
                     else
@@ -191,7 +191,9 @@ namespace Bomix_Force.Controllers
 
                 }
 
-                string FilePath = ".\\Views\\TemplateEmail\\TemplateRNC.html";
+                string FilePath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot/TemplateEmail", "TemplateRNC.html");
                 StreamReader str = new StreamReader(FilePath);
                 string msg = str.ReadToEnd();
                 msg = msg.Replace("NomeCliente", company.Name);
@@ -224,7 +226,7 @@ namespace Bomix_Force.Controllers
             }
             catch (Exception e)
             {
-                Notify("Não foi possivel criar o registro", "Não Conformidade", NotificationType.error);
+                Notify($"Não foi possivel criar o registro: {e.Message}", "Não Conformidade", NotificationType.error);
                 return View();
             }
         }

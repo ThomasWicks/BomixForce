@@ -10,10 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\TemplateEmail\**" />
-    <Content Remove="Views\TemplateEmail\**" />
-    <EmbeddedResource Remove="Views\TemplateEmail\**" />
-    <None Remove="Views\TemplateEmail\**" />
+    <Compile Remove="wwwroot\TemplateEmail\**" />
+    <Content Remove="wwwroot\TemplateEmail\**" />
+    <EmbeddedResource Remove="wwwroot\TemplateEmail\**" />
+    <None Remove="wwwroot\TemplateEmail\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,9 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Views\TemplateEmail\Order.html" />
-    <Content Include="Views\TemplateEmail\OrderTable.html" />
-    <Content Include="Views\TemplateEmail\TemplateRNC.html" />
+    <Content Include="wwwroot\TemplateEmail\Order.html" />
+    <Content Include="wwwroot\TemplateEmail\OrderTable.html" />
+    <Content Include="wwwroot\TemplateEmail\TemplateRNC.html" />
   </ItemGroup>
 
   <ItemGroup>
