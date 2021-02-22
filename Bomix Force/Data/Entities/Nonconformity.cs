@@ -17,7 +17,6 @@ namespace Bomix_Force.Data.Entities
         public string Nf { get; set; }
         public int ItemEnum { get; set; }
         public int Quantity { get; set; }
-        public byte[] Answer { get; set; }
         [ForeignKey("Company")]
         public int? CompanyId { get; set; }
         public virtual Company Company { get; set; }
