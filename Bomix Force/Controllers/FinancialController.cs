@@ -161,7 +161,7 @@ namespace Bomix_Force.Controllers
 
         }
         [HttpPost]
-        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect, string searchString)
+        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect)
         {
             try
             {
