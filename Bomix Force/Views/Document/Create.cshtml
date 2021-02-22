@@ -17,13 +17,13 @@
     </div>
     @*<h3 class="text-center title-font">Documentos</h3>*@
     <hr />
-    <div class="card text-center align-items-center" >
+    <div class="card text-center align-items-center">
         <h3 class="card-header align-self-stretch">Documentos</h3>
         <div class="align-items-center col-md-6">
             <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <label value="">Selecione o tipo de documento</label> <br />
-                <div class="multiselect" >
+                <div class="multiselect">
                     <div class="selectBox" id="div-select" onclick="showCheckboxes()" style="cursor: pointer;">
                         <select class="form-control" id="selectOptions">
                             <option>Selecione a opção</option>
@@ -31,18 +31,18 @@
                         <div class="overSelect"></div>
                     </div>
                     <div id="checkboxes" class="form-group col-12" style="text-align:start;">
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AF" value="Alvará de funcionamento" >Alvará de funcionamento<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB" value="AVCB – Auto de vistoria do Corpo de Bombeiros" >AVCB – Auto de vistoria do Corpo de Bombeiros <br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AS" value="Alvará sanitário" >Alvará sanitário<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LA" value="Licença ambiental" >Licença ambiental<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001" value="Certificado ISO 9001" >Certificado ISO 9001<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000" value="Certificado FSSC 22000" >Certificado FSSC 22000<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG" value="Laudo de migração" >Laudo de migração<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB" value="Laudo microbiológico" >Laudo microbiológico<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" value="Especificações técnicas" id="espectecCheckBox" onchange="showfieldsEspecTec()" >Especificações técnicas<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" value="Certidões negativas de débitos" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()" >Certidões negativas de débitos<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA" value="Declaração ausência de alergênicos" >Declaração ausência de alergênicos<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" value="Outros" id="othersCheckBox" onchange="showfieldsOther()" >Outros<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AF">Alvará de funcionamento<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AS">Alvará sanitário<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LA">Licença ambiental<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001">Certificado ISO 9001<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000">Certificado FSSC 22000<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG">Laudo de migração<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB">Laudo microbiológico<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA">Declaração ausência de alergênicos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
                         <span id="createSetorSpan" class="text-danger" />
                     </div>
                 </div>
@@ -224,7 +224,7 @@
             const newTxt = document.createTextNode(value);
             newNode.appendChild(newTxt);
             list.appendChild(newNode);
-        }); 
+        });
     });
 
     let listChecked = new Array();
@@ -266,7 +266,7 @@
                 const newTxt = document.createTextNode(value);
                 newNode.appendChild(newTxt);
                 list.appendChild(newNode);
-            });            
+            });
         }
     }
 </script>
