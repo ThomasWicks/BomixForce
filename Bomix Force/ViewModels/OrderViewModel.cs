@@ -27,14 +27,5 @@ namespace Bomix_Force.ViewModels
         public bool Color { get; set; }
 
         public List<OrderViewModel> orderViewModelDetails;
-
-        //public virtual List<Bomix_PedidoVendaItem> Item { get; set; }
-
-        //public int Id { get; set; }
-        //public int Pedido { get; set; }
-        //public DateTime Emissao { get; set; }
-        //public DateTime Entrega { get; set; }
-        //public string Status { get; set; }
-        //public virtual List<Item> Item { get; set; }
     }
 }
