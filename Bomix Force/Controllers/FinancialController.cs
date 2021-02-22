@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -53,6 +54,9 @@ namespace Bomix_Force.Controllers
         public ActionResult Index(string filter, string searchString, DateTime dateInit, DateTime dateEnd)
         {
             ViewBag.filter = filter;
+            string dateInitString;
+            string dateEndString;
+
             if (!String.IsNullOrEmpty(TempData["searchString"]?.ToString()) && String.IsNullOrEmpty(searchString))
             {
                 ViewBag.searchString = TempData["searchString"].ToString();
@@ -63,11 +67,31 @@ namespace Bomix_Force.Controllers
                 ViewBag.searchString = searchString;
                 TempData["searchString"] = searchString;
             }
-            ViewBag.dateInit = dateInit == DateTime.MinValue ? null : dateInit.Date.ToString("yyyy-MM-dd");
-            ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
+            if (!String.IsNullOrEmpty(TempData["dateInit"]?.ToString()) && dateInit == DateTime.MinValue)
+            {
+                DateTime tempdate = DateTime.ParseExact(TempData["dateinit"].ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                ViewBag.dateInit = tempdate.Date.ToString("yyyy-MM-dd");
+                dateInitString = tempdate.Date.ToString();
+            }
+            else
+            {
+                ViewBag.dateInit = dateInit == DateTime.MinValue ? null : dateInit.Date.ToString("yyyy-MM-dd");
+                TempData["dateInit"] = dateInit == DateTime.MinValue ? "" : dateInit.Date.ToString("yyyy-MM-dd");
+                dateInitString = dateInit == DateTime.MinValue ? DateTime.Now.AddYears(-2).Date.ToString() : dateInit.Date.ToString();
 
-            string dateInitString = dateInit == DateTime.MinValue ? DateTime.Now.AddYears(-2).Date.ToString() : dateInit.Date.ToString();
-            string dateEndString = dateEnd == DateTime.MinValue ? DateTime.Now.Date.ToString() : dateEnd.Date.ToString();
+            }
+            if (!String.IsNullOrEmpty(TempData["dateEnd"]?.ToString()) && dateEnd == DateTime.MinValue)
+            {
+                DateTime tempdate = DateTime.ParseExact(TempData["dateEnd"].ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                ViewBag.dateEnd = tempdate.Date.ToString("yyyy-MM-dd");
+                dateEndString = tempdate.Date.ToString();
+            }
+            else
+            {
+                ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
+                TempData["dateEnd"] = dateEnd == DateTime.MinValue ? "" : dateEnd.Date.ToString("yyyy-MM-dd");
+                dateEndString = dateEnd == DateTime.MinValue ? DateTime.Now.Date.ToString() : dateEnd.Date.ToString();
+            }
             var identityUser = _userManager.GetUserAsync(User);
             if (identityUser.Result.EmailConfirmed == true)
             {
@@ -137,7 +161,7 @@ namespace Bomix_Force.Controllers
 
         }
         [HttpPost]
-        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect, string searchString)
+        public async Task<ActionResult> Download(string Nota, string typeFinancial, string parcelaSelect)
         {
             try
             {

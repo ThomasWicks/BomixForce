@@ -31,18 +31,18 @@
                         <div class="overSelect"></div>
                     </div>
                     <div id="checkboxes" class="form-group col-12" style="text-align:start;">
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AF">Alvará de funcionamento<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.AS">Alvará sanitário<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LA">Licença ambiental<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001">Certificado ISO 9001<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000">Certificado FSSC 22000<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG">Laudo de migração<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB">Laudo microbiológico<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA">Declaração ausência de alergênicos<br />
-                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AF" nome="Alvará de funcionamento">Alvará de funcionamento<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AVCB" nome="AVCB – Auto de vistoria do Corpo de Bombeiros">AVCB – Auto de vistoria do Corpo de Bombeiros <br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.AS" nome="Alvará sanitário">Alvará sanitário<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LA" nome="Licença ambiental">Licença ambiental<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CISSO9001" nome="Certificado ISO 9001">Certificado ISO 9001<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CFSSC22000" nome="Certificado FSSC 22000">Certificado FSSC 22000<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMG" nome="Laudo de migração">Laudo de migração<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.LMB" nome="Laudo microbiológico">Laudo microbiológico<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.ET" nome="Especificações técnicas" id="espectecCheckBox" onchange="showfieldsEspecTec()">Especificações técnicas<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.CND" nome="Certidões negativas de débitos" id="CertNegDebCheckBox" onchange="showfieldsCertNegDeb()">Certidões negativas de débitos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.DAA" nome="Declaração ausência de alergênicos">Declaração ausência de alergênicos<br />
+                        <input class="mr-1" type="checkbox" asp-for="@Model.OT" nome="Outros" id="othersCheckBox" onchange="showfieldsOther()">Outros<br />
                         <span id="createSetorSpan" class="text-danger" />
                     </div>
                 </div>
@@ -232,10 +232,11 @@
     function countCheckBoxes(element) {
         if (element.checked) {
             numChecked += 1;
-            listChecked.push(element.value);
+            
+            listChecked.push($(element).attr("nome"));
         }
         else {
-            listChecked = listChecked.filter(item => item != element.value);
+            listChecked = listChecked.filter(item => item != $(element).attr("nome"));
             numChecked--;
         }
         if (numChecked > 0) {
