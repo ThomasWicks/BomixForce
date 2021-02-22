@@ -191,7 +191,7 @@ namespace Bomix_Force.Controllers
 
                 }
 
-                string FilePath = ".\\Views\\TemplateEmail\\RNC.html";
+                string FilePath = ".\\Views\\TemplateEmail\\TemplateRNC.html";
                 StreamReader str = new StreamReader(FilePath);
                 string msg = str.ReadToEnd();
                 msg = msg.Replace("NomeCliente", company.Name);

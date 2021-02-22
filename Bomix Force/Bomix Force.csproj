@@ -33,7 +33,7 @@
   <ItemGroup>
     <Content Include="Views\TemplateEmail\Order.html" />
     <Content Include="Views\TemplateEmail\OrderTable.html" />
-    <Content Include="Views\TemplateEmail\RNC.html" />
+    <Content Include="Views\TemplateEmail\TemplateRNC.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,7 +61,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\Assets\LoginBomix.png" />
-    <None Include="Views\TemplateEmail\RNC.html" />
   </ItemGroup>
 
   <ItemGroup>
