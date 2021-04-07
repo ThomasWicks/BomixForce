@@ -16,10 +16,10 @@ ViewData["Title"] = "Log in";
                         <div class="login-inputs">
                             @Html.ValidationMessage("loginError", "", new { @class = "text-danger" })
                             <label class="login-label" for="exampleInputEmail1">Usuário</label>
-                            <input asp-for="Input.UserName" placeholder="Usuario" class="input mb-2" />
+                            <input asp-for="Input.UserName" placeholder="Digite seu usuario" class="input mb-2" />
                             <span asp-validation-for="Input.UserName" class="text-danger"></span>
                             <label class="login-label mt-1" for="exampleInputPassword1">Senha</label>
-                            <input asp-for="Input.Password" placeholder="Senha" class="input" />
+                            <input asp-for="Input.Password" placeholder="Digite sua senha" class="input" />
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                             <div class="btn btn-link">
                                 <a  asp-area="Identity" asp-page="/Account/ForgotPassword" asp-route-returnUrl="@Url.Action("ForgotPassword", "Manage", new { area = "" })">Esqueci minha senha</a>
