@@ -108,27 +108,33 @@
             </th>
             @if (@item.Status == "ENCERRADO")
             {
-                <th class="mt-2 badge border border-danger">
-                    <a class="text-danger">Encerrado</a>
+                <th class="mt-2 badge border border-success">
+                    <a class="text-success">ENCERRADO</a>
                 </th>
 
             }
             else if (@item.Status == "ABERTO")
             {
                 <th class="mt-2 badge border border-primary">
-                    <a class="text-primary">Aberto</a>
+                    <a class="text-primary">ABERTO</a>
                 </th>
             }
             else if (@item.Status == "LIBERADO")
             {
-                <th class="mt-2 badge border border-success ">
-                    <a class="text-success">Liberado</a>
+                <th class="mt-2 badge border border-primary ">
+                    <a class="text-primary">ABERTO</a>
                 </th>
             }
             else if (@item.Status == "ORCAMENTO")
             {
                 <th class="mt-2 badge border border-secondary">
-                    <a class="text-secondary">Orçamento</a>
+                    <a class="text-secondary">ORCAMENTO</a>
+                </th>
+            }
+            else if (@item.Status == "PARCIAL")
+            {
+                <th class="mt-2 badge border border-warning">
+                    <a class="text-warning">PARCIAL</a>
                 </th>
             }
             else
