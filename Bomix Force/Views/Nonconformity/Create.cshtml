@@ -54,14 +54,15 @@
                     <br />
                 </div>
                 <div class="text-center">
-                    <label> Para que possamos te atender melhor insira fotos da não conformidade e da etiqueta <sup><img class="tag" src="~/Assets/tag.svg" href="#" onmouseover="mostrarElemento('prodImagem', 'inline');" onmouseout="mostrarElemento('prodImagem', 'none');"></sup> do produto.</label>
+                    <label> Para que possamos te atender melhor insira fotos da não conformidade e da etiqueta <sup><img class="tag" src="~/Assets/tag.svg" href="#" onmouseover="mostrarElemento('prodImagem', 'inline');" onmouseout="mostrarElemento('prodImagem', 'none');"></sup> do produto. Caso deseje, envie seu formulário de não conformidade.</label>
                     @*<a><img class="tag" src="~/Assets/tag.svg" href="#" onmouseover="mostrarElemento('prodImagem', 'inline');" onmouseout="mostrarElemento('prodImagem', 'none');"></a>*@
                 </div>
                 <div class="image-upload text-center">
                     <label for="FilePath">
                         <img style="width: 60px; height: 60px; cursor: pointer;" src="~/Assets/ic_upload.png" />
                     </label>
-                    <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png, .pdf" />
+                    <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png, .pdf, .doc, .docx, .odt" />
+                    <p><small class="text-center ">.jpg, .jpeg, .png, .pdf, .doc, .docx, .odt</small></p>
                     <div id="preview">
                         <p>Nenhum arquivo selecionado.</p>
                     </div>
