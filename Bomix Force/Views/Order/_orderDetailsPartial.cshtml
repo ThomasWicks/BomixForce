@@ -11,7 +11,7 @@
                 <div class="row">
                     <h5 class="col-6"><strong>Numero do Pedido: @Model[0].Pedido</strong></h5>
                     <div class="col-6 float-right">
-                        <input class="form-control col-6 float-right" type="number" min="1" value="1" style="height: 30px" id="OrdemDeCompra"/>
+                        <input class="form-control col-6 float-right" disabled="true" type="number" min="1" style="height: 30px" id="OrdemDeCompra"/>
                         <h5 class="float-right mr-1">Ordem de compra:  </h5>
                     </div>
                 </div>
@@ -20,11 +20,14 @@
                         <thead class="thead-light">
 
                             <tr>
-                                <th class="text-center">
+                                <th class="text-center align-middle">
                                     Produto
                                 </th>
-                                <th class="text-center">
+                                <th class="text-center align-middle">
                                     Quantidade
+                                </th>
+                                <th class="text-center align-middle">
+                                    Valor Unitário <smal class="text-danger">*</smal>
                                 </th>
                             </tr>
                         </thead>
@@ -59,10 +62,27 @@
                                             -
                                         </th>
                                     }
+                                    @if (item.ValorUnitario != 0.0f)
+                                    {
+                                        <th class="text-center ">
+                                            @item.ValorUnitario
+                                        </th>
 
+                                    }
+                                    else
+                                    {
+                                        <th class="text-center ">
+                                            -
+                                        </th>
+                                    }
                                 </tr>
                             }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><small class="text-danger">*Valor sujeito a mudança, confirme com o vendedor.</small></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <button data-dismiss="modal" class="btn btn-danger">Cancelar</button>

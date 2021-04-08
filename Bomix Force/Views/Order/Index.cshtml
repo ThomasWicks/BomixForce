@@ -88,9 +88,12 @@
                         <th class="text-center">
                             Quantidade
                         </th>
-                        <th class="text-center">
-                            Valor
-                        </th>
+                        @if(!User.IsInRole("User") && !User.IsInRole("Company"))
+                        {
+                            <th class="text-center">
+                                Valor
+                            </th>
+                        }
                         @if (!User.IsInRole("Employee"))
                         {
                             <th class="text-center">

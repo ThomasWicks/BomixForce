@@ -23,6 +23,7 @@ namespace Bomix_Force.ViewModels
         public string Arte { get; set; }
         public string Personalizacao { get; set; }
         public float Valor { get; set; }
+        public float ValorUnitario { get; set; }
         public string OrdemCompra { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]

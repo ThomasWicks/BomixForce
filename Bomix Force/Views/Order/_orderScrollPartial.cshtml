@@ -66,10 +66,11 @@
             }
             @if (@item.Valor != 0)
             {
-                <th class="text-center">
-                    @string.Format("{0:C}", item.Valor)
-                </th>
-
+                @if(!User.IsInRole("User") && !User.IsInRole("Company")){
+                    <th class="text-center">
+                        @string.Format("{0:C}", item.Valor)
+                    </th>
+                }
             }
             else
             {
