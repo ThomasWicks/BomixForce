@@ -99,7 +99,7 @@
                                 }
 
                                 <p class="title-card-white">@Html.DisplayFor(modelItem => item.Name)</p>
-                                <p class="info-card-white">Email: @Html.DisplayFor(modelItem => item.Email)</p>
+                                <p class="info-card-white">Email: <a href="mailto:@Html.DisplayFor(modelItem => item.Email)">@Html.DisplayFor(modelItem => item.Email)</a></p>
                                 @if (!ViewBag.indexEmployees && (User.IsInRole("Admin") || User.IsInRole("Employee")))
                                 {
                                     <p class="info-card-white">CNPJ: @Html.DisplayFor(modelItem => item.Cnpj)</p>
@@ -171,8 +171,3 @@
         </div>
     </div>
 </div>
-<style scoped>
-    .teste{
-        display: contents !important;
-    }
-</style>
