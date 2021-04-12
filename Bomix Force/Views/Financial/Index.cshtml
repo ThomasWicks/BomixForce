@@ -19,13 +19,15 @@
         @using (Html.BeginForm())
         {
             <form id="typeSearch" asp-controller="Order" asp-action="Index">
-                <div class="row">
+                <div class="row ">
                     <div class="form-group">
                         <label for="example-date-input" class="col-2 col-form-label">Busca</label>
-                        <div class="search ml-3 mr-2">
-                            <input type="image" alt="Submit" src="~/Assets/ic_search.png" style="margin-left: 3px;" />
+                        <div class="search ml-3 mr-2 ">
+                            <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
                             <input class="input-search" id="searchString" name="searchString" placeholder="Pesquisar" value="@(ViewBag.searchString)" />
-                            @*@Html.TextBox("searchString", null, new { placeholder = "Pesquisar", @class = "input-search" })*@
+                            <button type="button" id="clearButtonSearch" class="close" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                     </div>
                     <div class="form-group mr-2">
@@ -40,15 +42,20 @@
                             <input class="form-control" value="@(ViewBag.dateEnd)" name="dateEnd" id="dateEnd" type="date">
                         </div>
                     </div>
+                    @*<input name="dateInit" id="dateInit" type="date">
+                        <input name="dateEnd" id="dateEnd" type="date">*@
                     <div class="form-group mt-2 ml-2">
                         <label for="example-date-input" class="col-2 col-form-label"></label>
                         <div class="mt-1">
                             <button class="btn btn-primary mr-4 font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
                         </div>
                     </div>
-                    @*<div class=" ml-2">
-                            <button class="btn btn-primary font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
-                        </div>*@
+                    <div class="form-group mt-2">
+                        <label for="example-date-input" class="col-2 col-form-label"></label>
+                        <div class="mt-1">
+                            <button id="clearButtonDates" class="btn btn-danger font-project mr-4" style="color: white; background-color: #D52229;" >Limpar datas</button>
+                        </div>
+                    </div>
                 </div>
             </form>
 
@@ -162,6 +169,64 @@
             })
         }
     })
+
+    const inputSearch = document.getElementById('searchString');
+    const inputDateInit = document.getElementById('dateInit');
+    const inputDateEnd = document.getElementById('dateEnd');
+    const clearButtonSearch = document.getElementById('clearButtonSearch');
+    const clearButtonDates = document.getElementById('clearButtonDates');
+    
+    const show = (element) => {
+        element.style.display = 'block';
+    }
+
+    const hide = (element) => {
+        element.style.display = 'none';
+    }
+
+    const checkClearButtons = () =>{
+        if (inputSearch.value.length > 0)
+            show(clearButtonSearch);
+        else
+            hide(clearButtonSearch);
+        if (inputDateInit.value.length > 0)
+            show(clearButtonDates);
+        else
+            hide(clearButtonDates);
+        if (inputDateEnd.value.length > 0)
+            show(clearButtonDates);
+        else
+            hide(clearButtonDates);
+    }
+
+    const onChangeInputSearch = (event) => {
+        if (event.target.value.length > 0)
+            show(clearButtonSearch);
+        else
+            hide(clearButtonSearch);
+    }
+
+    const onChangeDate = (event) => {
+        show(clearButtonDates);
+    }
+
+    const clearSearch = () => {
+        inputSearch.value = '';
+        hide(clearButtonSearch);
+    }
+
+    const clearDates = () => {
+        inputDateInit.value = '';
+        inputDateEnd.value = '';
+        hide(clearButtonDates);
+    }
+
+    clearButtonSearch.addEventListener("click", clearSearch);
+    clearButtonDates.addEventListener("click", clearDates);
+    inputDateInit.onchange = onChangeDate;
+    inputDateEnd.onchange = onChangeDate;
+    inputSearch.onkeyup = onChangeInputSearch;
+    checkClearButtons();
 </script>
 
 
