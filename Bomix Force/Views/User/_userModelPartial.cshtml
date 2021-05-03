@@ -60,6 +60,12 @@
                             <span id="editCargoSpan" class="text-danger"></span>
                         </div>
                     </div>
+                    @* <div class="row">
+                        <div class="col-6">
+                            <label>Usuário com permissão de administrador?</label>
+                            <input type="checkbox" asp-for="@Model.Admin"/>
+                        </div>
+                    </div> *@
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     <button type="button" onclick="editvalidate()" class="btn btn-primary float-right">Editar</button>
                 </form>

@@ -47,6 +47,8 @@ namespace Bomix_Force.ViewModels
         public string Setor { get; set; }
         public Company Company { get; set; }
         public string Cnpj { get; set; }
+        [Display(Name = "Usuário com permissão de administrador?")]
+        public bool Admin { get; set; }
     }
     public class UserViewEdit
     {
@@ -67,7 +69,5 @@ namespace Bomix_Force.ViewModels
         public string Setor { get; set; }
         [Required]
         public int? CompanyId { get; set; }
-
-
     }
 }

@@ -153,16 +153,8 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string Username, string Name, string Setor, string Cargo, string Email)
+        public async Task<ActionResult> Create(UserViewModel userView)
         {
-            UserViewModel userView = new UserViewModel()
-            {
-                UserName = Username,
-                Name = Name,
-                Setor = Setor,
-                Cargo = Cargo,
-                Email = Email,
-            };
             try
             {
                 //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -176,11 +168,19 @@ namespace Bomix_Force.Controllers
                     string randomPass = passwordGenerator.GeneratePassword();
                     //Person person_owner = _genericPersonService.Get(u => u.IdentityUserId == userId).First();
                     Company company = _genericCompanyService.Get(g => g.IdentityUserId == userId).First();
+                    var countUsers = _genericPersonService.Get(m => m.CompanyId == company.Id).Count();
+                    if (countUsers == 3){
+                        ModelState.AddModelError("Não é possível cadastrar", "Limite de 3 usuários atingido.");
+                        return StatusCode(409);
+                    }
+                    Console.WriteLine("after 3");
                     var user = new IdentityUser { UserName = userView.UserName, Email = userView.Email };
                     var result = await _userManager.CreateAsync(user, randomPass);
 
-                    if (company.Id == 0 && User.IsInRole("Admin"))
+                    if (company.Id == 0 && User.IsInRole("Admin") && userView.Admin)
                         _ = await _userManager.AddToRoleAsync(user, "Admin");
+                    else if(User.IsInRole("Admin") && !userView.Admin)
+                        _ = await _userManager.AddToRoleAsync(user, "Employee");
                     else
                         _ = await _userManager.AddToRoleAsync(user, "User");
 
@@ -202,7 +202,6 @@ namespace Bomix_Force.Controllers
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
-                    //}
 
                     // If we got this far, something failed, redisplay form
                     return RedirectToAction(nameof(Index));

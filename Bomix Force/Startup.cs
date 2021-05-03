@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using Bomix_Force.Data.Context;
 using Bomix_Force.Repo;
 using Bomix_Force.Data.Entities;
@@ -69,7 +70,7 @@ namespace Bomix_Force
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
 
-            //Injeção de dependencia
+            //Injeï¿½ï¿½o de dependencia
             services.AddScoped<ModelContext>();
             services.AddScoped<IGenericRepository<Company>, GenericRepository<Company>>();
             services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
@@ -98,6 +99,9 @@ namespace Bomix_Force
                     jobType: typeof(CreateNewUsers),
                     cronExpression: "0 00 23 ? * *"));
             services.AddHostedService<QuartzHostedService>();
+
+            // hot reload development
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         private async Task CreateRolesandUsers(IServiceProvider serviceProvider)

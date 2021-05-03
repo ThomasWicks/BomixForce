@@ -125,11 +125,14 @@
                 const para = document.createElement('p');
                 if (validFileType(file)) {
                     para.textContent = `Arquivo ${file.name}`;
-                    const image = document.createElement('img');
-                    image.src = URL.createObjectURL(file);
-                    image.width = 300;
-                    image.height = 150;
-                    listItem.appendChild(image);
+                    if (!file.name.includes('.do') && !file.name.includes('.odt'))
+                    {
+                        const image = document.createElement('img');
+                        image.src = URL.createObjectURL(file);
+                        image.width = 300;
+                        image.height = 150;
+                        listItem.appendChild(image);
+                    }
                     listItem.appendChild(para);
                 } else {
                     para.textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
@@ -149,9 +152,13 @@
         "image/jpeg",
         "image/pjpeg",
         "image/png",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword",
+        "application/vnd.oasis.opendocument.text"
     ];
 
     function validFileType(file) {
+        console.log(file.type);
         return fileTypes.includes(file.type);
     }
 

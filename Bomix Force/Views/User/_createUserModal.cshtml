@@ -67,8 +67,20 @@
                             </select>
                             <span id="createCargoSpan" class="text-danger"></span>
                         </div>
-
                     </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="row">
+                            <div class="col-6">
+                                @* <label>Usuário com permissão de administrador?</label>
+                                <input type="checkbox" name="checkAdmin" id="checkAdmin" data-val="true" value="true" asp-for="@Model.Admin"/> *@
+                                <div class="checkbox">
+                                    <label>Usuário com permissão de administrador?</label>
+                                    <input asp-for="@Model.Admin" onchange="changeCheckAdmin(this.checked)" id="checkAdmin" />
+                                </div>
+                            </div>
+                        </div>
+                    }
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     <button type="button" onclick="validateCreate()" class="btn btn-primary float-right">Cadastrar</button>
                 </div>
@@ -79,14 +91,17 @@
 </div>
 
 <script>
-    var createUsername = ''
-    var createName = ''
-    var createCargo = ''
-    var createSetor = ''
-    var createEmail = ''
+    var createUsername = '';
+    var createName = '';
+    var createCargo = '';
+    var createSetor = '';
+    var createEmail = '';
+    var checkAdmin = false;
 
-
-
+    function changeCheckAdmin(value) {
+        console.log(value);
+        checkAdmin = value;
+    }
     function changeCreateUsername(value) {
         createUsername = value;
     }
@@ -125,33 +140,38 @@
                     Setor: createSetor,
                     Cargo: createCargo,
                     Email: createEmail,
+                    Admin: checkAdmin,
                 },
                 complete: function (e, xhr, settings) {
                     document.getElementById('loadingSpinnerOverlay').style.display = 'none';
                     if (e.status === 200) {
-                                                toastr.options = {
-                          "closeButton": false,
-                          "debug": false,
-                          "newestOnTop": false,
-                          "progressBar": false,
-                          "positionClass": "toast-top-right",
-                          "preventDuplicates": false,
-                          "onclick": null,
-                          "showDuration": "5000",
-                          "hideDuration": "1000",
-                          "timeOut": 0,
-                          "extendedTimeOut": 0,
-                          "showEasing": "swing",
-                          "hideEasing": "linear",
-                          "showMethod": "fadeIn",
-                          "hideMethod": "fadeOut",
-                          "tapToDismiss": false
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "5000",
+                            "hideDuration": "1000",
+                            "timeOut": 0,
+                            "extendedTimeOut": 0,
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut",
+                            "tapToDismiss": false
                         }
                         toastr.success("Usuário Cadastrado com sucesso", "Usuário");
                         setTimeout(function () {
                             getUser()
                         }, 2000);
-                    } else {
+                    } 
+                    else if(e.status === 409){
+                        toastr.error("Você atingiu o número máximo de cadastro", "Usuário");
+                    }
+                    else {
                         toastr.error("Ocorreu um erro no cadastro", "Usuário");
                     }
                 },
@@ -194,7 +214,6 @@
             return true
         }
     }
-
     function validateEmail(createEmail) {
         var re = /\S+@@\S+\.\S+/;
         var formatEmail = re.test(createEmail);
