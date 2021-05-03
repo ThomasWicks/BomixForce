@@ -20,7 +20,7 @@
             <form id="typeSearch" asp-controller="Order" asp-action="Index">
                 <div class="row ">
                     <div class="form-group">
-                        <label for="example-date-input" class="col-2 col-form-label">Busca</label>
+                        <label class="col-2 col-form-label">Busca</label>
                         <div class="search ml-3 mr-2 ">
                             <img src="~/Assets/ic_search.png" style="margin-left: 3px;" />
                             <input class="input-search" id="searchString" name="searchString" placeholder="Pesquisar" value="@(ViewBag.searchString)" />
@@ -30,23 +30,34 @@
                         </div>
                     </div>
                     <div class="form-group mr-2">
-                        <label for="example-date-input" class="col-2 col-form-label ">Inicio</label>
-                        <div class="">
+                        <label class="col-2 col-form-label ">Inicio</label>
+                        <div>
                             <input class="form-control" value="@(ViewBag.dateInit)" name="dateInit" id="dateInit" type="date">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="example-date-input" class="col-2 col-form-label">Fim</label>
-                        <div class="">
+                    <div class="form-group mr-2">
+                        <label class="col-2 col-form-label">Fim</label>
+                        <div>
                             <input class="form-control" value="@(ViewBag.dateEnd)" name="dateEnd" id="dateEnd" type="date">
                         </div>
                     </div>
-                    @*<input name="dateInit" id="dateInit" type="date">
-                        <input name="dateEnd" id="dateEnd" type="date">*@
+                    <div class="form-group">
+                        <label class="col-2 col-form-label">Status</label>
+                        <div>
+                            <select id="filterStatus" name="filterStatus" class="form-control">
+                                <option value="" hidden>Selecione um status</option>
+                                <option value="">TODOS</option>
+                                <option value="ABERTO OU LIBERADO">ABERTO</option>
+                                <option value="PARCIAL">PARCIAL</option>
+                                <option value="ENCERRADO">FINALIZADO</option>
+                                <option value="ORCAMENTO">ORÇAMENTO</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group mt-2 ml-2">
                         <label for="example-date-input" class="col-2 col-form-label"></label>
                         <div class="mt-1">
-                            <button class="btn btn-primary mr-4 font-project" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
+                            <button class="btn btn-primary mr-4 font-project" id="searchSubmitButton" type="submit" style="color: white; background-color: #002A51;">Buscar</button>
                         </div>
                     </div>
                     <div class="form-group mt-2">
@@ -197,11 +208,27 @@
 <script src="~/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-
         $("#loadingdiv").hide();
         var filter = '@(ViewBag.filter)'
         var searchString = '@(ViewBag.searchString)'
         var orders = '@(ViewBag.orders)'
+        var filterStatus = '@(ViewBag.filterStatus)'
+        if (filterStatus === "ABERTO OU LIBERADO")
+        {
+            $("#filterStatus").val("ABERTO OU LIBERADO")
+        }
+        else if (filterStatus === "ENCERRADO")
+        {
+            $("#filterStatus").val("ENCERRADO")
+        }
+        else if (filterStatus === "PARCIAL")
+        {
+            $("#filterStatus").val("PARCIAL")
+        }
+        else if (filterStatus === "ORCAMENTO")
+        {
+            $("#filterStatus").val("ORCAMENTO")
+        }
         var dataexist = true
         var modelLenght = '@(Model?.Count)'
         modelLenght = modelLenght ? modelLenght : 0
@@ -225,7 +252,7 @@
             $.ajax({
                 url: 'InfiniteScroll',
                 data: {
-                    pageNumber: currentPage, pageSize: 20, filter: filter, searchString: searchString
+                    pageNumber: currentPage, pageSize: 20, filter: filter, searchString: searchString, filterStatus: filterStatus
                 },
                 method: 'Post',
                 dataType: 'html',
@@ -240,6 +267,7 @@
     })
 
     const inputSearch = document.getElementById('searchString');
+    const buttonSearchSubmit = document.getElementById('searchSubmitButton');
     const inputDateInit = document.getElementById('dateInit');
     const inputDateEnd = document.getElementById('dateEnd');
     const clearButtonSearch = document.getElementById('clearButtonSearch');
@@ -282,12 +310,14 @@
     const clearSearch = () => {
         inputSearch.value = '';
         hide(clearButtonSearch);
+        buttonSearchSubmit.click();
     }
 
     const clearDates = () => {
         inputDateInit.value = '';
         inputDateEnd.value = '';
         hide(clearButtonDates);
+        buttonSearchSubmit.click();
     }
 
     clearButtonSearch.addEventListener("click", clearSearch);

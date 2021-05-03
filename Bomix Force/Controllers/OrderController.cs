@@ -12,12 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Bomix_Force.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.IO;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using System.Text.RegularExpressions;
 
 namespace Bomix_Force.Controllers
 {
@@ -49,14 +44,14 @@ namespace Bomix_Force.Controllers
         }
         // GET: OrderController
         public static volatile List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
-        public ActionResult Index(string searchString, DateTime dateInit, DateTime dateEnd, string filter)
+        public ActionResult Index(string searchString, DateTime dateInit, DateTime dateEnd, string filter, string filterStatus)
         {
-
             try
             {
                 var identityUser = _userManager.GetUserAsync(User);
                 if (identityUser.Result.EmailConfirmed == true)
                 {
+                    ViewBag.filterStatus = filterStatus;
                     ViewBag.filter = filter;
                     ViewBag.dateInit = dateInit == DateTime.MinValue ? null : dateInit.Date.ToString("yyyy-MM-dd");
                     ViewBag.dateEnd = dateEnd == DateTime.MinValue ? null : dateEnd.Date.ToString("yyyy-MM-dd");
@@ -66,7 +61,12 @@ namespace Bomix_Force.Controllers
                     string dateEndString = dateEnd == DateTime.MinValue ? DateTime.Now.Date.ToString() : dateEnd.Date.ToString();
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     orders = _pedidoVendaRepository.GetParameters("PCP", dateInitString, dateEndString, user).ToList();
-                    List<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
+                    List<OrderViewModel> orderView = new List<OrderViewModel>();
+                    if (filterStatus != "" && filterStatus != null)
+                        orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).Where(o => filterStatus.Contains(o.Status)).ToList();
+                    else
+                        orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
+
                     if (orders.Count == 0)
                     {
                         return View();
@@ -81,7 +81,7 @@ namespace Bomix_Force.Controllers
                     return Redirect("~/Identity/Account/Manage");
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 List<OrderViewModel> orderView = new List<OrderViewModel>();
                 return View(orderView);
@@ -147,7 +147,7 @@ namespace Bomix_Force.Controllers
                 await _emailSender.SendEmailAsync(email, "Replicação Pedido", $"A requisição do pedido de número: {order[0].Pedido} foi realiada com sucesso.", null);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -159,8 +159,6 @@ namespace Bomix_Force.Controllers
         {
             return View();
         }
-
-
         // POST: OrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -175,19 +173,16 @@ namespace Bomix_Force.Controllers
                 return View();
             }
         }
-        //}
         [HttpPost]
         [Route("Order/InfiniteScroll")]
-        public ActionResult InfiniteScroll(int? pageNumber, int pageSize, string filter, string searchString)
+        public ActionResult InfiniteScroll(int? pageNumber, int pageSize, string filter, string searchString, string filterStatus)
         {
             int page = (pageNumber ?? 1);
             try
             {
                 string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
                 ViewBag.filter = filter;
                 ViewBag.searchString = searchString;
-
                 IEnumerable<OrderViewModel> orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders);
                 if (!String.IsNullOrEmpty(searchString))
                 {
@@ -199,17 +194,19 @@ namespace Bomix_Force.Controllers
                     var orderViewPersonalizacao = orderView.Where(o => o.Personalizacao != null && o.Personalizacao.ToString().ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewCidade = orderView.Where(o => o.Cidade.ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewUF = orderView.Where(o => o.UF.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewOrdem = orderView.Where(o => o.OrdemCompra.ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewCliente = orderView.Where(o => o.Cliente != null && o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
+                    var orderViewValor = orderView.Where(o => o.Valor.ToString().Contains(searchString)).ToList();
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
-                        orderView = orderViewPedido.Union(orderViewPCP).Union(orderViewStatus).
+                        orderView = orderViewPedido.Union(orderViewOrdem).Union(orderViewPCP).Union(orderViewStatus).
                             Union(orderViewPersonalizacao).Union(orderViewProduto).Union(orderViewCidade)
-                            .Union(orderViewUF).Union(orderViewCliente).ToList();
+                            .Union(orderViewUF).Union(orderViewCliente).Union(orderViewValor).ToList();
                     }
                     else
                     {
-                        orderView = orderViewPedido.Union(orderViewPCP).Union(orderViewPersonalizacao)
+                        orderView = orderViewPedido.Union(orderViewOrdem).Union(orderViewPCP).Union(orderViewPersonalizacao)
                             .Union(orderViewCidade).Union(orderViewUF)
                             .Union(orderViewProduto).Union(orderViewStatus).ToList();
                     }
@@ -261,6 +258,10 @@ namespace Bomix_Force.Controllers
                         break;
 
                 }
+                if (filterStatus != "" && filterStatus != null)
+                    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).Where(o => filterStatus.Contains(o.Status)).ToList();
+                else
+                    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
                 orderView = orderView.Skip(page * pageSize).Take(pageSize).ToList();
                 foreach (var order in orderView)
                 {
@@ -279,12 +280,11 @@ namespace Bomix_Force.Controllers
                 }
                 return PartialView("_orderScrollPartial", orderView);
             }
-            catch (Exception ex)
+            catch
             {
                 //TODO TRATAR ERRO E VER QUANDO NÃO HÁ PEDIDOS
                 return View();
             }
-
         }
 
         // GET: OrderController/Edit/5
