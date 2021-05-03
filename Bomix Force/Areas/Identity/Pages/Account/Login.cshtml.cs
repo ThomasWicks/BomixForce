@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
 using Bomix_Force.Repo.Interface;
 using Bomix_Force.Data.Entities;
 using Bomix_Force.Models;
@@ -100,9 +97,13 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                     var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
-
-                        _logger.LogInformation("User logged in.");
                         var user = await _userManager.FindByNameAsync(Input.UserName);
+                        if (!User.IsInRole("Admin") && (!(DateTime.Now.TimeOfDay > new DateTime(2000, 1, 1, 7, 30, 0).TimeOfDay) && !(DateTime.Now.TimeOfDay < new DateTime(2000, 1, 1, 17, 30, 0).TimeOfDay)))
+                        {
+                            ModelState.AddModelError("loginError", "Está fora do horário de acesso.");
+                            await _signInManager.SignOutAsync();
+                            return Page();
+                        }
                         if (User.IsInRole("User") || User.IsInRole("Company"))
                         {
                             Company company = new Company();
@@ -150,7 +151,6 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                     }
                     if (result.IsLockedOut)
                     {
-                        _logger.LogWarning("User account locked out.");
                         return RedirectToPage("./Lockout");
                     }
                     else
@@ -165,7 +165,7 @@ namespace Bomix_Force.Areas.Identity.Pages.Account
                 // If we got this far, something failed, redisplay form
                 return Page();
             }
-            catch (Exception e)
+            catch
             {
                 ModelState.AddModelError("loginError", "Erro desconhecido, se permanecer contate um administrador");
                 await _signInManager.SignOutAsync();
