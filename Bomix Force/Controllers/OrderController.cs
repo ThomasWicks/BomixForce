@@ -42,8 +42,8 @@ namespace Bomix_Force.Controllers
             _pedidoItemRepository = pedidoItemRepository;
             _userManager = userManager;
         }
-        // GET: OrderController
         public static volatile List<Bomix_PedidoVenda> orders = new List<Bomix_PedidoVenda>();
+        // GET: OrderController
         public ActionResult Index(string searchString, DateTime dateInit, DateTime dateEnd, string filter, string filterStatus)
         {
             try
@@ -90,18 +90,17 @@ namespace Bomix_Force.Controllers
 
 
 
+        //Get: OrderController/DuplicateData/5
         [HttpGet]
         [Route("Order/DuplicateData/{Pedido}")]
-        //Get: OrderController/DuplicateData/5
         public ActionResult DuplicateData(string Pedido)
         {
             List<Bomix_PedidoVenda> order = orders.Where(o => o.Pedido == Pedido).ToList();
             List<OrderViewModel> orderView = _mapper.Map<List<OrderViewModel>>(order);
             return PartialView("_orderDetailsPartial", orderView);
         }
-
-        [HttpPost]
         // Post: OrderController/Duplicate/5
+        [HttpPost]
         public async Task<ActionResult> Duplicate(string Pedido, string Ordem)
         {
             try
@@ -259,9 +258,7 @@ namespace Bomix_Force.Controllers
 
                 }
                 if (filterStatus != "" && filterStatus != null)
-                    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).Where(o => filterStatus.Contains(o.Status)).ToList();
-                else
-                    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
+                    orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orderView).Where(o => filterStatus.Contains(o.Status)).ToList();
                 orderView = orderView.Skip(page * pageSize).Take(pageSize).ToList();
                 foreach (var order in orderView)
                 {
