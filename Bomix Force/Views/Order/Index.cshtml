@@ -79,7 +79,7 @@
             <table id="#tableOrder" class="table">
                 <thead class="thead-dark">
                     <tr>
-                        <th class="text-center">
+                        <th class="text-center align-top">
                             Número Pedido
                             @if (ViewBag.filter == "nPedidoAsc")
                             {
@@ -90,10 +90,10 @@
                                 <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "nPedidoAsc" })"><i class="fas fa-caret-down"></i></a>
                             }
                         </th>
-                        <th class="text-center">
+                        <th class="text-center align-top">
                             Ordem de Compra
                         </th>
-                        <th class="text-center">
+                        <th class="text-center align-top">
                             Produto
                             @if (ViewBag.filter == "ProdutoDesc")
                             {
@@ -104,24 +104,40 @@
                                 <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "ProdutoDesc" })"><i class="fas fa-caret-down"></i></a>
                             }
                         </th>
-                        <th class="text-center">
+                        <th class="text-center align-top" style="width: 200px;">
                             Quantidade
+                            @if (ViewBag.filter == "QtdAsc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "QtdDesc" })"><i class="fas fa-caret-up"></i></a>
+                            }
+                            @if (ViewBag.filter != "QtdAsc")
+                            {
+                                <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "QtdAsc" })"><i class="fas fa-caret-down"></i></a>
+                            }
                         </th>
                         @if(!User.IsInRole("User") && !User.IsInRole("Company"))
                         {
-                            <th class="text-center">
+                            <th class="text-center align-top">
                                 Valor
+                                @if (ViewBag.filter == "ValorAsc")
+                                {
+                                    <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "ValorDesc" })"><i class="fas fa-caret-up"></i></a>
+                                }
+                                @if (ViewBag.filter != "ValorAsc")
+                                {
+                                    <a href="@Url.Action("Index", "Order", new {searchString = ViewBag.searchString, filter = "ValorAsc" })"><i class="fas fa-caret-down"></i></a>
+                                }
                             </th>
                         }
                         @if (!User.IsInRole("Employee"))
                         {
-                            <th class="text-center">
+                            <th class="text-center align-top">
                                 Personalizado
                             </th>
                         }
                         @if (!User.IsInRole("User") && !User.IsInRole("Company"))
                         {
-                            <th class="text-center">
+                            <th class="text-center align-top">
                                 Cliente
                                 @if (ViewBag.filter == "ClienteAsc")
                                 {
@@ -133,7 +149,7 @@
                                 }
                             </th>
                         }
-                        <th class="text-center">
+                        <th class="text-center align-top">
                             Data de Saída
                             @if (ViewBag.filter == "EmissaoAsc")
                             {
@@ -145,10 +161,10 @@
                             }
                         </th>
 
-                        <th class="text-center">
+                        <th class="text-center align-top">
                             Cidade-UF
                         </th>
-                        <th class="text-center">
+                        <th class="text-center align-top">
                             Status
                             @if (ViewBag.filter == "StatusAsc")
                             {
@@ -161,7 +177,7 @@
                         </th>
                         @if (User.IsInRole("User") || User.IsInRole("Company"))
                         {
-                            <th class="text-center">
+                            <th class="text-center align-top">
                                 Duplicar
                             </th>
                         }

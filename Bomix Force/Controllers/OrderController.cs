@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using System.Globalization;
 
 namespace Bomix_Force.Controllers
 {
@@ -61,11 +62,7 @@ namespace Bomix_Force.Controllers
                     string dateEndString = dateEnd == DateTime.MinValue ? DateTime.Now.Date.ToString() : dateEnd.Date.ToString();
                     string user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     orders = _pedidoVendaRepository.GetParameters("PCP", dateInitString, dateEndString, user).ToList();
-                    List<OrderViewModel> orderView = new List<OrderViewModel>();
-                    if (filterStatus != "" && filterStatus != null)
-                        orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).Where(o => filterStatus.Contains(o.Status)).ToList();
-                    else
-                        orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
+                    var orderView = _mapper.Map<IEnumerable<OrderViewModel>>(orders).ToList();
 
                     if (orders.Count == 0)
                     {
@@ -196,6 +193,13 @@ namespace Bomix_Force.Controllers
                     var orderViewOrdem = orderView.Where(o => o.OrdemCompra.ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewCliente = orderView.Where(o => o.Cliente != null && o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewValor = orderView.Where(o => o.Valor.ToString().Contains(searchString)).ToList();
+                    try{
+                        var seacrhValue = float.Parse(searchString, CultureInfo.CurrentCulture); 
+                        orderViewValor = orderView.Where(o => o.Valor <= seacrhValue).ToList();
+                    }
+                    catch{
+                        
+                    }
 
                     if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
@@ -252,6 +256,18 @@ namespace Bomix_Force.Controllers
                         orderView = orderView.Where(o => o.Status == "ABERTO").Concat(orderView.Where(o => o.Status == "LIBERADO"))
                           .Concat(orderView.Where(o => o.Status == "ORCAMENTO")).Concat(orderView.Where(o => o.Status == "PARCIAL"))
                           .Concat(orderView.Where(o => o.Status == "ENCERRADO"));
+                        break;
+                    case ("ValorAsc"):
+                        orderView = orderView.OrderBy(o => o.Valor);
+                        break;
+                    case ("ValorDesc"):
+                        orderView = orderView.OrderByDescending(o => o.Valor);
+                        break;
+                    case ("QtdAsc"):
+                        orderView = orderView.OrderBy(o => o.Quantidade);
+                        break;
+                    case ("QtdDesc"):
+                        orderView = orderView.OrderByDescending(o => o.Quantidade);
                         break;
                     default:
                         break;
