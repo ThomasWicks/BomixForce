@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
-using System.Globalization;
 
 namespace Bomix_Force.Controllers
 {
@@ -194,8 +193,8 @@ namespace Bomix_Force.Controllers
                     var orderViewCliente = orderView.Where(o => o.Cliente != null && o.Cliente.ToLower().Contains(searchString.ToLower())).ToList();
                     var orderViewValor = orderView.Where(o => o.Valor.ToString().Contains(searchString)).ToList();
                     try{
-                        var seacrhValue = float.Parse(searchString, CultureInfo.CurrentCulture); 
-                        orderViewValor = orderView.Where(o => o.Valor <= seacrhValue).ToList();
+                        var seacrhValue = float.Parse(searchString); 
+                        orderViewValor = orderView.Where(o => o.Valor <= seacrhValue).OrderByDescending(o => o.Valor).ToList();
                     }
                     catch{
                         
