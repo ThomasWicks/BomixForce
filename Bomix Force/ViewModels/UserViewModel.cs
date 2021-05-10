@@ -45,6 +45,7 @@ namespace Bomix_Force.ViewModels
         [Display(Name = "Setor")]
         [Required]
         public string Setor { get; set; }
+        public string WhatsAppPhone { get; set; }
         public Company Company { get; set; }
         public string Cnpj { get; set; }
         [Display(Name = "Usuário com permissão de administrador?")]
