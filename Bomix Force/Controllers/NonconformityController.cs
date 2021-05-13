@@ -175,7 +175,6 @@ namespace Bomix_Force.Controllers
         {
             try
             {
-
                 Company company = new Company();
                 if (User.IsInRole("Company"))
                 {
@@ -206,7 +205,8 @@ namespace Bomix_Force.Controllers
 
                 str.Close();
                 Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
-                await _emailSender.SendEmailAsync(employee.Email, "Registro de não conformidade", msg, nonconformityViewModel.FilePath);
+                Console.WriteLine(nonconformityViewModel.FilesPath);
+                await _emailSender.SendEmailAsync(/*employee.Email*/ "pedro.santana@bomix.com.br", "Registro de não conformidade", msg, nonconformityViewModel.FilesPath);
                 Nonconformity nonconformity = _mapper.Map<Nonconformity>(nonconformityViewModel);
                 nonconformity.Company = company;
                 var values = Enum.GetValues(typeof(ItemEnum));
@@ -308,7 +308,7 @@ namespace Bomix_Force.Controllers
                     System.IO.File.Delete(path);
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        await file.FilePath[0].CopyToAsync(stream);
+                        await file.FilesPath[0].CopyToAsync(stream);
                     }
                     Notify("O arquivo foi atualizado com sucesso", "Sucesso", NotificationType.success);
                 }
@@ -316,7 +316,7 @@ namespace Bomix_Force.Controllers
                 {
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        await file.FilePath[0].CopyToAsync(stream);
+                        await file.FilesPath[0].CopyToAsync(stream);
                     }
                     Notify("O arquivo foi enviado com sucesso", "Sucesso", NotificationType.success);
                 }

@@ -374,7 +374,7 @@ namespace Bomix_Force.Controllers
                     System.IO.File.Delete(path);
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        await file.FilePath[0].CopyToAsync(stream);
+                        await file.FilesPath[0].CopyToAsync(stream);
                     }
                     Notify("O arquivo foi atualizado com sucesso", "Sucesso", NotificationType.success);
                 }
@@ -382,7 +382,7 @@ namespace Bomix_Force.Controllers
                 {
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        await file.FilePath[0].CopyToAsync(stream);
+                        await file.FilesPath[0].CopyToAsync(stream);
                     }
                     Notify("O arquivo foi enviado com sucesso", "Sucesso", NotificationType.success);
                 }
