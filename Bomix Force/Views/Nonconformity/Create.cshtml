@@ -124,7 +124,6 @@
         document.getElementById(id).style.display = visibilidade;
     }
 
-
     input.style.opacity = 0;
     input.addEventListener('change', updateImageDisplay);
     const list = document.createElement('ol');
@@ -183,23 +182,6 @@
     function validFileType(file) {
         return fileTypes.includes(file.type);
     }
-
-    /*$.ajax({
-                url: 'InfiniteScroll',
-                data: {
-                    pageNumber: currentPage, pageSize: 20, filter: filter, searchString: searchString, filterStatus: filterStatus
-                },
-                method: 'Post',
-                dataType: 'html',
-                success: function (data) {
-                    var ordertable = $('#tableOrderbody');
-                    ordertable.append(data)
-                    inProgress = false;
-                    $("#loadingdiv").hide();
-                }
-            })*/
-
-
 </script>
 
 <style>
