@@ -58,11 +58,16 @@
                     @*<a><img class="tag" src="~/Assets/tag.svg" href="#" onmouseover="mostrarElemento('prodImagem', 'inline');" onmouseout="mostrarElemento('prodImagem', 'none');"></a>*@
                 </div>
                 <div class="image-upload text-center">
-                    <label for="FilePath">
+                    <label for="FilesPath">
                         <img style="width: 60px; height: 60px; cursor: pointer;" src="~/Assets/ic_upload.png" />
                     </label>
-                    <input type="file" id="FilePath" name="FilePath" multiple accept=".jpg, .jpeg, .png, .pdf, .doc, .docx, .odt" />
-                    <p><small class="text-center ">.jpg, .jpeg, .png, .pdf, .doc, .docx, .odt</small></p>
+                    <input type="file" id="FilesPath" name="FilesPath" multiple accept=".jpg, .jpeg, .png, .pdf, .doc, .docx, .odt" />
+                    <p>
+                        <small class="text-center ">.jpg, .jpeg, .png, .pdf, .doc, .docx, .odt</small>
+                        <button id="clearFiles" style="display: none;" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </p>
                     <div id="preview">
                         <p>Nenhum arquivo selecionado.</p>
                     </div>
@@ -92,6 +97,25 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
+    const input = document.getElementById('FilesPath');
+    const preview = document.getElementById('preview');
+    const clearFilesButton = document.getElementById('clearFiles');
+
+    const removeFiles = () => {
+        hideClearFilesButton();
+        input.value = '';
+        updateImageDisplay();
+    }
+
+    function hideClearFilesButton(){
+        clearFilesButton.style.display = "none";
+    }
+    function showClearFilesButton() {
+        clearFilesButton.style.display = "block";
+    }
+
+    clearFilesButton.addEventListener('click', removeFiles);
+
     function startOverlay() {
         document.getElementById('loadingSpinnerOverlay').style.display = 'block';
     }
@@ -99,9 +123,6 @@
     function mostrarElemento(id, visibilidade) {
         document.getElementById(id).style.display = visibilidade;
     }
-
-    const input = document.getElementById('FilePath');
-    const preview = document.getElementById('preview');
 
     input.style.opacity = 0;
     input.addEventListener('change', updateImageDisplay);
@@ -111,21 +132,24 @@
         while (preview.firstChild) {
             preview.removeChild(preview.firstChild);
         }
-
         const curFiles = input.files;
         if (curFiles.length === 0) {
+            while (list.firstChild) {
+                list.removeChild(list.firstChild);
+            }
             const para = document.createElement('p');
             para.textContent = 'Nenhum arquivo selecionado.';
             preview.appendChild(para);
         } else {
             preview.appendChild(list);
+            showClearFilesButton();
 
             for (const file of curFiles) {
                 const listItem = document.createElement('li');
                 const para = document.createElement('p');
                 if (validFileType(file)) {
                     para.textContent = `Arquivo ${file.name}`;
-                    if (!file.name.includes('.do') && !file.name.includes('.odt'))
+                    if (!file.name.includes('.do') && !file.name.includes('.odt') && !file.name.includes('.pdf'))
                     {
                         const image = document.createElement('img');
                         image.src = URL.createObjectURL(file);
@@ -136,9 +160,7 @@
                     listItem.appendChild(para);
                 } else {
                     para.textContent = `O arquivo ${file.name} não é de um tipo válido. Por favor selecione outro arquivo.`;
-                    listItem.appendChild(para);
                 }
-
                 list.appendChild(listItem);
             }
         }
@@ -158,10 +180,8 @@
     ];
 
     function validFileType(file) {
-        console.log(file.type);
         return fileTypes.includes(file.type);
     }
-
 </script>
 
 <style>
