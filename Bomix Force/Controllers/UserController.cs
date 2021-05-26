@@ -173,34 +173,48 @@ namespace Bomix_Force.Controllers
                         ModelState.AddModelError("Não é possível cadastrar", "Limite de 3 usuários atingido.");
                         return StatusCode(409);
                     }
-                    Console.WriteLine("after 3");
                     var user = new IdentityUser { UserName = userView.UserName, Email = userView.Email };
                     var result = await _userManager.CreateAsync(user, randomPass);
-
-                    if (company.Id == 0 && User.IsInRole("Admin") && userView.Admin)
-                        _ = await _userManager.AddToRoleAsync(user, "Admin");
-                    else if(User.IsInRole("Admin") && !userView.Admin)
-                        _ = await _userManager.AddToRoleAsync(user, "Employee");
-                    else
-                        _ = await _userManager.AddToRoleAsync(user, "User");
-
                     if (result.Succeeded)
                     {
+                        var simpleUser = false;
+                        if (company.Id == 0 && User.IsInRole("Admin") && userView.Admin)
+                        {
+                            _ = await _userManager.AddToRoleAsync(user, "Admin");
+                            user.EmailConfirmed = true;
+                        }
+                        else if(User.IsInRole("Admin") && !userView.Admin)
+                        {
+                            _ = await _userManager.AddToRoleAsync(user, "Employee");
+                            user.EmailConfirmed = true;
+                        }
+                        else
+                        {
+                            _ = await _userManager.AddToRoleAsync(user, "User");
+                            simpleUser = true;
+                        }
+
                         Person person = new Person { Name = userView.Name, Cargo = userView.Cargo, Setor = userView.Setor, CompanyId = company.Id, IdentityUserId = user.Id, Email = userView.Email };
                         _genericPersonService.Insert(person);
                         _genericPersonService.Save();
                         _logger.LogInformation("Novo usuário criado.");
                         Employee employee = _pedidoVendaRepository.GetEmployeesByCNPJ(company.Cnpj);
-
-                        await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass, null);
-                        await _emailSender.SendEmailAsync(employee.Email, "Cadastro usuário",$"O Cliente {company.Name} criou o usuario {person.Name}." , null); ;
-
+                        if (simpleUser)
+                        {
+                            await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass+"\nO Cadastro ainda está pendente de confirmação", null);
+                            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, protocol: Request.Scheme);
+                            await _emailSender.SendEmailAsync(/*employee.Email*/"pedrogustavosantana97@gmail.com", "Cadastro usuário",$"O Cliente {company.Name} criou o usuario {person.Name}.\n<a href=\""+ callbackUrl + "\">Confirmar</a> o cadastro" , null);
+                        }else{
+                            await _emailSender.SendEmailAsync(user.Email, "Cadastro usuário", "O seu usuário foi criado com a senha: " + randomPass, null);
+                            await _emailSender.SendEmailAsync(employee.Email, "Cadastro usuário",$"O Cliente {company.Name} criou o usuario {person.Name}." , null);
+                        }
 
                         return RedirectToAction(nameof(Index));
                     }
-                    foreach (var error in result.Errors)
+                    else
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        return StatusCode(409);
                     }
 
                     // If we got this far, something failed, redisplay form
@@ -216,6 +230,25 @@ namespace Bomix_Force.Controllers
                 return StatusCode(500);
             }
         }
+
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null){
+                var result = await _userManager.ConfirmEmailAsync(user, code);
+                if (result.Succeeded)
+                {
+                    return View("ConfirmEmail");
+                }
+                return View();
+            }
+            return StatusCode(500);
+        }
+
         [HttpGet]
         public JsonResult getUserName()
         {
@@ -286,7 +319,7 @@ namespace Bomix_Force.Controllers
         }
 
         // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             Person person = _genericPersonService.Get(u => u.Id == id).First();
             UserViewModel userView = _mapper.Map<UserViewModel>(person);
@@ -296,10 +329,12 @@ namespace Bomix_Force.Controllers
         // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {
+                Person person = _genericPersonService.Get(u => u.Id == id).First();
+                _ = await _userManager.DeleteAsync(await _userManager.FindByIdAsync(person.IdentityUserId));
                 _genericPersonService.Delete(id);
                 _genericPersonService.Save();
                 return RedirectToAction(nameof(Index));
